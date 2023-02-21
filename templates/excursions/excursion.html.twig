@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('css/excursion.css') }}" />
+{% endblock %}
+{% block title %}{{ parent() }} Liste des sorties {% endblock %}
+
+{% block main %}
+    <div class="info">
+    <div class="date">
+        <label>date du jour: </label>
+        <label>{{ '21/02/2023'}}</label>
+    </div>
+    <div class="date">
+        <label>Participant: </label>
+        <label>{{ 'Juju'}}</label>
+    </div>
+    </div>
+    <div class="filter">
+        <label>Filtrer les sorties</label>
+        <label>Site</label>
+        <select>
+            <option value="saintHerblain">Saint Herblain</option>
+            <option value="angers">Angers</option>
+        </select>
+        <div class="Search">
+            <lable>Le nom de la sortie contient:</lable>
+            <input type="search" placeholder="search">
+        </div>
+        <div class="searchDate">
+            <label>Entre</label>
+            <input type="date">
+            <label>et</label>
+            <input type="date">
+        </div>
+        <fieldset>
+            <legend>choix de la sortie:</legend>
+
+            <div class="check">
+                <input type="checkbox" id="excursion" name="excursion" checked>
+                <label>Sorties dont je suis l'organisateur/trice</label>
+                <input type="checkbox" id="excursion" name="excursion" checked>
+                <label>Sorties dont je suis inscrit/e</label>
+                <input type="checkbox" id="excursion" name="excursion" checked>
+                <label>Sorties dont je ne suis pas inscrit/e</label>
+                <input type="checkbox" id="excursion" name="excursion" checked>
+                <label>Sorties passées</label>
+            </div>
+
+        </fieldset>
+        <div class="bpSearch">
+            <button>Rechercher</button>
+        </div>
+    </div>
+    <div class="table">
+        <table id="table1">
+            <tr>
+                <th>Nom de la sortie</th>
+                <th>Date de la sortie</th>
+                <th>Cloture</th>
+                <th>inscrits/places</th>
+                <th>Etat</th>
+                <th>Inscrit</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+    </div>
+    <div class="addExcursion">
+        <button>Créer une sortie</button>
+    </div>
+{% endblock %}
