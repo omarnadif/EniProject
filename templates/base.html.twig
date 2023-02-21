@@ -150,8 +150,9 @@
     <!-- Collection of nav links, forms, and other content for toggling -->
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">
         <div class="ml-2 navbar-nav">
-            <a href="#" class="nav-item nav-link active text-bg-dark">Home</a>
-            <a href="#" class="nav-item nav-link text-bg-dark">About</a>
+            <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
+            <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
+            <a href="{{ path('home_legal_stuff') }}" class="nav-item nav-link text-bg-dark">Mention-légale</a>
 {#            <div class="nav-item dropdown">#}
 {#                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>#}
 {#                <div class="dropdown-menu">#}
