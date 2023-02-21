@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -44,6 +46,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = null;
+
+    #[ORM\OneToMany(mappedBy: 'ParticipantOrganise', targetEntity: Sortie::class, orphanRemoval: true)]
+    private Collection $sorties;
+
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'ParticipantInscrit')]
+    private Collection $sortiesRelations;
+
+    #[ORM\ManyToOne(inversedBy: 'Participants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site = null;
+
+    public function __construct()
+    {
+        $this->sorties = new ArrayCollection();
+        $this->sortiesRelations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -190,6 +208,75 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActif(bool $actif): self
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): self
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+            $sorty->setParticipantOrganise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): self
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            // set the owning side to null (unless already changed)
+            if ($sorty->getParticipantOrganise() === $this) {
+                $sorty->setParticipantOrganise(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSortiesRelations(): Collection
+    {
+        return $this->sortiesRelations;
+    }
+
+    public function addSortiesRelation(Sortie $sortiesRelation): self
+    {
+        if (!$this->sortiesRelations->contains($sortiesRelation)) {
+            $this->sortiesRelations->add($sortiesRelation);
+            $sortiesRelation->addParticipantInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSortiesRelation(Sortie $sortiesRelation): self
+    {
+        if ($this->sortiesRelations->removeElement($sortiesRelation)) {
+            $sortiesRelation->removeParticipantInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): self
+    {
+        $this->site = $site;
 
         return $this;
     }

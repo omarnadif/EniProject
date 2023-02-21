@@ -172,21 +172,22 @@
 {#            </div>#}
 {#        </form>#}
        <div class="navbar-nav ml-auto">
-{#            <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>#}
-{#            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a>#}
-{#            <div class="nav-item dropdown">#}
-{#                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar"> Paula Wilson <b class="caret"></b></a>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>#}
-{#                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>#}
-{#                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a href="#" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>#}
-{#                </div>#}
-{#            </div>#}
+           {% if app.user %}
+            <div class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar">{{ app.user.nom }}{{ app.user.prenom }}<b class="caret"></b></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>
+                    <div class="dropdown-divider"></div>
+                    <a href="" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>
+                </div>
+            </div>
+           {% else %}
 
                <a href="" class="btn btn-outline-primary me-5">Login</a>
                <a href="" class="btn btn-warning ml-3">Sign-up</a>
+           {% endif %}
 
        </div>
     </div>
