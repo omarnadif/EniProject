@@ -1,80 +1,207 @@
-<!doctype html>
-<html lang="fr">
-
+</html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="{{ asset('img/favicon.png') }}">
-
-    <title>{% block title %}Bucket List{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merienda+One">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        body {
+            background: #eeeeee;
+        }
+        .form-inline {
+            display: inline-block;
+        }
+        .navbar-header.col {
+            padding: 0 !important;
+        }
+        .navbar {
+            background: #fff;
+            padding-left: 16px;
+            padding-right: 16px;
+            border-bottom: 1px solid #d6d6d6;
+            box-shadow: 0 0 4px rgba(0,0,0,.1);
+        }
+        .nav-link img {
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            margin: -8px 0;
+            float: left;
+            margin-right: 10px;
+        }
+        .navbar .navbar-brand {
+            color: #555;
+            padding-left: 0;
+            padding-right: 50px;
+            font-family: 'Merienda One', sans-serif;
+        }
+        .navbar .navbar-brand i {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-box input {
+            box-shadow: none;
+            padding-right: 35px;
+            border-radius: 3px !important;
+        }
+        .search-box .input-group-addon {
+            min-width: 35px;
+            border: none;
+            background: transparent;
+            position: absolute;
+            right: 0;
+            z-index: 9;
+            padding: 7px;
+            height: 100%;
+        }
+        .search-box i {
+            color: #a0a5b1;
+            font-size: 19px;
+        }
+        .navbar .nav-item i {
+            font-size: 18px;
+        }
+        .navbar .dropdown-item i {
+            font-size: 16px;
+            min-width: 22px;
+        }
+        .navbar .nav-item.open > a {
+            background: none !important;
+        }
+        .navbar .dropdown-menu {
+            border-radius: 1px;
+            border-color: #e5e5e5;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+        .navbar .dropdown-menu a {
+            color: #777;
+            padding: 8px 20px;
+            line-height: normal;
+        }
+        .navbar .dropdown-menu a:hover, .navbar .dropdown-menu a:active {
+            color: #333;
+        }
+        .navbar .dropdown-item .material-icons {
+            font-size: 21px;
+            line-height: 16px;
+            vertical-align: middle;
+            margin-top: -2px;
+        }
+        .navbar .badge {
+            color: #fff;
+            background: #f44336;
+            font-size: 11px;
+            border-radius: 20px;
+            position: absolute;
+            min-width: 10px;
+            padding: 4px 6px 0;
+            min-height: 18px;
+            top: 5px;
+        }
+        .navbar a.notifications, .navbar a.messages {
+            position: relative;
+            margin-right: 10px;
+        }
+        .navbar a.messages {
+            margin-right: 20px;
+        }
+        .navbar a.notifications .badge {
+            margin-left: -8px;
+        }
+        .navbar a.messages .badge {
+            margin-left: -4px;
+        }
+        .navbar .active a, .navbar .active a:hover, .navbar .active a:focus {
+            background: transparent !important;
+        }
+        @media (min-width: 1200px){
+            .form-inline .input-group {
+                width: 300px;
+                margin-left: 30px;
+            }
+        }
+        @media (max-width: 1199px){
+            .form-inline {
+                display: block;
+                margin-bottom: 10px;
+            }
+            .input-group {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-<header class="p-3 text-bg-dark bg-dark">
-    <div class="d-flex align-items-start flex-row">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start mb-auto p-2">
-            <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-
-                <img src="#" class="" >
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="" class="nav-link px-2 text-secondary">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
+<nav class="navbar navbar-expand-xl navbar-light bg-light">
+    <a href="#" class="navbar-brand"><img src="{{ asset('img/enilogo.png') }}" width="60" class="mr-2">Sortir<b>Eni</b></a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Collection of nav links, forms, and other content for toggling -->
+    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">
+        <div class="ml-2 navbar-nav">
+            <a href="#" class="nav-item nav-link active text-bg-dark">Home</a>
+            <a href="#" class="nav-item nav-link text-bg-dark">About</a>
+{#            <div class="nav-item dropdown">#}
+{#                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>#}
+{#                <div class="dropdown-menu">#}
+{#                    <a href="#" class="dropdown-item">Web Design</a>#}
+{#                    <a href="#" class="dropdown-item">Web Development</a>#}
+{#                    <a href="#" class="dropdown-item">Graphic Design</a>#}
+{#                    <a href="#" class="dropdown-item">Digital Marketing</a>#}
+{#                </div>#}
+{#            </div>#}
+            <a href="#" class="nav-item nav-link">Contact</a>
         </div>
-            <div class="d-flex align-items-end flex-row">
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
-            </form>
+{#        <form class="navbar-form form-inline">#}
+{#            <div class="input-group search-box">#}
+{#                <input type="text" id="search" class="form-control" placeholder="Search by Name">#}
+{#                <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>#}
+{#            </div>#}
+{#        </form>#}
+       <div class="navbar-nav ml-auto">
+{#            <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>#}
+{#            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a>#}
+{#            <div class="nav-item dropdown">#}
+{#                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar"> Paula Wilson <b class="caret"></b></a>#}
+{#                <div class="dropdown-menu">#}
+{#                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>#}
+{#                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>#}
+{#                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>#}
+{#                    <div class="dropdown-divider"></div>#}
+{#                    <a href="#" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>#}
+{#                </div>#}
+{#            </div>#}
 
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2 p-2">Login</button>
-                <button type="button" class="btn btn-warning p-2">Sign-up</button>
-            </div>
+               <a href="" class="btn btn-outline-primary me-5">Login</a>
+               <a href="" class="btn btn-warning ml-3">Sign-up</a>
 
-        </div>
+       </div>
     </div>
-</header>
-
-<main role="main">
-    <section class="jumbotron text-center">
-        <div class="container">
-            {% block informations %}{% endblock %}
-        </div>
-    </section>
-
-    <div class="container">
-
-        {% for group,messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ group }}" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endfor %}
-
-        {% block main %}{% endblock %}
-    </div>
-</main>
-
+</nav>
+{% block block %}{% endblock %}
+</body>
 <footer class="text-muted">
 
     <div class="container">
         <p class="float-right">
             <a href="#">Back to top</a>
         </p>
-        <p>BucketList &copy; {{ "now" | date('Y') }}</p>
+        <p>Eni Ecole Informatique &copy; {{ "now" | date('Y') }}</p>
     </div>
 
 </footer>
-
 <script src="https://code.jquery.com/jquery-3.2.1.s lim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 {% block scripts %}{% endblock %}
-</body>
 </html>
-
