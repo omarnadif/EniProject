@@ -45,15 +45,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = null;
 
-    /**
-     * @param array $roles
-     */
-    public function __construct()
-    {
-        $this->roles[] = "ROLE_USER";
-    }
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -86,7 +77,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return $this->getUserIdentifier();
+        return (string) $this->email;
     }
 
     /**

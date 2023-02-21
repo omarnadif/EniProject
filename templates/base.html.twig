@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}{% endblock %}</title>
+    {% block css %}{% endblock %}
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merienda+One">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -150,8 +151,9 @@
     <!-- Collection of nav links, forms, and other content for toggling -->
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">
         <div class="ml-2 navbar-nav">
-            <a href="#" class="nav-item nav-link active text-bg-dark">Home</a>
-            <a href="#" class="nav-item nav-link text-bg-dark">About</a>
+            <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
+            <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
+            <a href="{{ path('home_legal_stuff') }}" class="nav-item nav-link text-bg-dark">Mention-légale</a>
 {#            <div class="nav-item dropdown">#}
 {#                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>#}
 {#                <div class="dropdown-menu">#}
@@ -161,7 +163,7 @@
 {#                    <a href="#" class="dropdown-item">Digital Marketing</a>#}
 {#                </div>#}
 {#            </div>#}
-            <a href="#" class="nav-item nav-link">Contact</a>
+            <a href="{{ path('home_contact') }}" class="nav-item nav-link">Contact</a>
         </div>
 {#        <form class="navbar-form form-inline">#}
 {#            <div class="input-group search-box">#}
@@ -170,21 +172,22 @@
 {#            </div>#}
 {#        </form>#}
        <div class="navbar-nav ml-auto">
-{#            <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>#}
-{#            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a>#}
-{#            <div class="nav-item dropdown">#}
-{#                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar"> Paula Wilson <b class="caret"></b></a>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>#}
-{#                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>#}
-{#                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a href="#" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>#}
-{#                </div>#}
-{#            </div>#}
+           {% if app.user %}
+            <div class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar">{{ app.user.nom }}{{ app.user.prenom }}<b class="caret"></b></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>
+                    <div class="dropdown-divider"></div>
+                    <a href="" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>
+                </div>
+            </div>
+           {% else %}
 
                <a href="" class="btn btn-outline-primary me-5">Login</a>
                <a href="" class="btn btn-warning ml-3">Sign-up</a>
+           {% endif %}
 
        </div>
     </div>
