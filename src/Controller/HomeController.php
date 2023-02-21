@@ -21,7 +21,7 @@ class HomeController extends AbstractController
     }
 
     #[Route(path: 'legal-stuff', name: 'legal_stuff', methods: ['GET'])]
-    public function legalStuff(): Response
+    public function legalStuff(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('home/legal_stuff.html.twig');
     }
