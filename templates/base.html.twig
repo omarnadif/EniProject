@@ -174,9 +174,9 @@
        <div class="navbar-nav ml-auto">
            {% if app.user %}
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar">{{ app.user.nom }}{{' '}}{{ app.user.prenom }}<b class="caret"></b></a>
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="{{ asset('img/loginlogo.jpg') }}" class="avatar" alt="Avatar">{{ app.user.nom|upper }}{{' '}}{{ app.user.prenom }}<b class="caret"></b></a>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>
+                    <a href="{{ path('app_security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>
                     <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>
                     <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>
                     <div class="dropdown-divider"></div>
