@@ -14,10 +14,10 @@ class ExcursionController extends AbstractController
         return $this->render('excursions/excursion.html.twig');
     }
 
-    #[Route(path: 'update', name: 'updateExcursion', methods: ['GET'])]
+    #[Route(path: 'edite', name: 'updateExcursion', methods: ['GET'])]
     public function updateExcursion(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('excursions/updateExcursion.html.twig');
+        return $this->render('excursions/EditeExcursion.html.twig');
     }
 
 
