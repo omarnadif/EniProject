@@ -43,6 +43,13 @@ class RegistrationFormType extends AbstractType
             'label' => 'Email: ',
             'required' => true,
         ]);
+
+        $builder->add('pseudo', TextType::class, [
+            'trim' => true,
+            'label' => 'Pseudo: ',
+            'required' => true,
+        ]);
+
         $builder->add('plainPassword', PasswordType::class, [
             'mapped' => false,
             'label' => 'Mot de passe: ',
