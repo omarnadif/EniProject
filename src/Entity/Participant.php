@@ -13,7 +13,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà utilisé!')]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    //appgdhgcd
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]

@@ -12,11 +12,23 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ParticipantProfileFormType extends AbstractType
 {
+    /*
+    private UserPasswordEncoderInterface $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+    */
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('nom', TextType::class, [
@@ -70,6 +82,41 @@ class ParticipantProfileFormType extends AbstractType
         $builder->add('submit', SubmitType::class, [
             'label' => 'Modifier',
         ]);
+
+        /*
+        // Ajouter un champ "password Actuel"
+        $builder->add('password', PasswordType::class, [
+            'mapped' => false,
+            'required' => true,
+            'label' => 'Mot de passe actuel: ',
+            'constraints' => [
+                new NotBlank(),
+                new Callback([$this, 'validateCurrentPassword']),
+            ],
+        ]);
+
+        // Ajout un champ "nouveau password"
+        $builder->add('nouveauPassword', PasswordType::class, [
+            'mapped' => false,
+            'required' => true,
+            'label' => 'Nouveau mot de passe',
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
+
+        // Ajout un champ "confirmation password"
+        $builder->add('confirmationPassword', PasswordType::class, [
+            'mapped' => false,
+            'required' => true,
+            'label' => 'Confirmation du nouveau mot de passe',
+            'constraints' => [
+                new NotBlank(),
+                new Callback([$this, 'validateNewPassword']),
+            ],
+        ]);
+
+        */
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -78,4 +125,23 @@ class ParticipantProfileFormType extends AbstractType
             'data_class' => Participant::class,
         ]);
     }
+
+    /*
+     *
+    public function validateCurrentPassword($value, ExecutionContextInterface $context)
+    {
+        $user = $context->getObject()->getUser();
+        if (!$this->passwordEncoder->isPasswordValid($user, $value)) {
+            $context->buildViolation('Le mot de passe actuel est incorrect.')->addViolation();
+        }
+    }
+
+    public function validateNewPassword($value, ExecutionContextInterface $context)
+    {
+        $passwordNew = $context->getObject()->get('nouveauPassword')->getData();
+        if ($value !== $passwordNew) {
+            $context->buildViolation('Les mots de passe ne sont pas identiques.')->addViolation();
+        }
+    }
+    */
 }
