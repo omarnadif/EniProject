@@ -24,7 +24,7 @@ class SecurityController extends AbstractController
     public function logout(): void
     {}
 
-    #[Route(path: '/profile', name: 'app_security_profile', methods:['GET'])]
+    #[Route(path: '/profile', name: 'security_profile', methods:['GET'])]
     public function profile(): Response
     {
         $user = $this->getUser();

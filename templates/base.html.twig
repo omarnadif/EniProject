@@ -176,11 +176,11 @@
        <div class="navbar-nav ml-auto">
            {% if app.user %}
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="/img/avatar/2.jpg" class="avatar" alt="Avatar">{{ app.user.nom }}{{ app.user.prenom }}<b class="caret"></b></a>
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="{{ asset('img/avatar/pdp_default_Homme.jpg') }}" class="avatar" alt="Avatar">{{ app.user.nom }}{{ app.user.prenom }}<b class="caret"></b></a>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a>
+                    <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendrier</a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Paramètres</a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ path('security_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i>Se déconnecter</a>
                 </div>
