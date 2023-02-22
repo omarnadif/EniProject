@@ -1,0 +1,111 @@
+{% extends "base.html.twig" %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('css/updateExcursion.css') }}" />
+{% endblock %}
+{% block title %}{{ parent() }} Modifier une sortie {% endblock %}
+
+{% block main %}
+    <form>
+    <fieldset class="scheduler-border" >
+        <legend class="scheduler-border">Creation de sortie: </legend>
+    <div class=form>
+        <div class="header-left">
+            <div class="nomLabel">
+            <label>Nom de la sortie: </label>
+            </div>
+            <div class="nomSortieInput">
+                <input type="text" name="" placeholder=""/>
+            </div>
+            <div class="dateSortieLabel">
+            <label>Date et heure de la sortie: </label>
+            </div>
+            <div class="dateSortieInput">
+                <input  type="date"/>
+            </div>
+            <div class="dateLimiteLabel">
+            <label>Date limite d'inscription: </label>
+            </div>
+            <div class="dateLimiteInput">
+                <input type="date" />
+            </div>
+            <div class="nbPlaceLabel">
+            <label>nombre de place: </label>
+            </div>
+            <div class="nombrePlaceInput">
+                <input type="number"  />
+            </div>
+            <div class="dureeLabel">
+            <label>Durée: </label>
+            </div>
+            <div class="dureeInput">
+                <input type="number"/>
+            </div>
+            <div class="descriptionLabel">
+            <label>Description: </label>
+            </div>
+            <div class="descriptionInput">
+                <textarea name="description" rows="5" cols="30"></textarea>
+            </div>
+        </div>
+
+        <div class="header-right">
+
+
+            <label>Campus :</label>
+            <div class="campus">
+                <input type="text" name="campus" placeholder="campusName"/>
+            </div>
+
+            <label>Ville :</label>
+            <div class="ville">
+                <input type="text" name="ville" placeholder="CityName" />
+            </div>
+
+            <label>Rue :</label>
+            <div class="rue">
+                <input type="text" name="rue" placeholder="Rue" />
+            </div>
+
+            <label >Code Postal :</label>
+            <div class="Cp">
+                <input type="text" name="CodePostal" placeholder="Marseille" />
+            </div>
+
+            <label >Latitude :</label>
+            <div class="latitude">
+                <input type="text" name="latitude"  />
+            </div>
+
+            <label >Longitude :</label>
+            <div class="Cp">
+                <input type="text" name="longitude"  />
+            </div>
+        </div>
+        <fieldset class="scheduler-border-2">
+            <legend class="scheduler-border">Téléchargement de l'image </legend>
+        <div class="imageUpload">
+        <div class="preview">
+            <img id="file-ip-1-preview">
+        </div>
+        <label for="file-ip-1">Upload Image</label>
+        <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event);">
+        <div class="preview">
+            <img id="file-ip-1-preview">
+            <script type="text/javascript">
+                function showPreview(event){
+                    if(event.target.files.length > 0){
+                        let src = URL.createObjectURL(event.target.files[0]);
+                        let preview = document.getElementById("file-ip-1-preview");
+                        preview.src = src;
+                        preview.style.display = "block";
+                    }
+                }
+            </script>
+        </div>
+        </div>
+        </fieldset>
+
+    </div>
+    </fieldset>
+    </form>
+{% endblock %}
