@@ -171,6 +171,8 @@
 {#                <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>#}
 {#            </div>#}
 {#        </form>#}
+
+        {# Boutton connexion/S'incrire/Se déconnecter #}
        <div class="navbar-nav ml-auto">
            {% if app.user %}
             <div class="nav-item dropdown">
@@ -180,13 +182,12 @@
                     <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>
                     <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>
                     <div class="dropdown-divider"></div>
-                    <a href="" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>
+                    <a href="{{ path('security_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i>Se déconnecter</a></a>
                 </div>
             </div>
            {% else %}
-
-               <a href="" class="btn btn-outline-primary me-5">Login</a>
-               <a href="" class="btn btn-warning ml-3">Sign-up</a>
+               <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Se connecter</a>
+               <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
            {% endif %}
 
        </div>
