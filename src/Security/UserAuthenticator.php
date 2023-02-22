@@ -22,8 +22,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'security_login';
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
-    }
+    {}
 
     public function authenticate(Request $request): Passport
     {
@@ -38,6 +37,31 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
             ]
         );
+
+        /*  Brouillon de connexion avec pseudo ou email
+        $emailOrPseudo = $request->request->get('email', '');
+
+        if (strpos($emailOrPseudo, '@') === false) {
+
+            //Si dans l'input il n'y a pas de "@", alors c'est le pseudo
+            $pseudo = $emailOrPseudo;
+            $email = ''; //email non spécifié dans le badge de l'utilisateur
+        } else {
+            //Si dans l'input il y a un "@", alors c'est le email
+            $email = $emailOrPseudo;
+            $pseudo = ''; //pseudo non spécifié dans le badge de l'utilisateur
+        }
+
+        $request->getSession()->set(Security::LAST_USERNAME, $emailOrPseudo);
+
+        return new Passport(
+            new UserBadge($emailOrPseudo, fn ($pseudo)=> $this->participantRepository->findOneByPseudoOrEmail($pseudo, $email)),
+            new PasswordCredentials($request->request->get('password', '')),
+            [
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+            ]
+        );
+        */
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
