@@ -72,3 +72,6 @@ fieldset.scheduler-border-2{
     margin-top: 40px;
     justify-content: space-evenly;
 }
+select{
+    width: 190px;
+}

@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('css/updateExcursion.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/updateExcursion.css') }}" xmlns="http://www.w3.org/1999/html"/>
 {% endblock %}
 {% block title %}{{ parent() }} Modifier une sortie {% endblock %}
 
@@ -53,9 +53,14 @@
 
             <label>Campus :</label>
             <div class="campus">
-                <input type="text" name="campus" placeholder="campusName"/>
+                <select name="campus"/>
+                <option>Nantes</option>
+                <option>Rennes</option>
+                <option>Quimper</option>
+                <option>Niort</option>
+                <option>Angers</option>
+            </select>
             </div>
-
             <label>Ville :</label>
             <div class="ville">
                 <input type="text" name="ville" placeholder="CityName" />
