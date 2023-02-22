@@ -5,15 +5,20 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route(path: 'excursion')]
+#[Route(path: 'excursion/')]
 class ExcursionController extends AbstractController
 {
-    #[Route(path: '', name: 'excursion', methods: ['GET'])]
-    public function home(): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '', name: 'selectExcursion', methods: ['GET'])]
+    public function SelectExcursion(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('excursions/excursion.html.twig');
     }
 
+    #[Route(path: 'update', name: 'updateExcursion', methods: ['GET'])]
+    public function updateExcursion(): \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('excursions/updateExcursion.html.twig');
+    }
 
 
 }
