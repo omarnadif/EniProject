@@ -8,13 +8,14 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\EqualTo;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -62,6 +63,29 @@ class ParticipantProfileFormType extends AbstractType
             'trim' => true,
             'label' => 'Email: ',
             'required' => true,
+        ]);
+
+        $builder->add('photoProfil', FileType::class, [
+            'label' => 'Votre image de profil (Fichiers images uniquement)',
+
+            // unmapped means that this field is not associated to any entity property
+            'mapped' => false,
+            'required' => false,
+
+            // unmapped fields can't define their validation using annotations
+            // in the associated entity, so you can use the PHP constraint classes
+            'constraints' => [
+                new File([
+                    'maxSize' => '4096k',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/jpg',
+                        'image/png',
+                        'image/gif',
+                    ],
+                    'mimeTypesMessage' => 'Please upload a valid image file',
+                ])
+            ],
         ]);
 
         $builder->add('plainPassword', RepeatedType::class, [
