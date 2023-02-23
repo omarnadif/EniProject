@@ -5,6 +5,9 @@ namespace App\Form;
 
 
 use App\Entity\Participant;
+use App\Entity\Site;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -12,11 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ParticipantProfileFormType extends AbstractType
 {
@@ -43,6 +43,22 @@ class ParticipantProfileFormType extends AbstractType
             'required' => true,
         ]);
 
+        $builder->add('pseudo', TextType::class, [
+            'trim' => true,
+            'label' => 'Pseudo: ',
+            'required' => true,
+        ]);
+
+        $builder->add('site', Entity::class, [
+            'class' => Site::class,
+            'trim' => true,
+            'label' => 'Choississez votre campus: ',
+            'required' => true,
+            'query_builder' => function(EntityRepository $entityRepository) {
+            return $entityRepository->createQueryBuilder('c')->orderBy('c.siteNom', 'ASC');
+            }
+        ]);
+
         $builder->add('telephone', TextType::class, [
             'trim' => true,
             'label' => 'Téléphone: ',
@@ -52,12 +68,6 @@ class ParticipantProfileFormType extends AbstractType
         $builder->add('email', EmailType::class, [
             'trim' => true,
             'label' => 'Email: ',
-            'required' => true,
-        ]);
-
-        $builder->add('pseudo', TextType::class, [
-            'trim' => true,
-            'label' => 'Pseudo: ',
             'required' => true,
         ]);
 

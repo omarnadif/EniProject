@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: 'Participants')]
@@ -47,6 +49,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = null;
+
+    #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: "participants")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site;
+
+    #[ORM\Column(type: 'FileType', length: 255, nullable: true)]
+    private ?FileType $picture;
 
     public function getId(): ?int
     {
@@ -212,4 +221,21 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Site|null
+     */
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    /**
+     * @param Site|null $site
+     */
+    public function setSite(?Site $site): void
+    {
+        $this->site = $site;
+    }
+
 }
