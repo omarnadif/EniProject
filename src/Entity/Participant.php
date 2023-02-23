@@ -27,6 +27,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'pseudo', type: 'string', length: 50, unique: true)]
     private ?string $pseudo = null;
 
+#[ORM\Column(type: 'string',length: 100)]
+private ?string $resetToken;
+
     /**
      * @var string The hashed password
      */
@@ -212,4 +215,23 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param string|null $resetToken
+     */
+    public function setResetToken(?string $resetToken): void
+    {
+        $this->resetToken = $resetToken;
+    }
+
+
+
 }
