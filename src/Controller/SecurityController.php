@@ -44,6 +44,7 @@ class SecurityController extends AbstractController
     #[Route('/updateProfile', name: 'security_updateProfile', methods: ['GET', 'POST'])]
     public function updateProfile(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator): Response
     {
+
         $user = $this->getUser();
 
         //Création du formulaire
@@ -68,13 +69,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/profile/delete', name: 'security_deleteProfile', methods:['GET'])]
+    #[Route(path: '/profile/delete', name: 'deleteProfile', methods:['GET'])]
     public function deleteUser(EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator): Response
     {
         $user = $this->getUser();
         if (!$user)
         {
-            return $this->redirectToRoute('security_login');
+            return $this->redirectToRoute('app_login');
         }
         $this->container->get('security.token_storage')->setToken(null);
         $this->logout();
@@ -87,4 +88,6 @@ class SecurityController extends AbstractController
 
                 return $this->render('home/home.html.twig');
     }
+
+    #[Route('/forgetPassword')]
 }
