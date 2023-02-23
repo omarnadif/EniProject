@@ -1,26 +1,23 @@
 {% extends "base.html.twig" %}
 
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/EditeExcursion.css') }}" />
 {% endblock %}
 
 {% block title %}{{ parent() }} Creer Sortie {% endblock %}
 {% block main %}
 
-
-    {% form_theme  excursionForm 'bootstrap_5_layout.html.twig' %}
-
-
-
+    {{ form_start(excursionForm) }}
     <div class="row g-6 mr-6 mt-4">
+
         <div class="col-md-5 col-lg-3 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-primary">Your cart</span>
+                <span class="text-primary">Lieu</span>
                 <span class="badge bg-primary rounded-pill">3</span>
             </h4>
             <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between lh-sm">
-                    {{ form(excursionForm.lieu) }}
+                    {{ form_widget(excursionForm.lieu) }}
 
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -52,7 +49,7 @@
 
         </div>
         <div class="col-md-7 col-lg-8 ml-5">
-            <h4 class="mb-3">Billing address</h4>
+            <h4 class="mb-3">Créer une sortie</h4>
             <form class="needs-validation" novalidate="">
                 <div class="row g-3">
 
@@ -61,48 +58,49 @@
                         <label for="address" class="form-label">Nom</label>
                         {{ form(excursionForm.nom) }}
                         <div class="invalid-feedback">
-                            Please enter your shipping address.
+                            Please enter your data.
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="firstName" class="form-label">Date Sortie</label>
-                        <input type="date" class="form-control" id="firstName" placeholder="" value="" required="">
+                        {{ form_widget(excursionForm.dateHeureDebut)}}
+
                         <div class="invalid-feedback">
-                            Valid first name is required.
+                            Please enter your data.
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="lastName" class="form-label">Date Limite Sortie</label>
-                        <input type="date" class="form-control" id="lastName" placeholder="" value="" required="">
+                        {{ form_widget(excursionForm.dateLimiteInscription)}}
                         <div class="invalid-feedback">
-                            Valid last name is required.
+                            Please enter your data.
                         </div>
                     </div>
 
 
                     <div class="col-12">
                         <label for="address" class="form-label">Durée</label>
-                        {{ form(excursionForm.duree) }}
+                        {{ form_widget(excursionForm.duree) }}
                         <div class="invalid-feedback">
-                            Please enter your shipping address.
+                            Please enter your data.
                         </div>
                     </div>
 
                     <div class="col-12">
                         <label for="address" class="form-label">Nombre de places</label>
-                        {{ form(excursionForm.nbInscriptionsMax) }}
+                        {{ form_widget(excursionForm.nbInscriptionsMax) }}
                         <div class="invalid-feedback">
-                            Please enter your shipping address.
+                            Please enter your data.
                         </div>
                     </div>
 
                     <div class="col-12">
                         <label for="address" class="form-label">Description</label>
-                        {{ form(excursionForm.infosSortie) }}
+                        {{ form_widget(excursionForm.infosSortie) }}
                         <div class="invalid-feedback">
-                            Please enter your shipping address.
+                            Please enter your data.
                         </div>
                     </div>
 
@@ -112,9 +110,13 @@
 
 
 
-                <button class="w-25 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-            </form>
+{#                <button class="w-25 btn btn-primary btn-lg" type="submit">Enregistrer</button>#}
+{#                <button class="w-25 btn btn-success btn-lg" type="submit">Publier la sortie</button>#}
+{#                <button class="w-25 btn btn-warning btn-lg" type="submit">Annuler</button>#}
+                {{ form_end(excursionForm) }}
         </div>
+
     </div>
+
 
 {% endblock %}

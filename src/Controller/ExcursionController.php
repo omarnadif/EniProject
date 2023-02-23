@@ -30,7 +30,7 @@ class ExcursionController extends AbstractController
     }
 
     #[Route('edite', name: 'editeExcursion', methods: ['GET', 'POST'])]
-    public function excursionForm(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator): Response
+    public function excursionForm(Request $request, EntityManagerInterface $entityManager): Response
     {
 
         // Création
