@@ -7,12 +7,15 @@ use App\Form\RegistrationFormType;
 use App\Form\ResetPassWordRequestFormType;
 use App\Repository\ParticipantRepository;
 use App\Security\UserAuthenticator;
+use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
@@ -90,8 +93,13 @@ class SecurityController extends AbstractController
 
                 return $this->render('home/home.html.twig');
     }
-    #[Route(path: '/forgetPassword', name: 'security_forgettenPassword', methods:['GET'])]
-    public function forgetPassword(Request $request, ParticipantRepository $participantRepository): Response
+    #[Route(path: '/forgetPassword', name: 'security_forgettenPassword', methods:['GET','POST'])]
+    public function forgetPassword(Request $request,
+                                   ParticipantRepository $participantRepository,
+                                   TokenGeneratorInterface $tokenGenerator,
+                                   EntityManagerInterface $entityManager,
+                                   SendMailService $mail
+    ): Response
     {
         $form = $this->createForm(ResetPassWordRequestFormType::class);
 
@@ -99,13 +107,47 @@ class SecurityController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
 
-            $user = $participantRepository->findbyEmail($form->get('email')->getData());
+            $criteria = ['email' => $form->get('email')->getData()];
+            $user = $participantRepository->findOneBy($criteria);
+// on verifie si on a un utilisateur
 
-            dd($user);
+            if ($user){
+                //on génére un token de reinitialisation
+                $token = $tokenGenerator->generateToken();
+                $user->setResetToken($token);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                //on génére un lien de reinitialisation du mot de passe
+                $url = $this->generateUrl('reset_pass',['token' => $token],
+                UrlGeneratorInterface::ABSOLUTE_URL);
+
+                //on crée les données du mail
+                $context=compact('url','user');
+
+                //Envoi du mail
+                $mail->send('m.ouzzine@laposte.net',
+                $user->getEmail(),
+                'Réinitialisation du mot de passe',
+                'password_reset',
+                $context);
+                $this->addFlash('success','E-mail envoyé');
+                return $this->redirectToRoute('security_login');
+
+
+            }
+            $this->addFlash('danger', 'un problème est survenu');
+            return $this->redirectToRoute('security_login');
         }
 
         return $this->render('security/reset_password_request.html.twig',[
             'requestPassForm' => $form->createView()
         ]);
+    }
+
+    #[Route(path: '/forgetPassword/{token}', name: 'reset_pass', methods:['GET','POST'])]
+    public function resetPass():Response
+    {
+
     }
 }
