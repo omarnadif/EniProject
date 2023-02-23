@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Form\ParticipantProfileFormType;
 use App\Form\RegistrationFormType;
+use App\Form\ResetPassWordRequestFormType;
+use App\Repository\ParticipantRepository;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -88,7 +90,22 @@ class SecurityController extends AbstractController
 
                 return $this->render('home/home.html.twig');
     }
+    #[Route(path: '/forgetPassword', name: 'security_forgettenPassword', methods:['GET'])]
+    public function forgetPassword(Request $request, ParticipantRepository $participantRepository): Response
+    {
+        $form = $this->createForm(ResetPassWordRequestFormType::class);
 
-    #[Route('/forgetPassword', name:'security_forgettenPassword', methods: ['GET', 'POST'])];
-    public function forgetten
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $user = $participantRepository->findbyEmail($form->get('email')->getData());
+
+            dd($user);
+        }
+
+        return $this->render('security/reset_password_request.html.twig',[
+            'requestPassForm' => $form->createView()
+        ]);
+    }
 }
