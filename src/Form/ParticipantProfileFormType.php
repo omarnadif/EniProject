@@ -8,6 +8,7 @@ use App\Entity\Participant;
 use App\Entity\Site;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\Entity;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -49,14 +50,16 @@ class ParticipantProfileFormType extends AbstractType
             'required' => true,
         ]);
 
-        $builder->add('site', Entity::class, [
+        $builder->add('site', EntityType::class, [
             'class' => Site::class,
             'trim' => true,
-            'label' => 'Choississez votre campus: ',
+            'label' => 'Site: ',
             'required' => true,
             'query_builder' => function(EntityRepository $entityRepository) {
-            return $entityRepository->createQueryBuilder('c')->orderBy('c.siteNom', 'ASC');
-            }
+                return $entityRepository->createQueryBuilder('participant')->orderBy('participant.nom', 'ASC');
+            },
+            'choice_label' => 'nom',
+            'attr' => ['class' => 'form-control']
         ]);
 
         $builder->add('telephone', TextType::class, [

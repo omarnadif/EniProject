@@ -54,9 +54,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $site;
 
-    #[ORM\Column(type: 'FileType', length: 255, nullable: true)]
-    private ?FileType $picture;
-
     public function getId(): ?int
     {
         return $this->id;

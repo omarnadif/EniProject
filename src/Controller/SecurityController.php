@@ -44,7 +44,6 @@ class SecurityController extends AbstractController
     #[Route('/updateProfile', name: 'security_updateProfile', methods: ['GET', 'POST'])]
     public function updateProfile(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator): Response
     {
-
         $user = $this->getUser();
 
         //Création du formulaire

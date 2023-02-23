@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Participant;
+use App\Entity\Site;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -47,6 +50,19 @@ class RegistrationFormType extends AbstractType
             'trim' => true,
             'label' => 'Pseudo: ',
             'required' => true,
+        ]);
+
+
+        $builder->add('site', EntityType::class, [
+            'class' => Site::class,
+            'trim' => true,
+            'label' => 'Site: ',
+            'required' => true,
+            'query_builder' => function(EntityRepository $entityRepository) {
+                return $entityRepository->createQueryBuilder('participant')->orderBy('participant.nom', 'ASC');
+            },
+            'choice_label' => 'nom',
+            'attr' => ['class' => 'form-control']
         ]);
 
         $builder->add('plainPassword', PasswordType::class, [
