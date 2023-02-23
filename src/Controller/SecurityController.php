@@ -68,4 +68,24 @@ class SecurityController extends AbstractController
             'UpdateProfilForm' => $form->createView(),
         ]);
     }
+
+    #[Route(path: '/profile/delete', name: 'deleteProfile', methods:['GET'])]
+    public function deleteUser(EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator): Response
+    {
+        $user = $this->getUser();
+        if (!$user)
+        {
+            return $this->redirectToRoute('app_login');
+        }
+        $this->container->get('security.token_storage')->setToken(null);
+        $this->logout();
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+       // $this->get('session')->remove('user');
+        /* pour tout supprimer */
+       // $this->get('session')->clear();
+
+                return $this->render('home/home.html.twig');
+    }
 }
