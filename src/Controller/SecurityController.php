@@ -68,13 +68,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/profile/delete', name: 'deleteProfile', methods:['GET'])]
+    #[Route(path: '/profile/delete', name: 'security_deleteProfile', methods:['GET'])]
     public function deleteUser(EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator): Response
     {
         $user = $this->getUser();
         if (!$user)
         {
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('security_login');
         }
         $this->container->get('security.token_storage')->setToken(null);
         $this->logout();
