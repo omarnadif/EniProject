@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\ParticipantProfileFormType;
-use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +20,7 @@ class SecurityController extends AbstractController
     {
         // Si problème lors du login renvoie sur l'exception
         $error = $authenticationUtils->getLastAuthenticationError();
+
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -44,7 +44,6 @@ class SecurityController extends AbstractController
     #[Route('/updateProfile', name: 'security_updateProfile', methods: ['GET', 'POST'])]
     public function updateProfile(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator): Response
     {
-
         $user = $this->getUser();
 
         //Création du formulaire
@@ -53,6 +52,16 @@ class SecurityController extends AbstractController
 
         //Vérification du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
+
+            //Récupération des données du formulaire
+            $userData = $form->getData();
+
+            //Mise à jour du mot de passe, s'il a été modifié
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $userPasswordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
 
             //Modification du Participant en BDD (Base de donnée)
             $entityManager->flush();
@@ -67,5 +76,25 @@ class SecurityController extends AbstractController
         return $this->render('user/updateProfile.html.twig', [
             'UpdateProfilForm' => $form->createView(),
         ]);
+    }
+
+    #[Route(path: '/profile/delete', name: 'security_deleteProfile', methods:['GET'])]
+    public function deleteUser(EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator): Response
+    {
+        $user = $this->getUser();
+        if (!$user)
+        {
+            return $this->redirectToRoute('security_login');
+        }
+        $this->container->get('security.token_storage')->setToken(null);
+        $this->logout();
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+       // $this->get('session')->remove('user');
+        /* pour tout supprimer */
+       // $this->get('session')->clear();
+
+                return $this->render('home/home.html.twig');
     }
 }
