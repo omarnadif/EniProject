@@ -87,4 +87,6 @@ class SecurityController extends AbstractController
 
                 return $this->render('home/home.html.twig');
     }
+
+    #[Route('/forgetPassword')]
 }
