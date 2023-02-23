@@ -32,9 +32,15 @@ class RegistrationController extends AbstractController
         //Vérification du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //Hashage du mot de passe
-            $user->setPassword(
-                $userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            //Récupération des données du formulaire
+            $userData = $form->getData();
+
+            //Vérification que le password et confirm password sont identiques
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $userPasswordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
 
             //Insertion du Participant en BDD (Base de donnée)
             $entityManager->persist($user);
