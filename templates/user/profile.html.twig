@@ -12,7 +12,16 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+                                {# vérifie si l'utilisateur a déjà une image de profil, sinon on affiche l'image par défaut #}
+                                {% if app.user %}
+                                    {% if app.user.imageParticipant %}
+                                        <img src="{{ app.request.basepath }}/img/user/profilePicture/{{ app.user.imageParticipant }}" alt="imgProfilUser" class="rounded-circle" width="150">
+                                    {% else %}
+                                        <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                                    {% endif %}
+                                {% else %}
+                                    <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                                {% endif %}
                                 <div class="mt-3">
                                     <h4>{{ app.user.nom |upper}} {{ app.user.prenom |upper}}</h4>
                                     <p class="text-secondary mb-3">{% for role in app.user.roles %}{{ role }}{% endfor %}</p>
