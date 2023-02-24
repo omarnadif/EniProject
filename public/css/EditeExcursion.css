@@ -1,77 +1,50 @@
-.form{
-    margin-left: 20px;
-    display:flex;
-    flex-direction: row;
-    margin-top: 50px;
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
-.header-left{
-    margin-left: 100px;
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.b-example-divider {
+    height: 3rem;
+    background-color: rgba(0, 0, 0, .1);
+    border: solid rgba(0, 0, 0, .15);
+    border-width: 1px 0;
+    box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 100vh;
+}
+
+.bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+}
+
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+}
+
+.nav-scroller .nav {
     display: flex;
-    flex-direction:  column;
-    align-items: flex-start;
-
-
-}
-
-.header-right{
-    margin-left: 150px;
-    display: flex;
-    align-items: flex-start;
-    flex-direction:  column;
-
-}
-
-
-input{
-    border-radius:5px;
-    width: 190px;
-}
-
-input[type="date"]{
-width: 190px;
-
-}
-
-.imageUpload{
-    margin-left: 25px;
-    margin-right: 25px;
-    display: flex;
-    flex-direction: column;
-}
-fieldset.scheduler-border {
-    border: 1px groove #ddd !important;
-    padding: 0 1.4em 1.4em 1.4em !important;
-    margin: 50px 0 1.5em 0 !important;
-    -webkit-box-shadow:  0px 0px 0px 0px #000;
-    box-shadow:  0px 0px 0px 0px #000;
-}
-
-legend.scheduler-border {
-    font-size: 1.2em !important;
-    font-weight: bold !important;
-    width: initial;
-    text-align: left !important;
-}
-fieldset.scheduler-border-2{
-    margin: 0 0 1.5em 150px !important;
-    border: 1px groove #ddd !important;
-    padding: 0 1.4em 1.4em 1.4em !important;
-    -webkit-box-shadow:  0px 0px 0px 0px #000;
-    box-shadow:  0px 0px 0px 0px #000;
-}
-.preview{
-    display: flex;
-    flex-direction: column;
-    width: auto;
-
-}
-
-.bouttonCreation{
-    display: flex;
-    margin-top: 40px;
-    justify-content: space-evenly;
-}
-select{
-    width: 190px;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 }

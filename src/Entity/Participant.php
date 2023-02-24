@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: 'Participants')]
@@ -27,9 +29,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'pseudo', type: 'string', length: 50, unique: true)]
     private ?string $pseudo = null;
 
-#[ORM\Column(type: 'string',length: 100)]
-private ?string $resetToken;
-
     /**
      * @var string The hashed password
      */
@@ -50,6 +49,13 @@ private ?string $resetToken;
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = null;
+
+    #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: "participants")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageParticipant = null;
 
     public function getId(): ?int
     {
@@ -217,19 +223,31 @@ private ?string $resetToken;
     }
 
     /**
-     * @return string|null
+     * @return Site|null
      */
-    public function getResetToken(): ?string
+    public function getSite(): ?Site
     {
-        return $this->resetToken;
+        return $this->site;
     }
 
     /**
-     * @param string|null $resetToken
+     * @param Site|null $site
      */
-    public function setResetToken(?string $resetToken): void
+    public function setSite(?Site $site): void
     {
-        $this->resetToken = $resetToken;
+        $this->site = $site;
+    }
+
+    public function getImageParticipant(): ?string
+    {
+        return $this->imageParticipant;
+    }
+
+    public function setImageParticipant(?string $imageParticipant): self
+    {
+        $this->imageParticipant = $imageParticipant;
+
+        return $this;
     }
 
 
