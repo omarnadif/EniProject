@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}: Modifier mon profil{% endblock %}
+
+{% block main %}
+
+    {% form_theme UpdateProfilForm 'bootstrap_5_layout.html.twig' %}
+    {{ form(UpdateProfilForm) }}
+
+{% endblock %}
+

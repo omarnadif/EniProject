@@ -3,11 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Participant;
-use Doctrine\DBAL\Types\IntegerType;
+use App\Entity\Site;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -43,11 +46,38 @@ class RegistrationFormType extends AbstractType
             'label' => 'Email: ',
             'required' => true,
         ]);
-        $builder->add('plainPassword', PasswordType::class, [
-            'mapped' => false,
-            'label' => 'Mot de passe: ',
+
+        $builder->add('pseudo', TextType::class, [
+            'trim' => true,
+            'label' => 'Pseudo: ',
             'required' => true,
-            'attr' => ['autocomplete' => 'new-password'],
+        ]);
+
+
+        $builder->add('site', EntityType::class, [
+            'class' => Site::class,
+            'trim' => true,
+            'label' => 'Site: ',
+            'required' => true,
+            'query_builder' => function(EntityRepository $entityRepository) {
+                return $entityRepository->createQueryBuilder('participant')->orderBy('participant.nom', 'ASC');
+            },
+            'choice_label' => 'nom',
+            'attr' => ['class' => 'form-control']
+        ]);
+
+        $builder->add('plainPassword', RepeatedType::class, [
+            'mapped' => false,
+            'type' => PasswordType::class,
+            'invalid_message' => 'Les deux champs de mot de passe doivent correspondre !',
+            'first_options' => [
+                'label' => 'Mot de passe: ',
+                'attr' => ['autocomplete' => 'new-password'],
+            ],
+            'second_options' => [
+                'label' => 'Confirmation du mot de passe: ',
+                'attr' => ['autocomplete' => 'new-password'],
+            ],
             'constraints' => [
                 new NotBlank([
                     'message' => 'Le mot de passe est obligatoire !',
@@ -58,8 +88,14 @@ class RegistrationFormType extends AbstractType
                     'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} caractères !',
                     'maxMessage' => 'Votre mot de passe doit faire au maximum {{ limit }} caractères !',
                 ]),
+                /*
+                 * new EqualTo([
+                    'propertyPath' => 'plainPassword',
+                    'message' => 'Les deux champs de mot de passe doivent correspondre !',
+                ]),*/
             ],
         ]);
+
         $builder->add('agreeTerms', CheckboxType::class, [
             'mapped' => false,
             'label' => 'J\'accepte les CGU',

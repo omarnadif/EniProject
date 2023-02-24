@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -22,8 +23,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'security_login';
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
-    }
+    {}
 
     public function authenticate(Request $request): Passport
     {
@@ -35,9 +35,11 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
             [
+                new RememberMeBadge(),
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
             ]
         );
+
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -54,3 +56,28 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }
+
+/*  Brouillon de connexion avec pseudo ou email à mettre dans authenticate normalement
+$emailOrPseudo = $request->request->get('email', '');
+
+if (strpos($emailOrPseudo, '@') === false) {
+
+    //Si dans l'input il n'y a pas de "@", alors c'est le pseudo
+    $pseudo = $emailOrPseudo;
+    $email = ''; //email non spécifié dans le badge de l'utilisateur
+} else {
+    //Si dans l'input il y a un "@", alors c'est le email
+    $email = $emailOrPseudo;
+    $pseudo = ''; //pseudo non spécifié dans le badge de l'utilisateur
+}
+
+$request->getSession()->set(Security::LAST_USERNAME, $emailOrPseudo);
+
+return new Passport(
+    new UserBadge($emailOrPseudo, fn ($pseudo)=> $this->participantRepository->findOneByPseudoOrEmail($pseudo, $email)),
+    new PasswordCredentials($request->request->get('password', '')),
+    [
+        new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+    ]
+);
+*/

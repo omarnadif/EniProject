@@ -1,4 +1,3 @@
-</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -144,7 +143,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-xl navbar-light bg-light">
-    <a href="#" class="navbar-brand"><img src="{{ asset('img/enilogo.png') }}" width="60" class="mr-2">Sortir<b>Eni</b></a>
+    <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -171,22 +170,35 @@
 {#                <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>#}
 {#            </div>#}
 {#        </form>#}
+
+        {# Boutton connexion/S'incrire/Se déconnecter #}
        <div class="navbar-nav ml-auto">
            {% if app.user %}
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="{{ asset('img/loginlogo.jpg') }}" class="avatar" alt="Avatar">{{ app.user.nom|upper }}{{' '}}{{ app.user.prenom }}<b class="caret"></b></a>
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
+
+                    {# vérifie si l'utilisateur a déjà une image de profil, sinon on affiche l'image par défaut #}
+                    {% if app.user %}
+                        {% if app.user.imageParticipant %}
+                            <img src="{{ app.request.basepath }}/img/user/profilePicture/{{ app.user.imageParticipant }}" alt="imgProfilUser" class="rounded-circle" width="150">
+                        {% else %}
+                            <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                        {% endif %}
+                    {% else %}
+                        <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                    {% endif %}
+                    {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
                 <div class="dropdown-menu">
-                    <a href="{{ path('app_security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendar</a></a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Settings</a></a>
+                    <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendrier</a>
+                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Paramètres</a>
                     <div class="dropdown-divider"></div>
-                    <a href="{{ path('security_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>
+                    <a href="{{ path('security_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i>Se déconnecter</a>
                 </div>
             </div>
            {% else %}
-
-               <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Login</a>
-               <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">Sign-up</a>
+               <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Se connecter</a>
+               <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
            {% endif %}
 
        </div>
@@ -194,15 +206,20 @@
 </nav>
 {% block main %}{% endblock %}
 </body>
-<footer class="text-muted">
 
-    <div class="container">
-        <p class="float-right">
-            <a href="#">Back to top</a>
-        </p>
-        <p>Eni Ecole Informatique &copy; {{ "now" | date('Y') }}</p>
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+        <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+            <svg class="bi" width="30" height="24"><img src="{{ asset('img/enilogo.png') }}" width="40" class="mr-2" alt="Logo_Eni"></svg>
+        </a>
+        <span class="mb-3 mb-md-0 text-muted">Eni Ecole Informatique &copy; {{ "now" | date('Y') }}</span>
     </div>
 
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+        <li class="ms-3"><a class="text-muted" href="https://twitter.com/ENIEcoleInforma"><img src="{{ asset('img/twlogo.png') }}" width="30"  alt="Logo_tw"></svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="https://www.instagram.com/eniecoleinformatique/"><img src="{{ asset('img/instalogo.png') }}" class="ml-2" width="30"  alt="Logo_tw"></svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="https://www.facebook.com/EniEcoleInformatique/"><img src="{{ asset('img/fblogo.png') }}" width="30" class="ml-2" alt="Logo_tw"></svg></a></li>
+    </ul>
 </footer>
 <script src="https://code.jquery.com/jquery-3.2.1.s lim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>

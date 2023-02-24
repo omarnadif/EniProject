@@ -5,14 +5,16 @@ namespace App\Entity;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: 'Participants')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Ce mail est déjà utilisé!')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà utilisé!')]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    //appgdhgcd
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]
@@ -23,6 +25,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'json', length: '1000')]
     private array $roles = [];
+
+    #[ORM\Column(name: 'pseudo', type: 'string', length: 50, unique: true)]
+    private ?string $pseudo = null;
 
     /**
      * @var string The hashed password
@@ -45,6 +50,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = null;
 
+    #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: "participants")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageParticipant = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +72,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    /**
+     * @param string|null $pseudo
+     */
+    public function setPseudo(?string $pseudo): void
+    {
+        $this->pseudo = $pseudo;
     }
 
     /**
@@ -193,4 +221,35 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Site|null
+     */
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    /**
+     * @param Site|null $site
+     */
+    public function setSite(?Site $site): void
+    {
+        $this->site = $site;
+    }
+
+    public function getImageParticipant(): ?string
+    {
+        return $this->imageParticipant;
+    }
+
+    public function setImageParticipant(?string $imageParticipant): self
+    {
+        $this->imageParticipant = $imageParticipant;
+
+        return $this;
+    }
+
+
+
 }
