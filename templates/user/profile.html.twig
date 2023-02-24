@@ -26,7 +26,7 @@
                                     <h4>{{ app.user.nom |upper}} {{ app.user.prenom |upper}}</h4>
                                     <p class="text-secondary mb-3">{% for role in app.user.roles %}{{ role }}{% endfor %}</p>
                                     <button class="btn btn-warning">Mot de passe oublié</button>
-                                    <button class="btn btn-outline-danger"><a href="{{ path('security_deleteProfile') }}">Supprimer</a></button>
+                                    <button class="btn btn-outline-danger"><a onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" href="{{ path('security_deleteProfile') }}">Supprimer</a></button>
                                 </div>
                             </div>
                         </div>
