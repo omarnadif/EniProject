@@ -143,7 +143,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-xl navbar-light bg-light">
-    <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>
+    <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/logo/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -200,7 +200,6 @@
                <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Se connecter</a>
                <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
            {% endif %}
-
        </div>
     </div>
 </nav>
@@ -210,15 +209,15 @@
 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
     <div class="col-md-4 d-flex align-items-center">
         <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-            <svg class="bi" width="30" height="24"><img src="{{ asset('img/enilogo.png') }}" width="40" class="mr-2" alt="Logo_Eni"></svg>
+            <svg class="bi" width="30" height="24"><img src="{{ asset('img/logo/enilogo.png') }}" width="40" class="mr-2" alt="Logo_Eni"></svg>
         </a>
         <span class="mb-3 mb-md-0 text-muted">Eni Ecole Informatique &copy; {{ "now" | date('Y') }}</span>
     </div>
 
     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-muted" href="https://twitter.com/ENIEcoleInforma"><img src="{{ asset('img/twlogo.png') }}" width="30"  alt="Logo_tw"></svg></a></li>
-        <li class="ms-3"><a class="text-muted" href="https://www.instagram.com/eniecoleinformatique/"><img src="{{ asset('img/instalogo.png') }}" class="ml-2" width="30"  alt="Logo_tw"></svg></a></li>
-        <li class="ms-3"><a class="text-muted" href="https://www.facebook.com/EniEcoleInformatique/"><img src="{{ asset('img/fblogo.png') }}" width="30" class="ml-2" alt="Logo_tw"></svg></a></li>
+        <li class="ms-3"><a class="text-muted" target="__blank" href="https://twitter.com/ENIEcoleInforma"><img src="{{ asset('img/logo/twlogo.png') }}" width="30"  alt="Logo_tw"></a></li>
+        <li class="ms-3"><a class="text-muted" target="__blank" href="https://www.instagram.com/eniecoleinformatique/"><img src="{{ asset('img/logo/instalogo.png') }}" class="ml-2" width="30"  alt="Logo_tw"></a></li>
+        <li class="ms-3"><a class="text-muted" target="__blank" href="https://www.facebook.com/EniEcoleInformatique/"><img src="{{ asset('img/logo/fblogo.png') }}" width="30" class="ml-2" alt="Logo_tw"></a></li>
     </ul>
 </footer>
 <script src="https://code.jquery.com/jquery-3.2.1.s lim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
