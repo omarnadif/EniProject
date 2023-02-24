@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-#[Route(path: 'lieu/')]
+#[Route(path: '/admin/lieu/')]
 class LieuController extends AbstractController
 {
 

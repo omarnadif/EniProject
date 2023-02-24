@@ -46,6 +46,7 @@ class LieuFormType extends AbstractType
             'trim' => true,
             'choice_label'=>'nom',
             'label' => 'Ville: ',
+            'attr' => ['class' => 'form-control'],
             'class'=>Ville::class,
             'required' => true,
         ]);

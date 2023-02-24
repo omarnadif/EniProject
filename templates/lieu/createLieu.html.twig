@@ -6,6 +6,7 @@
 
 {% block title %}{{ parent() }} Creer Sortie {% endblock %}
 {% block main %}
+    {% form_theme lieuForm 'bootstrap_5_layout.html.twig' %}
 
     {{ form_start(lieuForm) }}
     <div class="row g-6 mr-6 mt-4">
