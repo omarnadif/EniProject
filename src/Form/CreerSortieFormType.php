@@ -68,7 +68,9 @@ class CreerSortieFormType extends AbstractType
             'trim' => true,
             'required' => true,
             'class' => Lieu::class,
+            'choice_label'=>'nom',
             'attr' => ['class' => 'form-control']
+
         ]);
 
 
@@ -79,6 +81,7 @@ class CreerSortieFormType extends AbstractType
             'label' => 'Nom: ',
             'required' => true,
             'class' => Etat::class,
+            'choice_label'=>'libelle',
             'attr' => ['class' => 'form-control'],
         ]);
 

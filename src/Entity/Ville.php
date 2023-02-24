@@ -21,13 +21,14 @@ class Ville
     #[ORM\Column]
     private ?int $codePostal = null;
 
-    #[ORM\OneToMany(mappedBy: 'ville', targetEntity: lieu::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'ville', targetEntity: Lieu::class, orphanRemoval: true)]
     private Collection $lieus;
 
     public function __construct()
     {
         $this->lieus = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
