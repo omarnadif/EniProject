@@ -25,6 +25,12 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
 
+    # Gestion des rôles
+    # Le super admin possède les droits de role admin en plus de ce qu'ils lui sont affectés
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_ADMIN: ROLE_USER
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
