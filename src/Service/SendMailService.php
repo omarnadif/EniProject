@@ -1,7 +1,7 @@
 <?php
 namespace App\Service;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
 class SendMailService{
@@ -16,7 +16,7 @@ class SendMailService{
         string $to,
         string $subject,
         string $template,
-        string $context
+        array $context
 
     ):void
     {
@@ -29,7 +29,10 @@ class SendMailService{
             ->context($context);
 
         // on envoie le mail
-        $this->mailer->send($email);
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+        }
 
     }
 }

@@ -35,6 +35,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: '200')]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'string', length: '200')]
+    private ?string $resetToken = null;
+
     #[ORM\Column(length: 100)]
     private ?string $nom = null;
 
@@ -141,6 +144,24 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param string|null $resetToken
+     */
+    public function setResetToken(?string $resetToken): void
+    {
+        $this->resetToken = $resetToken;
+    }
+
+
 
     /**
      * Returning a salt is only needed, if you are not using a modern
