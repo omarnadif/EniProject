@@ -42,6 +42,23 @@ class RegistrationController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
+            /*
+
+            // Récupération du rôle sélectionné
+            $selectedRole = $form->get('roles')->getData();
+
+            // Enregistrement du rôle dans la propriété roles de l'utilisateur
+            $user->setRoles([$selectedRole]);
+
+            //Détermination de la valeur de la propriété "administrateur" en fonction du rôle sélectionné
+            if ($selectedRole === 'ROLE_ADMIN') {
+                $user->setAdministrateur(true);
+            } else {
+                $user->setAdministrateur(false);
+            }
+
+            */
+
             //Insertion du Participant en BDD (Base de donnée)
             $entityManager->persist($user);
             $entityManager->flush();
