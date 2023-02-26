@@ -85,13 +85,22 @@ class SecurityController extends AbstractController
         $this->container->get('security.token_storage')->setToken(null);
         $this->logout();
 
+        // Suppression de l'image de profil de l'utilisateur, s'il en a une
+        $imageProfil = $user->getImageParticipant();
+        if ($imageProfil) {
+            $imagePath = $this->getParameter('participant_image_directory') . '/' . $imageProfil;
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $entityManager->remove($user);
         $entityManager->flush();
-       // $this->get('session')->remove('user');
+        // $this->get('session')->remove('user');
         /* pour tout supprimer */
-       // $this->get('session')->clear();
+        // $this->get('session')->clear();
 
-                return $this->render('home/home.html.twig');
+        return $this->render('home/home.html.twig');
     }
     #[Route(path: '/forgetPassword', name: 'security_forgettenPassword', methods:['GET','POST'])]
     public function forgetPassword(Request $request,
