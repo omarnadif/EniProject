@@ -33,7 +33,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             //Récupération des données du formulaire
-            $userData = $form->getData();
+            $user = $form->getData();
 
             //Vérification que le password et confirm password sont identiques
             $plainPassword = $form->get('plainPassword')->getData();
