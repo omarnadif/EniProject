@@ -14,6 +14,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route(path: '/admin/lieu/')]
 class LieuController extends AbstractController
 {
+    #[Route(path: 'index', name: 'indexlieu', methods:['GET'])]
+    public function profile(EntityManagerInterface $em): Response
+    {
+        $lieux = $em->getRepository(Lieu::class)->findAll();
+
+        return $this->render('lieu/show.html.twig', [
+            'lieux' => $lieux,
+        ]);
+    }
 
     #[Route('create', name: 'createLieu', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
@@ -48,4 +57,7 @@ class LieuController extends AbstractController
             'lieuForm' => $formLieu->createView(),
         ]);
     }
+
+
+
 }
