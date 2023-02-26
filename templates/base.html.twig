@@ -147,12 +147,21 @@
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
+
+
     <!-- Collection of nav links, forms, and other content for toggling -->
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">
         <div class="ml-2 navbar-nav">
-            <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
-            <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
-            <a href="{{ path('home_legal_stuff') }}" class="nav-item nav-link text-bg-dark">Mention-légale</a>
+            {% if app.user %}
+                <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
+
+                <a href="{{ path('createLieu') }}" class="nav-item nav-link active text-bg-dark">Créer un lieu d'évenement</a>
+                <a href="{{ path('selectExcursion') }}" class="nav-item nav-link active text-bg-dark">Choix d'évenements</a>
+            {% else %}
+                <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
+
+            {% endif %}
+
 {#            <div class="nav-item dropdown">#}
 {#                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>#}
 {#                <div class="dropdown-menu">#}
@@ -162,7 +171,6 @@
 {#                    <a href="#" class="dropdown-item">Digital Marketing</a>#}
 {#                </div>#}
 {#            </div>#}
-            <a href="{{ path('home_contact') }}" class="nav-item nav-link">Contact</a>
         </div>
 {#        <form class="navbar-form form-inline">#}
 {#            <div class="input-group search-box">#}
@@ -213,6 +221,11 @@
             <svg class="bi" width="30" height="24"><img src="{{ asset('img/logo/enilogo.png') }}" width="40" class="mr-2" alt="Logo_Eni"></svg>
         </a>
         <span class="mb-3 mb-md-0 text-muted">Eni Ecole Informatique &copy; {{ "now" | date('Y') }}</span>
+        <br>
+        <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a><br>
+        <a href="{{ path('home_legal_stuff') }}" class="nav-item nav-link text-bg-dark">Mention-légale</a><br>
+        <a href="{{ path('home_contact') }}" class="nav-item nav-link">Contact</a>
+
     </div>
 
     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
