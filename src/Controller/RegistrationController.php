@@ -26,7 +26,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        $user->setAdministrateur(false);
+        //$user->setAdministrateur(false);
         $user->setActif(false);
 
         //Vérification du formulaire
@@ -42,22 +42,18 @@ class RegistrationController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
-            /*
-
             // Récupération du rôle sélectionné
             $selectedRole = $form->get('roles')->getData();
 
             // Enregistrement du rôle dans la propriété roles de l'utilisateur
-            $user->setRoles([$selectedRole]);
+            //$user->setRoles($selectedRole);
 
             //Détermination de la valeur de la propriété "administrateur" en fonction du rôle sélectionné
             if ($selectedRole === 'ROLE_ADMIN') {
-                $user->setAdministrateur(true);
+                $user->setAdministrateur('1');
             } else {
-                $user->setAdministrateur(false);
+                $user->setAdministrateur('0');
             }
-
-            */
 
             //Insertion du Participant en BDD (Base de donnée)
             $entityManager->persist($user);
@@ -65,7 +61,6 @@ class RegistrationController extends AbstractController
 
             //Connexion automatique du Participant
             return $userAuthenticator->authenticateUser($user, $authenticator, $request);
-
         }
 
         return $this->render('registration/register.html.twig', [
