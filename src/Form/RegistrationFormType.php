@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -66,22 +67,25 @@ class RegistrationFormType extends AbstractType
             'attr' => ['class' => 'form-control']
         ]);
 
-        /*
-        $builder->add('roles',ChoiceType::class, [
+
+        $builder->add('roles',CollectionType::class, [
         'label' => "Role de l'utilisateur : ",
-        'choices'  => [
-            'Utilisateur' => 'ROLE_USER',
-            'Administrateur' => 'ROLE_ADMIN',
+        'entry_type' => ChoiceType::class,
+        'entry_options' => [
+            'choices'  => [
+                'Utilisateur' => 'ROLE_USER',
+                'Administrateur' => 'ROLE_ADMIN',
             ],
-            'multiple' => false,
-            'expanded' => true,
+        ],
+            /*'multiple' => false,
+            'expanded' => true,*/
         ]);
 
         $builder->add('actif', CheckboxType::class, [
             'label' => 'Actif',
             'required' => false
         ]);
-           */
+
 
         $builder->add('plainPassword', RepeatedType::class, [
             'mapped' => false,
