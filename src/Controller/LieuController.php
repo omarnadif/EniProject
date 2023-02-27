@@ -61,7 +61,7 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'update/{id}', name: 'updateVille', methods: ['GET','POST'])]
+    #[Route(path: 'update/{id}', name: 'updateVille_Lieu', methods: ['GET','POST'])]
     public function update($id, EntityManagerInterface $em,Request $request): Response
     {
         $ville = $em->find(Ville::class, $id);
@@ -93,7 +93,7 @@ class LieuController extends AbstractController
 
         if ($ville === null) {
             // la ville n'a pas été trouvée
-            return $this->render('lieu/indexLieu.html.twig/', [
+            return $this->render('lieu/indexLieu.html.twig', [
                 'ville' => $ville,]);
         } else {
             // la ville a été trouvée
@@ -106,7 +106,7 @@ class LieuController extends AbstractController
 
     }
 
-    #[Route(path: 'delete/{id}', name: 'deleteVille', methods: ['GET'])]
+    #[Route(path: 'delete/{id}', name: 'deleteVille_Lieu', methods: ['GET'])]
     public function delete($id, EntityManagerInterface $em): Response
     {
         $ville = $em->find(Ville::class, $id);
@@ -119,9 +119,11 @@ class LieuController extends AbstractController
             return $this->redirectToRoute('indexlieu');
         }
 
-        return $this->render('lieu/indexLieu.html.twig/', [
+        return $this->render('lieu/indexLieu.html.twig', [
             'ville' => $ville,
         ]);
     }
+
+
 
 }

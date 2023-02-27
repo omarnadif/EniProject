@@ -24,8 +24,8 @@
                 <td>{{ ville.nom }}</td>
                 <td>{{ ville.codePostal }}</td>
                 <td>
-                    <a href="{{ path('updateVille', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                    <a href="{{ path('deleteVille', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                    <a href="{{ path('updateVille_Lieu', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                    <a href="{{ path('deleteVille_Lieu', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
                 </td>
             </tr>
         {% endfor %}
@@ -35,7 +35,7 @@
     </table>
 </div>
     <div>
-        <a href="{{ path('createVille')}}" class="btn btn-outline-success btn-sm">Ajouter</a>
+        <a href="{{ path('createLieu')}}" class="btn btn-outline-success btn-sm">Ajouter</a>
     </div>
     <style>
         #divConteneur{
