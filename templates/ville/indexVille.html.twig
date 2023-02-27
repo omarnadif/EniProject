@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="" />
+{% endblock %}
+
+{% block title %}{{ parent() }} Ville{% endblock %}
+{% block main %}
+
+
+    <h2 class="display-6 text-center mb-4">Gestion des Villes</h2>
+
+    <div class="table-responsive">
+        <table class=" text-center table table-bordered border-primary">
+            <thead>
+            <tr>
+                <th style="width: 22%;">Id</th>
+                <th style="width: 22%;">Nom</th>
+                <th style="width: 22%;">Code Postal</th>
+                <th style="width: 22%;">Actions</th>
+            </tr>
+            </thead>
+                    <tbody>
+                    {% for ville in villes %}
+                        <tr>
+                            <th scope="row">{{ ville.id }}</th>
+                            <td>{{ ville.nom }}</td>
+                            <td>{{ ville.codePostal }}</td>
+                            <td>
+                                <a href="{{ path('updateVille', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                                <a href="{{ path('deleteVille', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+        </table>
+        <a href="{{ path('createVille') }}" class="btn btn-info ml-5">Ajouter</a>
+    </div>
+
+
+{% endblock %}

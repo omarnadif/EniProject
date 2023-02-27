@@ -21,7 +21,7 @@ class VilleController extends AbstractController
     {
         $villes = $em->getRepository(Ville::class)->findAll();
 
-        return $this->render('ville/index.html.twig', [
+        return $this->render('ville/indexVille.html.twig', [
             'villes' => $villes,
         ]);
     }
@@ -52,7 +52,7 @@ class VilleController extends AbstractController
             $this->addFlash('success', 'Le souhait a bien été ajouté !');
 
             // Redirection vers la liste
-            return $this->redirectToRoute('indexlieu');
+            return $this->redirectToRoute('indexville');
 
         }
 
@@ -60,6 +60,70 @@ class VilleController extends AbstractController
             'formVille' => $formVille->createView(),
         ]);
     }
+
+    #[Route(path: 'update/{id}', name: 'updateVille', methods: ['GET','POST'])]
+    public function update($id, EntityManagerInterface $em,Request $request): Response
+    {
+        $ville = $em->find(Ville::class, $id);
+        // Création
+
+
+
+        //Création du formulaire
+        $formVille = $this->createForm(VilleFormType::class, $ville);
+        $formVille->handleRequest($request);
+
+
+
+
+        //Vérification du formulaire
+        if ($formVille->isSubmitted() && $formVille->isValid()) {
+
+
+            //Insertion du Participant en BDD (Base de donnée)
+            $em->persist($ville);
+            $em->flush();
+
+            $this->addFlash('success', 'La ville a bien été modifier !');
+
+            // Redirection vers la liste
+            return $this->redirectToRoute('indexville');
+
+        }
+
+        if ($ville === null) {
+            // la ville n'a pas été trouvée
+            return $this->render('ville/indexVille.html.twig', [
+                'ville' => $ville,]);
+        } else {
+            // la ville a été trouvée
+        }
+
+        return $this->render('ville/updateVille.html.twig', [
+            'ville' => $ville,
+            'formVille' => $formVille->createView(),
+        ]);
+
+    }
+
+    #[Route(path: 'delete/{id}', name: 'deleteVille', methods: ['GET'])]
+    public function delete($id, EntityManagerInterface $em): Response
+    {
+        $ville = $em->find(Ville::class, $id);
+
+        if ($ville === null) {
+            // la ville n'a pas été trouvée
+        } else {
+            $em->remove($ville);
+            $em->flush();
+            return $this->redirectToRoute('indexville');
+        }
+
+        return $this->render('ville/indexVille.html.twig', [
+            'ville' => $ville,
+        ]);
+    }
+
 
 
 
