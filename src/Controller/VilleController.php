@@ -56,8 +56,8 @@ class VilleController extends AbstractController
 
         }
 
-        return $this->render('ville/create.html.twig', [
-            'lieuVille' => $formVille->createView(),
+        return $this->render('ville/createVille.html.twig', [
+            'formVille' => $formVille->createView(),
         ]);
     }
 
