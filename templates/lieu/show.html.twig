@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="{{ asset('css/.css') }}" />
+{% endblock %}
+
+{% block title %}{{ parent() }} Creer Sortie {% endblock %}
+{% block main %}
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for lieu in lieux %}
+                <th scope="row">1</th>
+                 <td>{{ lieu.nom}} </td>
+                <td>{{ lieu.rue}} </td>
+                <td>{{ lieu.l}} </td>
+                <td>{{ lieu.nom}} </td>
+            {% endfor %}
+
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
