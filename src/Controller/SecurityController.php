@@ -137,6 +137,7 @@ class SecurityController extends AbstractController
                 //on crée les données du mail
                 $context=compact('url','user');
 
+
                 //Envoi du mail
                 $mail->send('453f7e6784-9562de@inbox.mailtrap.io',
                 $user->getEmail(),
