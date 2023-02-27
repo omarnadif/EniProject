@@ -52,7 +52,7 @@ class VilleController extends AbstractController
             $this->addFlash('success', 'Le souhait a bien été ajouté !');
 
             // Redirection vers la liste
-            return $this->redirectToRoute('indexville');
+            return $this->redirectToRoute('indexlieu');
 
         }
 
