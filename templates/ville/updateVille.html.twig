@@ -1,0 +1,55 @@
+{% extends "base.html.twig" %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/EditeExcursion.css') }}" />
+{% endblock %}
+
+{% block title %}{{ parent() }} Creer Ville {% endblock %}
+{% block main %}
+    {% form_theme formVille 'bootstrap_5_layout.html.twig' %}
+
+    {{ form_start(formVille) }}
+    <div class="row g-6 mr-6 mt-4">
+
+        <div class="col-md-5 col-lg-3 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">Preview Lieu </span>
+            </h4>
+            <ul class="list-group mb-4">
+
+                <input class="form-control" type="file" id="formFile">
+
+                <img src="{{ asset('img/testimg.jpg') }}" class="img-thumbnail" alt="...">
+
+
+            </ul>
+
+        </div>
+        <div class="col-md-7 col-lg-8 ml-5">
+            <h4 class="mb-3">Ajouter des villes </h4>
+            <form class="needs-validation" novalidate="">
+                <div class="row g-3">
+
+
+                    <div class="col-12">
+                        <label for="nom" class="form-label">Nom</label>
+                        {{ form_widget(formVille.nom) }}
+                    </div>
+
+                    <div class="col-12">
+                        <label for="rue" class="form-label">Code Postal</label>
+                        {{ form_widget(formVille.codePostal)}}
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+
+                {{ form_end(formVille) }}
+        </div>
+
+    </div>
+
+
+{% endblock %}

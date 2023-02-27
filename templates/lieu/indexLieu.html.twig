@@ -1,0 +1,46 @@
+{% extends "base.html.twig" %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="{{ asset('css/.css') }}" />
+{% endblock %}
+
+{% block title %}{{ parent() }} Creer Sortie {% endblock %}
+{% block main %}
+<div id="divConteneur">
+    <table class="table table-striped" id="Table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ville</th>
+            <th scope="col">Code postal</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for ville in villes %}
+            <tr>
+                <th scope="row">{{ ville.id }}</th>
+                <td>{{ ville.nom }}</td>
+                <td>{{ ville.codePostal }}</td>
+                <td>
+                    <a href="{{ path('updateVille', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                    <a href="{{ path('deleteVille', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+    <style>
+        #divConteneur{
+            min-height:100px;
+            height:260px;/*pour IE qui comprend rien, et qui ne reconnait pas min-height, mais qui comprend mal height*/
+            min-width:260px;
+            width:560px;/*pour IE qui comprend rien*/
+            overflow:auto;/*pour activer les scrollbarres*/
+        }
+    </style>
+{% endblock %}
