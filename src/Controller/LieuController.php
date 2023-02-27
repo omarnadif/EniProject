@@ -116,6 +116,7 @@ class LieuController extends AbstractController
         } else {
             $em->remove($ville);
             $em->flush();
+            return $this->redirectToRoute('indexlieu');
         }
 
         return $this->render('lieu/indexLieu.html.twig/', [
