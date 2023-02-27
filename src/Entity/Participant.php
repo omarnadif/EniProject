@@ -35,8 +35,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: '200')]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'string', length: '200')]
-    private ?string $resetToken = null;
+    #[ORM\Column(type: 'string', length: '200',nullable: 'false')]
+    private ?string $resetToken ;
 
     #[ORM\Column(length: 100)]
     private ?string $nom = null;
