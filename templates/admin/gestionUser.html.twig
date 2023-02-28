@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="" />
+{% endblock %}
+
+{% block title %}{{ parent() }} Ville{% endblock %}
+{% block main %}
+
+    <h2 class="display-6 text-center mb-4">Gestion des utilisateurs </h2>
+
+{#    <form class="navbar-form form-control-sm">
+        <div class="input-group search-box mb-4">
+            <h6 class="text-justify mt-2 mr-3">Le nom contient: </h6>
+            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+
+            <input type="text" id="search" class="form-control" placeholder="">
+
+        </div>
+    </form>#}
+
+    <div class="table-responsive">
+
+        <table class=" text-center table table-bordered border-primary">
+            <thead>
+            <tr>
+
+                <th style="width: 5%;">Id</th>
+                <th style="width: 22%;">Email</th>
+                <th style="width: 10%;">Pseudo</th>
+                <th style="width: 10%;">Nom</th>
+                <th style="width: 10%;">Prenom</th>
+                <th style="width: 10%;">Telephone</th>
+                <th style="width: 22%;">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.pseudo }}</td>
+                    <td>{{ user.nom }}</td>
+                    <td>{{ user.prenom }}</td>
+                    <td>{{ user.telephone }}</td>
+                    <td>
+                      <a href="{{ path('updateGestionUser', {'id': user.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                        <a href="{{ path('deleteParticipant', {'id': user.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

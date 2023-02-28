@@ -4,9 +4,9 @@
 {% block title %}{{  parent() }}Page d'Accueil {% endblock %}
 
 {% block informations %}
-    {% if app.user %}
+ {#   {% if app.user %}
         <p class="lead text-muted">Hello {{ app.user.pseudo }}! :)</p>
-    {% endif %}
+    {% endif %}#}
 {% endblock %}
 
 {% block main %}
