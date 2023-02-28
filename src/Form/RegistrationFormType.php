@@ -75,6 +75,7 @@ class RegistrationFormType extends AbstractType
             'label' => false,
             'choices'  => [
                 'Utilisateur' => 'ROLE_USER',
+                'Organisateur' => 'ROLE_ORGANISATEUR',
                 'Administrateur' => 'ROLE_ADMIN',
             ],
         ],
@@ -124,6 +125,7 @@ class RegistrationFormType extends AbstractType
                 ]),
             ],
         ]);
+
         $builder->add('submit', SubmitType::class, [
             'label' => 'S\'inscrire',
         ]);
