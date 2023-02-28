@@ -6,17 +6,21 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-#[Route(path: '/admin/lieu/')]
+#[Route(path: 'admin/lieu/')]
 class LieuController extends AbstractController
 {
-    #[Route(path: 'index', name: 'indexlieu', methods:['GET'])]
+    #[Route(path: 'index/', name: 'indexlieu', methods:['GET'])]
     public function profile(EntityManagerInterface $em): Response
     {
 
@@ -26,6 +30,28 @@ class LieuController extends AbstractController
             'villes' => $villes,
         ]);
     }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    #[Route(path: 'search/ville/', name:'search_lieu', requirements: ['q' => '?q=*'], methods:['GET','POST'])]
+    public function search(Request $request, VilleRepository $villeRepository): Response
+    {
+        $searchTerm = $request->query->get('q');
+
+        $villes = $villeRepository->createQueryBuilder('v')
+            ->andWhere('v.nom LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('lieu/indexLieu.html.twig', [
+            'villes' => $villes
+        ]);
+
+    }
+
 
     #[Route('create', name: 'createLieu', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response

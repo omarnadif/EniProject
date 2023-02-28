@@ -1,41 +1,47 @@
 {% extends "base.html.twig" %}
 
-{% block css %}
-<link type="text/css" rel="stylesheet" href="{{ asset('css/.css') }}" />
-{% endblock %}
-
 {% block title %}{{ parent() }} Creer Sortie {% endblock %}
 {% block main %}
-<div id="divConteneur">
-    <table class="table table-striped" id="Table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Ville</th>
-            <th scope="col">Code postal</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
+    <div class= "d-flex flex-row">
+        <div class="p-2">
+            <label class="p-2" for="form1">Le nom contient: </label>
+            <input type="search" id="form1" class="p-2" />
+        </div>
+        {% set searchTerm = '' %}
+        <a href="{{ path('search_lieu', { 'q' : searchTerm }) }}" id="bp" type="button" class="btn btn-outline-primary" style="font-size: 14px; width: 70px; height: 50px; line-height: 30px;">search</a>
+        </a>
+    </div>
 
-        {% for ville in villes %}
+    <div id="divConteneur">
+        <table class="table table-striped" id="Table">
+            <thead>
             <tr>
-                <th scope="row">{{ ville.id }}</th>
-                <td>{{ ville.nom }}</td>
-                <td>{{ ville.codePostal }}</td>
-                <td>
-                    <a href="{{ path('updateVille_Lieu', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                    <a href="{{ path('deleteVille_Lieu', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
-                </td>
+                <th scope="col">#</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Actions</th>
             </tr>
-        {% endfor %}
+            </thead>
+            <tbody>
+
+            {% for ville in villes %}
+                <tr>
+                    <th scope="row">{{ ville.id }}</th>
+                    <td>{{ ville.nom }}</td>
+                    <td>{{ ville.codePostal }}</td>
+                    <td>
+                        <a href="{{ path('updateVille', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                        <a href="{{ path('deleteVille', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
 
 
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
     <div>
-        <a href="{{ path('createLieu')}}" class="btn btn-outline-success btn-sm">Ajouter</a>
+        <a href="{{ path('createVille')}}" class="btn btn-outline-success btn-sm">Ajouter</a>
     </div>
     <style>
         #divConteneur{
@@ -45,5 +51,36 @@
             width:560px;/*pour IE qui comprend rien*/
             overflow:auto;/*pour activer les scrollbarres*/
         }
+        #bp{
+            margin-top: 5px;
+        }
     </style>
+    <script>
+        $(document).ready(function() {
+            let searchTerm = ''
+            $('#bp').click(function test() {
+                searchTerm = $('#form1').val();
+
+                $('#bp').attr('href', "{{ path('search_lieu', { 'q' : '' }) }}" + searchTerm);
+
+                $.ajax({
+                    url: '/admin/lieu/search/ville/',
+                    data: {q: searchTerm},
+                    success: function(response) {
+                        $('#table-body').empty();
+
+                        response.forEach(function(ville) {
+                            var row = '<tr>' +
+                                '<th scope="row">' + ville.id + '</th>' +
+                                '<td>' + ville.nom + '</td>' +
+                                '<td>' + ville.codePostal + '</td>' +
+                                '</tr>';
+
+                            $('#table-body').append(row);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
