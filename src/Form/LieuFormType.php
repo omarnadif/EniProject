@@ -54,13 +54,11 @@ class LieuFormType extends AbstractType
 
         $builder->add('lieuUploadPicture', FileType::class, [
             'label' => 'Ajoutez des photos du lieu :',
-
-            // unmapped means that this field is not associated to any entity property
             'mapped' => false,
             'required' => false,
-
-            // unmapped fields can't define their validation using annotations
-            // in the associated entity, so you can use the PHP constraint classes
+            'attr' => [
+                'data-preview' => '#preview',
+            ],
             'constraints' => [
                 new File([
                     'maxSize' => '4096k',

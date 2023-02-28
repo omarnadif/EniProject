@@ -5,54 +5,75 @@
 {% endblock %}
 
 {% block title %}{{ parent() }} Créer un lieu de sortie {% endblock %}
+
 {% block main %}
     {% form_theme lieuForm 'bootstrap_5_layout.html.twig' %}
 
     {{ form_start(lieuForm) }}
-    <div class="row g-6 mr-6 mt-4">
 
+    <div class="row g-6 mr-6 mt-4">
         <div class="col-md-5 col-lg-3 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-primary">Preview Lieu </span>
+                <span class="text-primary">Preview du Lieu</span>
             </h4>
-            <ul class="list-group mb-4">
-                <img src="{{ asset('img/lieu/lieuUserUploadPicture' ~ lieu.lieuImageUpload) }}" class="img-thumbnail" alt="Lieu_ImagePreview">
-            </ul>
+            <img id="preview" class="img-thumbnail" alt="Lieu_ImagePreview">
         </div>
         <div class="col-md-7 col-lg-8 ml-5">
             <h4 class="mb-3">Création de Lieux</h4>
-            <form class="needs-validation" novalidate="">
-                <div class="row g-3">
-                    <div class="col-12">
-                        <label for="nom" class="form-label">Nom</label>
-                        {{ form_widget(lieuForm.nom) }}
-                    </div>
 
-                    <div class="col-12">
-                        <label for="rue" class="form-label">Rue</label>
-                        {{ form_widget(lieuForm.rue)}}
-                    </div>
-
-                    <div class="col-12">
-                        <label for="longitude" class="form-label">Longitude</label>
-                        {{ form_widget(lieuForm.longitude)}}
-                    </div>
-
-                    <div class="col-12">
-                        <label for="latitude" class="form-label">Latitude</label>
-                        {{ form_widget(lieuForm.latitude)}}
-                    </div>
-
-                    <div class="col-12">
-                        <label for="ville" class="form-label">Ville</label>
-                        {{ form_widget(lieuForm.ville)}}
-                    </div>
-
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="nom" class="form-label">Nom</label>
+                    {{ form_widget(lieuForm.nom) }}
                 </div>
 
-                <hr class="my-4">
-                {{ form_end(lieuForm) }}
-        </div>
+                <div class="col-12">
+                    <label for="rue" class="form-label">Rue</label>
+                    {{ form_widget(lieuForm.rue)}}
+                </div>
 
+                <div class="col-12">
+                    <label for="longitude" class="form-label">Longitude</label>
+                    {{ form_widget(lieuForm.longitude)}}
+                </div>
+
+                <div class="col-12">
+                    <label for="latitude" class="form-label">Latitude</label>
+                    {{ form_widget(lieuForm.latitude)}}
+                </div>
+
+                <div class="col-12">
+                    <label for="ville" class="form-label">Ville</label>
+                    {{ form_widget(lieuForm.ville)}}
+                </div>
+
+                <div class="col-12">
+                    <label for="lieuUploadPicture" class="form-label">Image</label>
+                    {{ form_widget(lieuForm.lieuUploadPicture, {attr: {class: 'form-control'}}) }}
+                </div>
+            </div>
+
+            <hr class="my-4">
+            {{ form_end(lieuForm) }}
+        </div>
     </div>
+
+    {# Javascript pour faire la prévisualisation de l'image lors de l'insert de l'image sans avoir encore validé le formulaire #}
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            const input = document.querySelector('[data-preview="#preview"]');
+            const preview = document.querySelector('#preview');
+
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.addEventListener("load", () => {
+                    preview.src = reader.result;
+                });
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 {% endblock %}
