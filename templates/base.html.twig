@@ -155,10 +155,6 @@
             {% if app.user %}
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
-                <a href="{{ path('home_legal_stuff') }}" class="nav-item nav-link text-bg-dark">Mention-légale</a>
-                <a href="{{ path('home_contact') }}" class="nav-item nav-link">Contact</a>
-                <a href="{{ path('createLieu') }}" class="nav-item nav-link active text-bg-dark">Créer un lieu d'évenement</a>
-                <a href="{{ path('selectExcursion') }}" class="nav-item nav-link active text-bg-dark">Choix d'évenements</a>
             {% else %}
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
@@ -174,7 +170,12 @@
                 </div>
             </div>
         </div>
-
+{#        <form class="navbar-form form-inline">#}
+{#            <div class="input-group search-box">#}
+{#                <input type="text" id="search" class="form-control" placeholder="Search by Name">#}
+{#                <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>#}
+{#            </div>#}
+{#        </form>#}
 
         {# Boutton connexion/S'incrire/Se déconnecter #}
        <div class="navbar-nav ml-auto">
@@ -195,8 +196,7 @@
                     {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
                 <div class="dropdown-menu">
                     <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendrier</a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Paramètres</a>
+                    <a href="{{ path('indexGestionUser') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Dashboard</a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ path('security_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i>Se déconnecter</a>
                 </div>
