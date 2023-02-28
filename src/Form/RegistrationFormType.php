@@ -75,7 +75,6 @@ class RegistrationFormType extends AbstractType
             'label' => false,
             'choices'  => [
                 'Utilisateur' => 'ROLE_USER',
-                'Organisateur' => 'ROLE_ORGANISATEUR',
                 'Administrateur' => 'ROLE_ADMIN',
             ],
         ],

@@ -50,7 +50,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/updateProfile', name: 'security_updateProfile', methods: ['GET', 'POST'])]
-    public function updateProfile(Participant $participant = null, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator, SluggerInterface $slugger): Response
+    public function updateProfile(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         // Récupération de l'utilisateur courant
         $user = $this->getUser();
