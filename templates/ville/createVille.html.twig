@@ -1,31 +1,44 @@
 {% extends "base.html.twig" %}
 
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/EditeExcursion.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/.css') }}" />
 {% endblock %}
 
 {% block title %}{{ parent() }} Creer Ville {% endblock %}
+
 {% block main %}
     {% form_theme formVille 'bootstrap_5_layout.html.twig' %}
 
     {{ form_start(formVille) }}
     <div class="row g-6 mr-6 mt-4">
 
-        <div class="col-md-5 col-lg-3 order-md-last">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-primary">Preview Lieu </span>
-            </h4>
-            <ul class="list-group mb-4">
-
-                <input class="form-control" type="file" id="formFile">
-
-                <img src="{{ asset('img/testimg.jpg') }}" class="img-thumbnail" alt="...">
+        <div class="col-md-5 col-lg-6 order-md-last">
 
 
-            </ul>
+
+            <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+            <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item" data-bs-interval="2000">
+                        <img class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" src="{{ asset('img/ville/barcel.jpg') }}" role="img"  preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect></img>
+                    </div>
+
+
+                    <div class="carousel-item" data-bs-interval="2000">
+                        <img class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" src="{{ asset('img/ville/turin.jpg') }}" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em"></text></img>
+                    </div>
+                    <div class="carousel-item active">
+                        <img class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" src="{{ asset('img/ville/paris.jpg') }}" role="img" aria-label="Placeholder: Third slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#555"></rect><text x="50%" y="50%" fill="#333" dy=".3em"></text></img>
+                    </div>
+                </div>
+
+            </div>
+
 
         </div>
-        <div class="col-md-7 col-lg-8 ml-5">
+        <div class="col-md-7 col-lg-5 ml-5">
             <h4 class="mb-3">Ajouter des villes </h4>
             <form class="needs-validation" novalidate="">
                 <div class="row g-3">
