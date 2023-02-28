@@ -55,9 +55,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageParticipant = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $lieuImageUpload = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -252,18 +249,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImageParticipant(?string $imageParticipant): self
     {
         $this->imageParticipant = $imageParticipant;
-
-        return $this;
-    }
-
-    public function getLieuImageUpload(): ?string
-    {
-        return $this->lieuImageUpload;
-    }
-
-    public function setLieuImageUpload(?string $lieuImageUpload): self
-    {
-        $this->lieuImageUpload = $lieuImageUpload;
 
         return $this;
     }

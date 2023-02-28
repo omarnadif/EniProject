@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 #[Route(path: '/admin/lieu/')]
@@ -28,35 +31,58 @@ class LieuController extends AbstractController
     }
 
     #[Route('create', name: 'createLieu', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function createLieu(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-
         // Création
         $lieu = new Lieu();
-
 
         //Création du formulaire
         $formLieu = $this->createForm(LieuFormType::class, $lieu);
         $formLieu->handleRequest($request);
 
-
-
         //Vérification du formulaire
         if ($formLieu->isSubmitted() && $formLieu->isValid()) {
 
+            // Récupération des données du formulaire
+            $lieu = $formLieu->getData();
+
+            // Récupération de l'image de profil du formulaire
+            $lieuUserPicture = $formLieu->get('lieuUploadPicture')->getData();
+
+            // Vérification si une image de profil a été téléchargée
+            if ($lieuUserPicture) {
+
+                // Génération d'un nom de fichier unique pour éviter les conflits
+                $originalFilename = pathinfo($lieuUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$lieuUserPicture->guessExtension();
+
+                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
+                try {
+                    $lieuUserPicture->move(
+                        $this->getParameter('lieu_ImageUpload_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gestion d'une exception si nécessaire
+                }
+
+                // Ajout du nom du fichier d'image dans l'entité Lieu
+                if ($lieu instanceof Lieu) {
+                    $lieu->setLieuImageUpload($newFilename);
+                }
+            }
 
             //Insertion du Participant en BDD (Base de donnée)
             $entityManager->persist($lieu);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le souhait a bien été ajouté !');
-
             // Redirection vers la liste
-            return $this->redirectToRoute('home_home');
-
+            return $this->redirectToRoute('indexlieu');
         }
 
         return $this->render('lieu/createLieu.html.twig', [
+            'lieu' => $lieu,
             'lieuForm' => $formLieu->createView(),
         ]);
     }
@@ -66,6 +92,7 @@ class LieuController extends AbstractController
     {
         $ville = $em->find(Ville::class, $id);
         // Création
+
 
 
 

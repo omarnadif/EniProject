@@ -8,7 +8,7 @@ parameters:
     participant_image_directory: '%kernel.project_dir%/public/img/user/profilePicture'
 
     # Route pour l'insertion de l'image du lieu
-    participant_lieuImageUpload_directory: '%kernel.project_dir%/public/img/lieu/lieuUserUploadPicture'
+    lieu_ImageUpload_directory: '%kernel.project_dir%/public/img/lieu/lieuUserUploadPicture'
 
 services:
     # default configuration for services in *this* file
