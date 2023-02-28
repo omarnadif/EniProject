@@ -189,16 +189,17 @@
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
 
-                    {# vérifie si l'utilisateur a déjà une image de profil, sinon on affiche l'image par défaut #}
+                    {# vérifie si l'utilisateur a déjà une image de profil, sinon on affiche l'image par défaut (Et sa peut importe l'url) #}
                     {% if app.user %}
                         {% if app.user.imageParticipant %}
-                            <img src="{{ app.request.basepath }}/img/user/profilePicture/{{ app.user.imageParticipant }}" alt="imgProfilUser" class="rounded-circle" width="150">
+                            <img src="{{ asset('img/user/profilePicture/' ~ app.user.imageParticipant) }}" alt="imgProfilUser" class="rounded-circle" width="150">
                         {% else %}
-                            <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                            <img src="{{ asset('img/user/defaultProfilePicture/pdp_default_Homme.png') }}" alt="defaultImgProfilUser" class="rounded-circle" width="150">
                         {% endif %}
                     {% else %}
-                        <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                        <img src="{{ asset('img/user/defaultProfilePicture/pdp_default_Homme.png') }}" alt="defaultImgProfilUser" class="rounded-circle" width="150">
                     {% endif %}
+
                     {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
                 <div class="dropdown-menu">
                     <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
