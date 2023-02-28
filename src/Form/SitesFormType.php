@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Ville;
+use App\Entity\Site;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class VilleFormType extends AbstractType
+class SitesFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -20,28 +20,19 @@ class VilleFormType extends AbstractType
             ->add('nom', null, [
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['max' => 255]),
-                    //seulement des lettres et des espaces
-                    new Regex('/^[a-zA-Z\s]+$/')
-                ]
-            ])
-            ->add('codePostal', null, [
-                'constraints' => [
-                    new NotBlank(),
-                    //maximum 5 numéros
-                    new Regex('/^\d{5}$/')
+                    new Length(['max' => 255])
                 ]
             ])
         ;
-
-
-
+        $builder->add('Ajouter', SubmitType::class, [
+            'attr' => ['class' => 'w-25 btn btn-warning btn-lg']
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Ville::class,
+            'data_class' => Site::class,
         ]);
     }
 }
