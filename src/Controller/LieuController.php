@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
-use App\Entity\Participant;
 use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
@@ -19,18 +18,17 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route(path: '/admin/lieu/')]
 class LieuController extends AbstractController
 {
-    #[Route(path: 'index', name: 'indexlieu', methods:['GET'])]
-    public function profile(EntityManagerInterface $em): Response
+    #[Route(path: 'indexLieu', name: 'indexlieu', methods:['GET'])]
+    public function indexLieu(EntityManagerInterface $em): Response
     {
-
-        $villes = $em->getRepository(Ville::class)->findAll();
+        $lieu = $em->getRepository(Lieu::class)->findAll();
 
         return $this->render('lieu/indexLieu.html.twig', [
-            'villes' => $villes,
+            'lieu' => $lieu,
         ]);
     }
 
-    #[Route('create', name: 'createLieu', methods: ['GET', 'POST'])]
+    #[Route('createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
     public function createLieu(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         // Création
@@ -73,7 +71,7 @@ class LieuController extends AbstractController
                 }
             }
 
-            //Insertion du Participant en BDD (Base de donnée)
+            //Insertion du Lieu en BDD (Base de donnée)
             $entityManager->persist($lieu);
             $entityManager->flush();
 
@@ -87,70 +85,57 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'update/{id}', name: 'updateVille_Lieu', methods: ['GET','POST'])]
-    public function update($id, EntityManagerInterface $em,Request $request): Response
+    #[Route(path: 'updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
+    public function updateLieu($id, EntityManagerInterface $em,Request $request): Response
     {
-        $ville = $em->find(Ville::class, $id);
-        // Création
-
-
-
+        $lieu = $em->find(Lieu::class, $id);
 
         //Création du formulaire
-        $formVille = $this->createForm(VilleFormType::class, $ville);
-        $formVille->handleRequest($request);
-
-
-
+        $formLieu = $this->createForm(LieuFormType::class, $lieu);
+        $formLieu->handleRequest($request);
 
         //Vérification du formulaire
-        if ($formVille->isSubmitted() && $formVille->isValid()) {
+        if ($formLieu->isSubmitted() && $formLieu->isValid()) {
 
-
-            //Insertion du Participant en BDD (Base de donnée)
-            $em->persist($ville);
+            //Insertion du Lieu en BDD (Base de donnée)
+            $em->persist($lieu);
             $em->flush();
 
-            $this->addFlash('success', 'La ville a bien été modifier !');
+            $this->addFlash('success', 'Le lieu a bien été modifié !');
 
             // Redirection vers la liste
             return $this->redirectToRoute('indexlieu');
-
         }
 
-        if ($ville === null) {
-            // la ville n'a pas été trouvée
+        if ($lieu === null) {
+            // le lieu n'a pas été trouvée
             return $this->render('lieu/indexLieu.html.twig', [
-                'ville' => $ville,]);
+                'lieu' => $lieu,]);
         } else {
-            // la ville a été trouvée
+            // le lieu a été trouvée
         }
 
-        return $this->render('ville/updateVille.html.twig', [
-            'ville' => $ville,
-            'formVille' => $formVille->createView(),
+        return $this->render('lieu/updateLieu.html.twig', [
+            'lieu' => $lieu,
+            'formLieu' => $formLieu->createView(),
         ]);
-
     }
 
-    #[Route(path: 'delete/{id}', name: 'deleteVille_Lieu', methods: ['GET'])]
-    public function delete($id, EntityManagerInterface $em): Response
+    #[Route(path: 'deleteLieu/{id}', name: 'deleteLieu', methods: ['GET'])]
+    public function deleteLieu($id, EntityManagerInterface $em): Response
     {
-        $ville = $em->find(Ville::class, $id);
+        $lieu = $em->find(Lieu::class, $id);
 
-        if ($ville === null) {
-            // la ville n'a pas été trouvée
+        if ($lieu === null) {
+            // le lieu n'a pas été trouvé
         } else {
-            $em->remove($ville);
+            $em->remove($lieu);
             $em->flush();
             return $this->redirectToRoute('indexlieu');
         }
 
         return $this->render('lieu/indexLieu.html.twig', [
-            'ville' => $ville,
+            'lieu' => $lieu,
         ]);
     }
-
-
-
 }
