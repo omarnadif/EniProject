@@ -6,6 +6,8 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
+use App\Repository\LieuRepository;
+use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +20,18 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route(path: '/admin/lieu/')]
 class LieuController extends AbstractController
 {
-    #[Route(path: 'indexLieu', name: 'indexLieu', methods:['GET'])]
-    public function indexLieu(EntityManagerInterface $em): Response
+    #[Route(path: 'index', name: 'indexLieu', methods: ['GET', 'POST'])]
+    public function indexLieu(Request $request, EntityManagerInterface $em, LieuRepository $lieuRepository): Response
     {
-        $lieu = $em->getRepository(Lieu::class)->findAll();
-
+        $searchTerm = $request->request->get('searchTerm');
+        if ($searchTerm) {
+            $lieu = $lieuRepository->search($searchTerm);
+        } else {
+            $lieu = $lieuRepository->findAll();
+        }
         return $this->render('lieu/indexLieu.html.twig', [
             'lieu' => $lieu,
+
         ]);
     }
 
