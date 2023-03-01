@@ -16,15 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/admin/site/')]
 class SitesController extends AbstractController
 {
-    #[Route(path: 'index', name: 'indexSite', methods:['GET'])]
-    public function profile(EntityManagerInterface $em): Response
-    {
-        $sites = $em->getRepository(Site::class)->findAll();
-
-        return $this->render('site/indexSite.html.twig', [
-            'sites' => $sites,
-        ]);
-    }
 
 
     #[Route('create', name: 'createSite', methods: ['GET', 'POST'])]
@@ -120,6 +111,19 @@ class SitesController extends AbstractController
         ]);
 
     }
+    #[Route(path: 'index', name: 'indexSite', methods: ['GET', 'POST'])]
+    public function index(Request $request, EntityManagerInterface $em, SiteRepository $siteRepository): Response
+    {
+        $searchTerm = $request->request->get('searchTerm');
+        if ($searchTerm) {
+            $sites = $siteRepository->search($searchTerm);
+        } else {
+            $sites = $siteRepository->findAll();
+        }
+        return $this->render('site/indexSite.html.twig', [
+            'sites' => $sites,
 
+        ]);
+    }
 }
 

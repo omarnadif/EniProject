@@ -7,17 +7,17 @@
 {% block title %}{{ parent() }} Site {% endblock %}
 {% block main %}
 
-
+    Copy code
     <h2 class="display-6 text-center mb-4">Gestion des Sites</h2>
 
-    <form class="navbar-form form-control-sm">
+    <form class="navbar-form form-control-sm" action="{{ path('indexSite') }}" method="post">
         <div class="input-group search-box mb-4">
             <h6 class="text-justify mt-2 mr-3">Le nom contient: </h6>
             <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
 
-            <label for="search"></label>
-            <input type="text" id="search" class="form-control" placeholder=""/>
-
+            <input type="text" name="searchTerm" class="form-control" placeholder="Rechercher...">
+            <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
+        </div>
         </div>
     </form>
 
@@ -33,14 +33,15 @@
             </thead>
             <tbody>
             {% for site in sites %}
-                <tr>
-
-                    <td>{{ site.nom }}</td>
-                    <td>
-                       <a href="{{ path('updateSite', {'id': site.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                        <a href="{{ path('deleteSite', {'id': site.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
-                    </td>
-                </tr>
+                {% if site.nom matches '/' ~ (app.request.query.get('search') ?? '') ~ '/i' %}
+                    <tr>
+                        <td>{{ site.nom }}</td>
+                        <td>
+                            <a href="{{ path('updateSite', {'id': site.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                            <a href="{{ path('deleteSite', {'id': site.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
