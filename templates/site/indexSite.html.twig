@@ -7,13 +7,12 @@
 {% block title %}{{ parent() }} Site {% endblock %}
 {% block main %}
 
-    Copy code
     <h2 class="display-6 text-center mb-4">Gestion des Sites</h2>
 
     <form class="navbar-form form-control-sm" action="{{ path('indexSite') }}" method="post">
         <div class="input-group search-box mb-4">
             <h6 class="text-justify mt-2 mr-3">Le nom contient: </h6>
-            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+            {#<span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>#}
 
             <input type="text" name="searchTerm" class="form-control" placeholder="Rechercher...">
             <button class="btn btn-outline-secondary" type="submit">Rechercher</button>

@@ -13,11 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-#[Route(path: '/admin/ville/')]
+
 class VilleController extends AbstractController
 {
-    #[Route(path: 'index', name: 'indexville', methods:['GET'])]
-    public function profile(EntityManagerInterface $em): Response
+    #[Route(path: 'ville/index', name: 'indexville', methods:['GET'])]
+    public function indexVille(EntityManagerInterface $em): Response
     {
         $villes = $em->getRepository(Ville::class)->findAll();
 
@@ -26,8 +26,8 @@ class VilleController extends AbstractController
         ]);
     }
 
-    #[Route('create', name: 'createVille', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('ville/create', name: 'createVille', methods: ['GET', 'POST'])]
+    public function createVille(Request $request, EntityManagerInterface $entityManager): Response
     {
 
         // Création
@@ -61,8 +61,8 @@ class VilleController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'update/{id}', name: 'updateVille', methods: ['GET','POST'])]
-    public function update($id, EntityManagerInterface $em,Request $request): Response
+    #[Route(path: '/admin/ville/update/{id}', name: 'updateVille', methods: ['GET','POST'])]
+    public function updateVille($id, EntityManagerInterface $em,Request $request): Response
     {
         $ville = $em->find(Ville::class, $id);
         // Création
@@ -106,8 +106,8 @@ class VilleController extends AbstractController
 
     }
 
-    #[Route(path: 'delete/{id}', name: 'deleteVille', methods: ['GET'])]
-    public function delete($id, EntityManagerInterface $em): Response
+    #[Route(path: '/admin/ville/delete/{id}', name: 'deleteVille', methods: ['GET'])]
+    public function deleteVille($id, EntityManagerInterface $em): Response
     {
         $ville = $em->find(Ville::class, $id);
 
