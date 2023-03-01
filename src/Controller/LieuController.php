@@ -7,6 +7,7 @@ use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
-#[Route(path: '/admin/lieu/')]
 class LieuController extends AbstractController
 {
-    #[Route(path: 'indexLieu', name: 'indexLieu', methods:['GET'])]
+    #[Route(path: 'lieu/indexLieu', name: 'indexLieu', methods:['GET'])]
     public function indexLieu(EntityManagerInterface $em): Response
     {
         $lieu = $em->getRepository(Lieu::class)->findAll();
@@ -28,7 +28,7 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route('createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
+    #[Route('lieu/createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
     public function createLieu(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         // Création
@@ -85,7 +85,7 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
+    #[Route(path: 'admin/lieu/updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
     public function updateLieu($id, EntityManagerInterface $em,Request $request): Response
     {
         $lieu = $em->find(Lieu::class, $id);
@@ -121,14 +121,24 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'deleteLieu/{id}', name: 'deleteLieu', methods: ['GET'])]
-    public function deleteLieu($id, EntityManagerInterface $em): Response
+    #[Route(path: 'admin/lieu/deleteLieu/{id}', name: 'deleteLieu', methods: ['GET'])]
+    public function deleteLieu($id, EntityManagerInterface $em,  Filesystem $filesystem): Response
     {
         $lieu = $em->find(Lieu::class, $id);
 
         if ($lieu === null) {
             // le lieu n'a pas été trouvé
         } else {
+
+            // Suppression de l'image stockée dans le projet
+            $filename = $lieu->getLieuImageUpload();
+            if ($filename !== null) {
+                $filesystem->remove($this->getParameter('lieu_ImageUpload_directory') . '/' . $filename);
+            }
+
+            // Suppression du nom de l'image stockée en base de données
+            $lieu->setLieuImageUpload(null);
+
             $em->remove($lieu);
             $em->flush();
             return $this->redirectToRoute('indexLieu');
