@@ -2,81 +2,41 @@
 
 {% block title %}{{ parent() }} Creer Sortie {% endblock %}
 {% block main %}
+    {# --- Barre de recherche --- #}
     <div class= "d-flex flex-row">
         <div class="p-2">
             <label class="p-2" for="form1">Le nom contient: </label>
             <input type="search" id="form1" class="p-2" />
         </div>
         <button id="bp" type="button" class="btn btn-outline-primary" style="font-size: 14px; width: 70px; height: 50px; line-height: 30px;">search</button>
-        </button>
     </div>
+    {# --- FIN Barre de recherche --- #}
 
-    <div id="divConteneur">
-        <table class="table table-striped" id="Table">
+    {# --- Corps de l'index LIEU --- #}
+
+    <div class="table-responsive">
+
+        <table class=" text-center table table-bordered border-primary">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Ville</th>
-                <th scope="col">Code postal</th>
-                <th scope="col">Actions</th>
+                <th style="width: 22%;">Nom</th>
+                <th style="width: 22%;">Actions</th>
             </tr>
             </thead>
             <tbody>
-
-            {% for ville in villes %}
+            {% for lieux in lieu %}
                 <tr>
-                    <th scope="row">{{ ville.id }}</th>
-                    <td>{{ ville.nom }}</td>
-                    <td>{{ ville.codePostal }}</td>
+                    <td>{{ lieux.nom }}</td>
                     <td>
-                        <a href="{{ path('updateVille', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                        <a href="{{ path('deleteVille', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                        <a href="{{ path('updateLieu', {'id': lieux.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                        <a href="{{ path('deleteLieu', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
-
-
             </tbody>
         </table>
+        <a href="{{ path('createLieu') }}" class="btn btn-info ml-5">Ajouter</a>
     </div>
-    <div>
-        <a href="{{ path('createVille')}}" class="btn btn-outline-success btn-sm">Ajouter</a>
-    </div>
-    <style>
-        #divConteneur{
-            min-height:100px;
-            height:260px;/*pour IE qui comprend rien, et qui ne reconnait pas min-height, mais qui comprend mal height*/
-            min-width:260px;
-            width:560px;/*pour IE qui comprend rien*/
-            overflow:auto;/*pour activer les scrollbarres*/
-        }
-        #bp{
-            margin-top: 5px;
-        }
-    </style>
-    <script>
-        $(document).ready(function() {
-            $('#bp').click(function() {
-                let searchTerm = $('#form1').val();
 
-                $.ajax({
-                    url: '/admin/lieu/search/ville/',
-                    data: {q: searchTerm},
-                    success: function(response) {
-                        $('#table-body').empty();
-
-                        response.forEach(function(ville) {
-                            var row = '<tr>' +
-                                '<th scope="row">' + ville.id + '</th>' +
-                                '<td>' + ville.nom + '</td>' +
-                                '<td>' + ville.codePostal + '</td>' +
-                                '</tr>';
-
-                            $('#table-body').append(row);
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+    {# --- FIN Corps de l'index LIEU --- #}
 {% endblock %}
