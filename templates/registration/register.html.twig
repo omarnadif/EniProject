@@ -1,8 +1,0 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}{{ parent() }}: S'inscrire{% endblock %}
-
-{% block main %}
-    {% form_theme registrationForm 'bootstrap_5_layout.html.twig' %}
-    {{ form(registrationForm) }}
-{% endblock %}

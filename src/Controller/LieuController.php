@@ -7,6 +7,7 @@ use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -122,13 +123,23 @@ class LieuController extends AbstractController
     }
 
     #[Route(path: 'deleteLieu/{id}', name: 'deleteLieu', methods: ['GET'])]
-    public function deleteLieu($id, EntityManagerInterface $em): Response
+    public function deleteLieu($id, EntityManagerInterface $em, Filesystem $filesystem): Response
     {
         $lieu = $em->find(Lieu::class, $id);
 
         if ($lieu === null) {
             // le lieu n'a pas été trouvé
         } else {
+
+            // Suppression de l'image stockée dans le projet ****à tester******
+            $filename = $lieu->getLieuImageUpload();
+            if ($filename !== null) {
+                $filesystem->remove($this->getParameter('lieu_ImageUpload_directory') . '/' . $filename);
+            }
+
+            // Suppression du nom de l'image stockée en base de données
+            $lieu->setLieuImageUpload(null);
+
             $em->remove($lieu);
             $em->flush();
             return $this->redirectToRoute('indexLieu');
