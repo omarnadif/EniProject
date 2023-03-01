@@ -67,18 +67,18 @@ class GestionUserController extends AbstractController
             $em->persist($participant);
             $em->flush();
 
-
+            $this->addFlash('success', 'DONE !');
             // Redirection vers la liste
             return $this->redirectToRoute('indexGestionUser');
 
         }
 
         if ($participant === null) {
-            // la ville n'a pas été trouvée
+            //  pas  trouvée
             return $this->render('admin/gestionUser.html.twig', [
                 'participant' => $participant,]);
         } else {
-            // la ville a été trouvée
+            // trouvée
         }
 
         return $this->render('admin/updateUser.html.twig', [

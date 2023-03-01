@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -29,30 +30,50 @@ class RegistrationFormType extends AbstractType
             'trim' => true,
             'label' => 'Nom: ',
             'required' => true,
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 2, 'max' => 50]),
+            ],
         ]);
 
         $builder->add('prenom', TextType::class, [
             'trim' => true,
             'label' => 'Prénom: ',
             'required' => true,
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 2, 'max' => 50]),
+            ],
         ]);
 
         $builder->add('telephone', TextType::class, [
             'trim' => true,
             'label' => 'Téléphone: ',
             'required' => true,
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 10, 'max' => 12]),
+            ],
         ]);
 
         $builder->add('email', EmailType::class, [
             'trim' => true,
             'label' => 'Email: ',
             'required' => true,
+            'constraints' => [
+                new NotBlank(),
+                new Email(),
+            ],
         ]);
 
         $builder->add('pseudo', TextType::class, [
             'trim' => true,
             'label' => 'Pseudo: ',
             'required' => true,
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 2, 'max' => 20]),
+            ],
         ]);
 
         $builder->add('site', EntityType::class, [

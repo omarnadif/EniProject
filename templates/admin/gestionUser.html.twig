@@ -18,12 +18,15 @@
 
         </div>
     </form>#}
+    <a href="" class="btn btn-outline-dark col-2 mb-4 ml-4">Ajouter un Utilisateur</a>
 
     <div class="table-responsive">
+
 
         <table class=" text-center table table-bordered border-primary">
             <thead>
             <tr>
+
 
                 <th style="width: 5%;">Id</th>
                 <th style="width: 22%;">Email</th>
@@ -45,7 +48,7 @@
                     <td>{{ user.telephone }}</td>
                     <td>
                       <a href="{{ path('updateGestionUser', {'id': user.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                        <a href="{{ path('deleteParticipant', {'id': user.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                        <a href="{{ path('deleteParticipant', {'id': user.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
