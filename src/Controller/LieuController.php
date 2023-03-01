@@ -18,7 +18,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route(path: '/admin/lieu/')]
 class LieuController extends AbstractController
 {
-    #[Route(path: 'indexLieu', name: 'indexlieu', methods:['GET'])]
+    #[Route(path: 'indexLieu', name: 'indexLieu', methods:['GET'])]
     public function indexLieu(EntityManagerInterface $em): Response
     {
         $lieu = $em->getRepository(Lieu::class)->findAll();
@@ -76,7 +76,7 @@ class LieuController extends AbstractController
             $entityManager->flush();
 
             // Redirection vers la liste
-            return $this->redirectToRoute('indexlieu');
+            return $this->redirectToRoute('indexLieu');
         }
 
         return $this->render('lieu/createLieu.html.twig', [
@@ -104,7 +104,7 @@ class LieuController extends AbstractController
             $this->addFlash('success', 'Le lieu a bien été modifié !');
 
             // Redirection vers la liste
-            return $this->redirectToRoute('indexlieu');
+            return $this->redirectToRoute('indexLieu');
         }
 
         if ($lieu === null) {
@@ -131,7 +131,7 @@ class LieuController extends AbstractController
         } else {
             $em->remove($lieu);
             $em->flush();
-            return $this->redirectToRoute('indexlieu');
+            return $this->redirectToRoute('indexLieu');
         }
 
         return $this->render('lieu/indexLieu.html.twig', [
