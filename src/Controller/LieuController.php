@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
-use App\Entity\Ville;
 use App\Form\LieuFormType;
-use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -83,7 +81,7 @@ class LieuController extends AbstractController
     }
 
     #[Route(path: 'admin/lieu/updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
-    public function updateLieu($id, EntityManagerInterface $em, Request $request, SluggerInterface $slugger): Response
+    public function updateLieu($id, EntityManagerInterface $em, Request $request, SluggerInterface $slugger, Filesystem $filesystem): Response
     {
         // Récupération des données de LIEU
         $lieu = $em->find(Lieu::class, $id);
@@ -111,7 +109,7 @@ class LieuController extends AbstractController
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$lieuUserPicture->guessExtension();
 
-                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
+                // Déplacement de l'image téléchargée dans le répertoire de stockage défini dans service.yaml (dans participant_image_directory)
                 try {
                     $lieuUserPicture->move(
                         $this->getParameter('lieu_ImageUpload_directory'),
@@ -121,10 +119,17 @@ class LieuController extends AbstractController
                     // Gestion d'une exception si nécessaire
                 }
 
-                // Ajout du nom du fichier d'image dans l'entité Lieu
+                // Suppression de l'ancienne image s'il en existe une
+                $oldFilename = $lieu->getLieuImageUpload();
+                if ($oldFilename) {
+                    $filesystem->remove($this->getParameter('lieu_ImageUpload_directory').'/'.$oldFilename);
+                }
+
+                // Ajout du nom du nouveau fichier d'image dans l'entité Lieu
                 if ($lieu instanceof Lieu) {
                     $lieu->setLieuImageUpload($newFilename);
                 }
+            }
 
             //Insertion du Lieu en BDD (Base de donnée)
             $em->persist($lieu);
@@ -134,13 +139,13 @@ class LieuController extends AbstractController
 
             // Redirection vers la liste
             return $this->redirectToRoute('indexLieu');
-            }
         }
 
         if ($lieu === null) {
-            // le lieu n'a pas été trouvée
+            // le lieu n'a pas été trouvé
             return $this->render('lieu/indexLieu.html.twig', [
-                'lieu' => $lieu,]);
+                'lieu' => $lieu,
+            ]);
         }
 
         return $this->render('lieu/updateLieu.html.twig', [
