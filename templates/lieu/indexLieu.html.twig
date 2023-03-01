@@ -39,7 +39,7 @@
                     <td>{{ lieux.nom }}</td>
                     <td>
                         <a href="{{ path('updateLieu', {'id': lieux.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                        <a href="{{ path('deleteLieu', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                        <a href="{{ path('deleteLieu', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
