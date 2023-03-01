@@ -31,10 +31,6 @@ class LieuController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
     #[Route(path: 'search/ville/', name:'search_lieu', requirements: ['q' => '?q=*'], methods:['GET','POST'])]
     public function search(Request $request, VilleRepository $villeRepository): Response
     {
@@ -54,7 +50,7 @@ class LieuController extends AbstractController
 
 
     #[Route('create', name: 'createLieu', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function createLieu(Request $request, EntityManagerInterface $entityManager): Response
     {
 
         // Création
@@ -88,7 +84,7 @@ class LieuController extends AbstractController
     }
 
     #[Route(path: 'update/{id}', name: 'updateVille_Lieu', methods: ['GET','POST'])]
-    public function update($id, EntityManagerInterface $em,Request $request): Response
+    public function updateLieu($id, EntityManagerInterface $em,Request $request): Response
     {
         $ville = $em->find(Ville::class, $id);
         // Création
@@ -133,7 +129,7 @@ class LieuController extends AbstractController
     }
 
     #[Route(path: 'delete/{id}', name: 'deleteVille_Lieu', methods: ['GET'])]
-    public function delete($id, EntityManagerInterface $em): Response
+    public function deleteLieu($id, EntityManagerInterface $em): Response
     {
         $ville = $em->find(Ville::class, $id);
 
