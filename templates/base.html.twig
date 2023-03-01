@@ -142,20 +142,32 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-xl navbar-light bg-light">
-                <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/logo/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">        <span class="navbar-toggler-icon"></span>    </button>    <!-- Collection of nav links, forms, and other content for toggling -->    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">        <div class="ml-2 navbar-nav">            {% if app.user %}
+    <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/logo/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">        <span class="navbar-toggler-icon"></span>    </button>    <!-- Collection of nav links, forms, and other content for toggling -->    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">        <div class="ml-2 navbar-nav">            {% if app.user %}
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
             {% else %}
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
             {% endif %}
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
-                <div class="dropdown-menu">
-                    <a href="{{ path('indexlieu') }}" class="dropdown-item">Lieu</a>
-                    <a href="{{ path('indexville') }}" class="dropdown-item">Ville</a>
+            {% if app.user %}
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
+                    <div class="dropdown-menu">
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('indexlieu') }}" class="dropdown-item">Gestion des lieux</a>
+                            <a href="{{ path('indexville') }}" class="dropdown-item">Gestion de les villes</a>
+                            <a href="{{ path('indexSite') }}" class="dropdown-item">Gestion de sites</a>
+                        {% endif %}
+
+
+                        {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('createLieu') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des lieux</a>
+                            <a href="{{ path('createVille') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des villes</a>
+                        {% endif %}
+
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
 
         {#        <form class="navbar-form form-inline">#}

@@ -3,6 +3,8 @@
 {% block title %}{{ parent() }}: S'inscrire{% endblock %}
 
 {% block main %}
-    {% form_theme registrationForm 'bootstrap_5_layout.html.twig' %}
-    {{ form(registrationForm) }}
+    <div class="ml-4 mr-3">
+        {% form_theme registrationForm 'bootstrap_5_layout.html.twig' %}
+        {{ form(registrationForm) }}
+    </div>
 {% endblock %}
