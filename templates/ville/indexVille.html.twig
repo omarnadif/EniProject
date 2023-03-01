@@ -28,7 +28,9 @@
                 <th style="width: 22%;">Id</th>
                 <th style="width: 22%;">Nom</th>
                 <th style="width: 22%;">Code Postal</th>
+                {% if app.user and is_granted('ROLE_ADMIN') %}
                 <th style="width: 22%;">Actions</th>
+                {% endif %}
             </tr>
             </thead>
                     <tbody>
@@ -37,10 +39,12 @@
                             <th scope="row">{{ ville.id }}</th>
                             <td>{{ ville.nom }}</td>
                             <td>{{ ville.codePostal }}</td>
+                            {% if app.user and is_granted('ROLE_ADMIN') %}
                             <td>
                                 <a href="{{ path('updateVille', {'id': ville.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
                                 <a href="{{ path('deleteVille', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

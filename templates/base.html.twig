@@ -149,13 +149,23 @@
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
             {% endif %}
+            {% if app.user %}
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
                 <div class="dropdown-menu">
-                    <a href="{{ path('indexlieu') }}" class="dropdown-item">Lieu</a>
-                    <a href="{{ path('indexville') }}" class="dropdown-item">Ville</a>
+                    {% if app.user and is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('indexlieu') }}" class="dropdown-item">Gestion des lieux</a>
+                        <a href="{{ path('indexville') }}" class="dropdown-item">Gestion de les villes</a>
+                        <a href="{{ path('indexSite') }}" class="dropdown-item">Gestion de sites</a>
+                    {% endif %}
+
+                    {% if app.user and is_granted('ROLE_USER') %}
+                        <a href="{{ path('createLieu') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des lieux</a>
+                        <a href="{{ path('createVille') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des villes</a>
+                    {% endif %}
                 </div>
             </div>
+            {% endif %}
         </div>
 
         {#        <form class="navbar-form form-inline">#}

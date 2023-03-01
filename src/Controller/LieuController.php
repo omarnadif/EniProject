@@ -15,10 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
-#[Route(path: '/admin/lieu/')]
+
 class LieuController extends AbstractController
 {
-    #[Route(path: 'indexLieu', name: 'indexlieu', methods:['GET'])]
+    #[Route(path: 'lieu/indexLieu', name: 'indexlieu', methods:['GET'])]
     public function indexLieu(EntityManagerInterface $em): Response
     {
         $lieu = $em->getRepository(Lieu::class)->findAll();
@@ -28,7 +28,7 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route('createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
+    #[Route('lieu/createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
     public function createLieu(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         // Création
@@ -85,7 +85,7 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
+    #[Route(path: '/admin/lieu/updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
     public function updateLieu($id, EntityManagerInterface $em,Request $request): Response
     {
         $lieu = $em->find(Lieu::class, $id);
@@ -121,7 +121,7 @@ class LieuController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'deleteLieu/{id}', name: 'deleteLieu', methods: ['GET'])]
+    #[Route(path: '/admin/lieu/deleteLieu/{id}', name: 'deleteLieu', methods: ['GET'])]
     public function deleteLieu($id, EntityManagerInterface $em): Response
     {
         $lieu = $em->find(Lieu::class, $id);
