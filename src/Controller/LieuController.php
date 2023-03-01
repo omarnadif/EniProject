@@ -8,7 +8,6 @@ use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,10 +91,17 @@ class LieuController extends AbstractController
     public function update($id, EntityManagerInterface $em,Request $request): Response
     {
         $ville = $em->find(Ville::class, $id);
+        // Création
+
+
+
 
         //Création du formulaire
         $formVille = $this->createForm(VilleFormType::class, $ville);
         $formVille->handleRequest($request);
+
+
+
 
         //Vérification du formulaire
         if ($formVille->isSubmitted() && $formVille->isValid()) {
@@ -109,6 +115,7 @@ class LieuController extends AbstractController
 
             // Redirection vers la liste
             return $this->redirectToRoute('indexlieu');
+
         }
 
         if ($ville === null) {
@@ -123,33 +130,27 @@ class LieuController extends AbstractController
             'ville' => $ville,
             'formVille' => $formVille->createView(),
         ]);
+
     }
 
     #[Route(path: 'delete/{id}', name: 'deleteVille_Lieu', methods: ['GET'])]
-    public function deleteLieu($id, EntityManagerInterface $em, Filesystem $filesystem): Response
+    public function delete($id, EntityManagerInterface $em): Response
     {
-        $lieu = $em->find(Lieu::class, $id);
+        $ville = $em->find(Ville::class, $id);
 
-        if ($lieu === null) {
-            // le lieu n'a pas été trouvé
+        if ($ville === null) {
+            // la ville n'a pas été trouvée
         } else {
-            // Suppression de l'image stockée dans le projet ****à tester******
-            $filename = $lieu->getLieuImageUpload();
-            if ($filename !== null) {
-                $filesystem->remove($this->getParameter('lieu_ImageUpload_directory') . '/' . $filename);
-            }
-
-            // Suppression du nom de l'image stockée en base de données
-            $lieu->setLieuImageUpload(null);
-
-            $em->remove($lieu);
+            $em->remove($ville);
             $em->flush();
-
             return $this->redirectToRoute('indexlieu');
         }
 
         return $this->render('lieu/indexLieu.html.twig', [
-            'lieu' => $lieu,
+            'ville' => $ville,
         ]);
     }
+
+
+
 }

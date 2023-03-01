@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Site;
 use App\Form\SitesFormType;
 use App\Form\VilleFormType;
+use App\Repository\SiteRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +25,7 @@ class SitesController extends AbstractController
             'sites' => $sites,
         ]);
     }
+
 
     #[Route('create', name: 'createSite', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
