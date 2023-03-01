@@ -116,7 +116,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/profile/delete', name: 'security_deleteProfile', methods:['GET'])]
-    public function deleteUser(EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator): Response
+    public function deleteUser(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         if (!$user)
