@@ -61,8 +61,8 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
      */
     public  function findUser(){
         return $this->createQueryBuilder('p')
-            ->where('p.nom != :role')
-            ->setParameter('role', "ROLE_ADMIN")
+            ->where('p.roles  NOT LIKE :role')
+            ->setParameter('role', '%"ROLE_ADMIN"%')
             ->getQuery()
             ->getResult();
     }

@@ -185,7 +185,10 @@
                         {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
                     <div class="dropdown-menu">
                         <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
-                        <a href="{{ path('indexGestionUser') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Dashboard</a>
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('indexGestionUser') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Dashboard</a>
+                        {% endif %}
+
                         <div class="dropdown-divider"></div>
                         <a href="{{ path('security_logout') }}" class="dropdown-item">
                             <i class="material-icons">&#xE8AC;</i>Se déconnecter</a>
@@ -193,7 +196,11 @@
                 </div>
             {% else %}
                 <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Se connecter</a>
-                <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
+
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
+                {% endif %}
+
             {% endif %}
         </div>
     </div>
