@@ -56,9 +56,17 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
         $this->save($user, true);
     }
 
-//    /**
-//     * @return Participant[] Returns an array of Participant objects
-//     */
+    /**
+     * @return Participant[] Returns an array of Participant objects
+     */
+    public  function findUser(){
+        return $this->createQueryBuilder('p')
+            ->where('p.nom != :role')
+            ->setParameter('role', "ROLE_ADMIN")
+            ->getQuery()
+            ->getResult();
+    }
+
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('p')

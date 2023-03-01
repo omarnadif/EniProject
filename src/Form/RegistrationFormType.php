@@ -67,25 +67,23 @@ class RegistrationFormType extends AbstractType
             'attr' => ['class' => 'form-control']
         ]);
 
-
         $builder->add('roles',CollectionType::class, [
-        'label' => "Role de l'utilisateur : ",
+        'label' => "Role de l'utilisateur :",
+        'required' => true,
         'entry_type' => ChoiceType::class,
         'entry_options' => [
+            'label' => false,
             'choices'  => [
                 'Utilisateur' => 'ROLE_USER',
                 'Administrateur' => 'ROLE_ADMIN',
             ],
         ],
-            /*'multiple' => false,
-            'expanded' => true,*/
         ]);
 
         $builder->add('actif', CheckboxType::class, [
             'label' => 'Actif',
             'required' => false
         ]);
-
 
         $builder->add('plainPassword', RepeatedType::class, [
             'mapped' => false,
@@ -126,6 +124,7 @@ class RegistrationFormType extends AbstractType
                 ]),
             ],
         ]);
+
         $builder->add('submit', SubmitType::class, [
             'label' => 'S\'inscrire',
         ]);

@@ -35,6 +35,11 @@ class Lieu
     #[ORM\OneToMany(mappedBy: 'lieu', targetEntity: Sortie::class, orphanRemoval: true)]
     private Collection $sorties;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lieuImageUpload = null;
+
+    /* $lieuImageUpload */
+
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
@@ -131,6 +136,18 @@ class Lieu
                 $sorty->setLieu(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLieuImageUpload(): ?string
+    {
+        return $this->lieuImageUpload;
+    }
+
+    public function setLieuImageUpload(?string $lieuImageUpload): self
+    {
+        $this->lieuImageUpload = $lieuImageUpload;
 
         return $this;
     }

@@ -34,7 +34,9 @@ class VilleFormType extends AbstractType
             ])
         ;
 
-
+        $builder->add('Ajouter', SubmitType::class, [
+            'attr' => ['class' => 'w-25 btn btn-dark btn-lg']
+        ]);
 
     }
 

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
     <style>
         body {
             background: #eeeeee;
@@ -143,97 +142,85 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-xl navbar-light bg-light">
-    <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/logo/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>
-    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-
-    <!-- Collection of nav links, forms, and other content for toggling -->
-    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">
-        <div class="ml-2 navbar-nav">
-            {% if app.user %}
+                <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/logo/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">        <span class="navbar-toggler-icon"></span>    </button>    <!-- Collection of nav links, forms, and other content for toggling -->    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-center">        <div class="ml-2 navbar-nav">            {% if app.user %}
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
-                <a href="{{ path('home_legal_stuff') }}" class="nav-item nav-link text-bg-dark">Mention-légale</a>
-                <a href="{{ path('home_contact') }}" class="nav-item nav-link">Contact</a>
-                <a href="{{ path('createLieu') }}" class="nav-item nav-link active text-bg-dark">Créer un lieu d'évenement</a>
-                <a href="{{ path('selectExcursion') }}" class="nav-item nav-link active text-bg-dark">Choix d'évenements</a>
             {% else %}
                 <a href="{{ path('home_home') }}" class="nav-item nav-link active text-bg-dark">Acceuil</a>
                 <a href="{{ path('home_about') }}" class="nav-item nav-link text-bg-dark">A propos</a>
-
             {% endif %}
-
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
                 <div class="dropdown-menu">
                     <a href="{{ path('indexlieu') }}" class="dropdown-item">Lieu</a>
                     <a href="{{ path('indexville') }}" class="dropdown-item">Ville</a>
-
                 </div>
             </div>
         </div>
 
+        {#        <form class="navbar-form form-inline">#}
+        {#            <div class="input-group search-box">#}
+        {#                <input type="text" id="search" class="form-control" placeholder="Search by Name">#}
+        {#                <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>#}
+        {#            </div>#}
+        {#        </form>#}
 
         {# Boutton connexion/S'incrire/Se déconnecter #}
-       <div class="navbar-nav ml-auto">
-           {% if app.user %}
-            <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
+        <div class="navbar-nav ml-auto">
+            {% if app.user %}
+                <div class="nav-item dropdown">
+                    <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
 
-                    {# vérifie si l'utilisateur a déjà une image de profil, sinon on affiche l'image par défaut #}
-                    {% if app.user %}
-                        {% if app.user.imageParticipant %}
-                            <img src="{{ app.request.basepath }}/img/user/profilePicture/{{ app.user.imageParticipant }}" alt="imgProfilUser" class="rounded-circle" width="150">
+                        {# vérifie si l'utilisateur a déjà une image de profil, sinon on affiche l'image par défaut (Et sa peut importe l'url) #}
+                        {% if app.user %}
+                            {% if app.user.imageParticipant %}
+                                <img src="{{ asset('img/user/profilePicture/' ~ app.user.imageParticipant) }}" alt="imgProfilUser" class="rounded-circle" width="150">
+                            {% else %}
+                                <img src="{{ asset('img/user/defaultProfilePicture/pdp_default_Homme.png') }}" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                            {% endif %}
                         {% else %}
-                            <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
+                            <img src="{{ asset('img/user/defaultProfilePicture/pdp_default_Homme.png') }}" alt="defaultImgProfilUser" class="rounded-circle" width="150">
                         {% endif %}
-                    {% else %}
-                        <img src="{{ app.request.basepath }}img/user/defaultProfilePicture/pdp_default_Homme.png" alt="defaultImgProfilUser" class="rounded-circle" width="150">
-                    {% endif %}
-                    {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
-                <div class="dropdown-menu">
-                    <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i> Calendrier</a>
-                    <a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Paramètres</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ path('security_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i>Se déconnecter</a>
+
+                        {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
+                    <div class="dropdown-menu">
+                        <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
+                        <a href="{{ path('indexGestionUser') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Dashboard</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('security_logout') }}" class="dropdown-item">
+                            <i class="material-icons">&#xE8AC;</i>Se déconnecter</a>
+                    </div>
                 </div>
-            </div>
-           {% else %}
-               <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Se connecter</a>
-               <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
-           {% endif %}
-       </div>
+            {% else %}
+                <a href="{{ path('security_login') }}" class="btn btn-outline-primary me-5">Se connecter</a>
+                <a href="{{ path('security_register') }}" class="btn btn-warning ml-3">S'inscrire</a>
+            {% endif %}
+        </div>
     </div>
 </nav>
-{% block informations %}{% endblock %}
-{% block main %}{% endblock %}
+{% block informations %}
+{% endblock %}
+{% block main %}
+{% endblock %}
 </body>
-
-
 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
     <div class="col-md-4 d-flex align-items-center">
         <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
             <svg class="bi" width="30" height="24"><img src="{{ asset('img/logo/enilogo.png') }}" width="40" class="mr-2" alt="Logo_Eni"></svg>
-        </a>
-        <span class="mb-3 mb-md-0 text-muted">Eni Ecole Informatique &copy; {{ "now" | date('Y') }}</span>
-    </div>
-    <ul class="nav justify-content-center ">
+        </a>        <span class="mb-3 mb-md-0 text-muted">Eni Ecole Informatiquee &copy; {{ "now" | date('Y') }}</span>
+    </div>    <ul class="nav justify-content-center ">
         <a href="{{ path('home_legal_stuff') }}" class="nav-link px-2 text-muted">Mention-légale</a>
         <a href="{{ path('home_contact') }}" class="nav-link px-2 text-muted">Contact</a>
-    </ul>
-
-    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-muted" target="__blank" href="https://twitter.com/ENIEcoleInforma"><img src="{{ asset('img/logo/twlogo.png') }}" width="30"  alt="Logo_tw"></a></li>
-        <li class="ms-3"><a class="text-muted" target="__blank" href="https://www.instagram.com/eniecoleinformatique/"><img src="{{ asset('img/logo/instalogo.png') }}" class="ml-2" width="30"  alt="Logo_tw"></a></li>
-        <li class="ms-3"><a class="text-muted" target="__blank" href="https://www.facebook.com/EniEcoleInformatique/"><img src="{{ asset('img/logo/fblogo.png') }}" width="30" class="ml-2" alt="Logo_tw"></a></li>
+    </ul>    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+        <li class="ms-3">
+            <a class="text-muted" target="__blank" href="https://twitter.com/ENIEcoleInforma">
+                <img src="{{ asset('img/logo/twlogo.png') }}" width="30"  alt="Logo_tw"></a></li>
+        <li class="ms-3"><a class="text-muted" target="__blank" href="https://www.instagram.com/eniecoleinformatique/">
+                <img src="{{ asset('img/logo/instalogo.png') }}" class="ml-2" width="30"  alt="Logo_tw"></a></li>
+        <li class="ms-3"><a class="text-muted" target="__blank" href="https://www.facebook.com/EniEcoleInformatique/">
+                <img src="{{ asset('img/logo/fblogo.png') }}" width="30" class="ml-2" alt="Logo_tw"></a></li>
     </ul>
 </footer>
-
-
-<script src="https://code.jquery.com/jquery-3.2.1.s lim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.s lim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script><script src="{{ asset('js/bootstrap.min.js') }}"></script>
 {% block scripts %}{% endblock %}
 </html>

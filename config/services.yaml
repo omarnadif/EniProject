@@ -4,8 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    # Route pour l'insertion de  l'image
+    # Route pour l'insertion de l'image de profil
     participant_image_directory: '%kernel.project_dir%/public/img/user/profilePicture'
+
+    # Route pour l'insertion de l'image du lieu
+    lieu_ImageUpload_directory: '%kernel.project_dir%/public/img/lieu/lieuUserUploadPicture'
 
 services:
     # default configuration for services in *this* file

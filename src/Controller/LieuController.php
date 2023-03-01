@@ -31,13 +31,17 @@ class LieuController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     #[Route(path: 'search/ville/', name:'search_lieu', requirements: ['q' => '?q=*'], methods:['GET','POST'])]
     public function search(Request $request, VilleRepository $villeRepository): Response
     {
         $searchTerm = $request->query->get('q');
 
-        $villes = $villeRepository->createQueryBuilder('l')
-            ->andWhere('l.nom LIKE :searchTerm')
+        $villes = $villeRepository->createQueryBuilder('v')
+            ->andWhere('v.nom LIKE :searchTerm')
             ->setParameter('searchTerm', '%' . $searchTerm . '%')
             ->getQuery()
             ->getResult();
