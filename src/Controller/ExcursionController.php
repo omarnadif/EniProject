@@ -37,19 +37,19 @@ class ExcursionController extends AbstractController
         }
 
         if ($searchTerm) {
-            $lieux = $lieuRepository->search($searchTerm);
+            $lieu = $lieuRepository->search($searchTerm);
         } else {
-            $lieux = $lieuRepository->findAll();
+            $lieu = $lieuRepository->findAll();
         }
         if ($searchTerm) {
-            $sorties = $sortieRepository->search($searchTerm);
+            $sortie = $sortieRepository->search($searchTerm);
         } else {
-            $sorties = $sortieRepository->findAll();
+            $sortie = $sortieRepository->findAll();
         }
 
         return $this->render('excursions/indexExcursion.html.twig', [
-            'sorties' => $sorties,
-            'lieux' => $lieux,
+            'sortie' => $sortie,
+            'lieu' => $lieu,
             'participant' => $participant,
         ]);
     }
@@ -80,8 +80,8 @@ class ExcursionController extends AbstractController
         ]);
     }
 
-    #[Route('editExcursion', name: 'editExcursion', methods: ['GET', 'POST'])]
-    public function excursionForm(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('createExcursion', name: 'createExcursion', methods: ['GET', 'POST'])]
+    public function createExcursion(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $sortie = new Sortie();
 
@@ -93,21 +93,23 @@ class ExcursionController extends AbstractController
             $organisateur = $this->getUser();
             $sortie->setParticipantOrganise($organisateur);
 
+            $sortie = new Sortie();
+
             // Récupération des données du formulaire
             $sortie = $form->getData();
 
             // Récupération de l'image de la sortie du formulaire
             $sortieUserPicture = $form->get('sortieUploadPicture')->getData();
 
-            // Vérification si une image de profil a été téléchargée
+            // Vérification si une image de la Sortie a été téléchargée
             if ($sortieUserPicture) {
 
                 // Génération d'un nom de fichier unique pour éviter les conflits
                 $originalFilename = pathinfo($sortieUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $sortieUserPicture->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$sortieUserPicture->guessExtension();
 
-                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
+                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans sortie_ImageUpload_directory)
                 try {
                     $sortieUserPicture->move(
                         $this->getParameter('sortie_ImageUpload_directory'),
@@ -125,13 +127,15 @@ class ExcursionController extends AbstractController
 
             $entityManager->persist($sortie);
             $entityManager->flush();
+
+            // Redirection vers la liste
+            return $this->redirectToRoute('indexExcursion');
         }
 
         return $this->render('excursions/EditeExcursion.html.twig', [
             'excursionForm' => $form->createView(),
         ]);
     }
-
     #[Route('inscriptionExcursion/{id}', name: 'inscriptionExcursion', methods: ['GET', 'POST'])]
     public function addParticipantEvent($id, Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository, SluggerInterface $slugger): Response
     {
