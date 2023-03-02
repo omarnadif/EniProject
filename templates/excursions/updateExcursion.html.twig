@@ -1,122 +1,110 @@
 {% extends "base.html.twig" %}
+
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('css/EditeExcursion.css') }}" xmlns="http://www.w3.org/1999/html"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/EditeExcursion.css') }}" />
 {% endblock %}
-{% block title %}{{ parent() }} Modifier une sortie {% endblock %}
 
+{% block title %}{{ parent() }} Modifier la Sortie {% endblock %}
 {% block main %}
-    <form>
-        <fieldset class="scheduler-border" >
-            <legend class="scheduler-border">Modification de sortie: </legend>
-            <div class=form>
-                <div class="header-left">
-                    <div class="nomLabel">
-                        <label>Nom de la sortie: </label>
-                    </div>
-                    <div class="nomSortieInput">
-                        <input type="text" name="" placeholder=""/>
-                    </div>
-                    <div class="dateSortieLabel">
-                        <label>Date et heure de la sortie: </label>
-                    </div>
-                    <div class="dateSortieInput">
-                        <input  type="date"/>
-                    </div>
-                    <div class="dateLimiteLabel">
-                        <label>Date limite d'inscription: </label>
-                    </div>
-                    <div class="dateLimiteInput">
-                        <input type="date" />
-                    </div>
-                    <div class="nbPlaceLabel">
-                        <label>nombre de place: </label>
-                    </div>
-                    <div class="nombrePlaceInput">
-                        <input type="number"  />
-                    </div>
-                    <div class="dureeLabel">
-                        <label>Durée: </label>
-                    </div>
-                    <div class="dureeInput">
-                        <input type="number"/>
-                    </div>
-                    <div class="descriptionLabel">
-                        <label>Description: </label>
-                    </div>
-                    <div class="descriptionInput">
-                        <textarea name="description" rows="5" cols="30"></textarea>
-                    </div>
-                </div>
 
-                <div class="header-right">
+    {{ form_start(excursionForm) }}
+    <div class="row g-6 mr-6 mt-4">
+
+        <div class="col-md-5 col-lg-3 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">Lieu</span>
+                <span class="badge bg-primary rounded-pill">3</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    {{ form_widget(excursionForm.lieu) }}
+
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    {{ form_widget(excursionForm.sites) }}
+
+                </li>
 
 
-                    <label>Campus :</label>
-                    <div class="campus">
-                        <select name="campus"/>
-                        <option>Nantes</option>
-                        <option>Rennes</option>
-                        <option>Quimper</option>
-                        <option>Niort</option>
-                        <option>Angers</option>
-                        </select>
-                    </div>
-                    <label>Ville :</label>
-                    <div class="ville">
-                        <input type="text" name="ville" placeholder="CityName" />
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    <div>
+
+                        <h6 class="my-0">Images</h6>
+                        //integer l'image du lieu
+                        <img src="" alt="Image">
+                        <small class="text-muted">Image du lieu</small>
                     </div>
 
-                    <label>Rue :</label>
-                    <div class="rue">
-                        <input type="text" name="rue" placeholder="Rue" />
-                    </div>
+        </div>
+        <div class="col-md-7 col-lg-8 ml-5">
+            <h4 class="mb-3">Modifier la sortie</h4>
+            <form class="needs-validation" novalidate="">
+                <div class="row g-3">
 
-                    <label >Code Postal :</label>
-                    <div class="Cp">
-                        <input type="text" name="CodePostal" placeholder="Marseille" />
-                    </div>
 
-                    <label >Latitude :</label>
-                    <div class="latitude">
-                        <input type="text" name="latitude"  />
-                    </div>
-
-                    <label >Longitude :</label>
-                    <div class="Cp">
-                        <input type="text" name="longitude"  />
-                    </div>
-                </div>
-                <fieldset class="scheduler-border-2">
-                    <legend class="scheduler-border">Téléchargement de l'image </legend>
-                    <div class="imageUpload">
-                        <div class="preview">
-                            <img id="file-ip-1-preview">
-                        </div>
-                        <label for="file-ip-1">Upload Image</label>
-                        <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event);">
-                        <div class="preview">
-                            <img id="file-ip-1-preview">
-                            <script type="text/javascript">
-                                function showPreview(event){
-                                    if(event.target.files.length > 0){
-                                        let src = URL.createObjectURL(event.target.files[0]);
-                                        let preview = document.getElementById("file-ip-1-preview");
-                                        preview.src = src;
-                                        preview.style.display = "block";
-                                    }
-                                }
-                            </script>
+                    <div class="col-12">
+                        <label for="address" class="form-label">Nom</label>
+                        {{ form(excursionForm.nom) }}
+                        <div class="invalid-feedback">
+                            Please enter your data.
                         </div>
                     </div>
-                </fieldset>
 
-            </div>
-            <div class="bouttonCreation">
-                <button>Enregistrer</button>
-                <button>Publier la sortie</button>
-                <button>Supprimer la sortie</button>
-                <button>Annuler</button>
-            </div>
-        </fieldset>
-    </form>
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Date Sortie</label>
+                        {{ form_widget(excursionForm.dateHeureDebut)}}
+
+                        <div class="invalid-feedback">
+                            Please enter your data.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Date Limite Sortie</label>
+                        {{ form_widget(excursionForm.dateLimiteInscription)}}
+                        <div class="invalid-feedback">
+                            Please enter your data.
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="address" class="form-label">Durée</label>
+                        {{ form_widget(excursionForm.duree) }}
+                        <div class="invalid-feedback">
+                            Please enter your data.
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="address" class="form-label">Nombre de places</label>
+                        {{ form_widget(excursionForm.nbInscriptionsMax) }}
+                        <div class="invalid-feedback">
+                            Please enter your data.
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="address" class="form-label">Description</label>
+                        {{ form_widget(excursionForm.infosSortie) }}
+                        <div class="invalid-feedback">
+                            Please enter your data.
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+
+
+                {#                <button class="w-25 btn btn-primary btn-lg" type="submit">Enregistrer</button>#}
+                {#                <button class="w-25 btn btn-success btn-lg" type="submit">Publier la sortie</button>#}
+                {#                <button class="w-25 btn btn-warning btn-lg" type="submit">Annuler</button>#}
+                {{ form_end(excursionForm) }}
+        </div>
+
+    </div>
+
+
 {% endblock %}
