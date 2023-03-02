@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
 use App\Repository\LieuRepository;
+use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Security\UserAuthenticator;
@@ -24,10 +25,16 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ExcursionController extends AbstractController
 {
     #[Route(path: 'index', name: 'indexExcursion', methods: ['GET'])]
-    public function index(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository): \Symfony\Component\HttpFoundation\Response
+    public function index(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
     {
         $sortie = new Sortie();
         $searchTerm = $request->request->get('searchTerm');
+        if ($searchTerm) {
+            $participant = $participantRepository->search($searchTerm);
+        } else {
+            $participant = $participantRepository->findAll();
+        }
+
         if ($searchTerm) {
             $lieu = $lieuRepository->search($searchTerm);
         } else {
@@ -42,6 +49,7 @@ class ExcursionController extends AbstractController
         return $this->render('excursions/indexExcursion.html.twig', [
             'sortie' => $sortie,
             'lieu' => $lieu,
+            'participant' => $participant,
         ]);
     }
 
