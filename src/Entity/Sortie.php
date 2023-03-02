@@ -43,24 +43,24 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $sites = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\ManyToOne(inversedBy: 'sortiesOrganise')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $ParticipantOrganise = null;
+    private ?Participant $ParticipantOrganise;
 
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sortiesRelations')]
-    private Collection $ParticipantInscrit;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Etat $etat = null;
 
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
+    private Collection $participants;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sortieImageUpload = null;
 
-
     public function __construct()
     {
-        $this->ParticipantInscrit = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,29 +177,7 @@ class Sortie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Participant>
-     */
-    public function getParticipantInscrit(): Collection
-    {
-        return $this->ParticipantInscrit;
-    }
 
-    public function addParticipantInscrit(Participant $participantInscrit): self
-    {
-        if (!$this->ParticipantInscrit->contains($participantInscrit)) {
-            $this->ParticipantInscrit->add($participantInscrit);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipantInscrit(Participant $participantInscrit): self
-    {
-        $this->ParticipantInscrit->removeElement($participantInscrit);
-
-        return $this;
-    }
 
     public function getEtat(): ?Etat
     {
@@ -209,6 +187,30 @@ class Sortie
     public function setEtat(?Etat $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        $this->participants->removeElement($participant);
 
         return $this;
     }

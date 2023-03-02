@@ -40,12 +40,12 @@ class RegistrationController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
-        // Vérification de la checkbox "Actif"
-        if ($form->get('actif')->getData()) {
-            $user->setActif(true);
-        } else {
-            $user->setActif(false);
-        }
+            // Vérification de la checkbox "Actif"
+            if ($form->get('actif')->getData()) {
+                $user->setActif(true);
+            } else {
+                $user->setActif(false);
+            }
 
         //Insertion du Participant en BDD (Base de donnée)
         $entityManager->persist($user);
