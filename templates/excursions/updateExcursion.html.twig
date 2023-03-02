@@ -4,7 +4,7 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('css/EditeExcursion.css') }}" />
 {% endblock %}
 
-{% block title %}{{ parent() }} Modifier la Sortie {% endblock %}
+{% block title %}{{ parent() }} Creer Sortie {% endblock %}
 {% block main %}
 
     {{ form_start(excursionForm) }}
@@ -13,34 +13,47 @@
         <div class="col-md-5 col-lg-3 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-primary">Lieu</span>
-                <span class="badge bg-primary rounded-pill">3</span>
+                {# <span class="badge bg-primary rounded-pill">3</span> #}
             </h4>
             <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between lh-sm">
                     {{ form_widget(excursionForm.lieu) }}
-
                 </li>
+
                 <li class="list-group-item d-flex justify-content-between lh-sm">
                     {{ form_widget(excursionForm.sites) }}
-
                 </li>
 
-
                 <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-
-                        <h6 class="my-0">Images</h6>
-                        //integer l'image du lieu
-                        <img src="" alt="Image">
-                        <small class="text-muted">Image du lieu</small>
+                    {# Préview de l'image de la sortie #}
+                    <div class="row g-3">
+                        <h4>
+                            <span class="text-primary">Preview du Lieu</span>
+                        </h4>
+                        <br>
+                        <img id="preview" class="img-thumbnail" alt="Lieu_ImagePreview">
                     </div>
+                    {# --- Préview de l'image de la sortie --- #}
+                </li>
 
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Promo code</h6>
+                        <small>!a changer par les détails du lieu et de la ville!</small>
+                    </div>
+                    <span class="text-success">−$5</span>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (USD)</span>
+                    <strong>$20</strong>
+                </li>
+            </ul>
         </div>
         <div class="col-md-7 col-lg-8 ml-5">
-            <h4 class="mb-3">Modifier la sortie</h4>
+            <h4 class="mb-3">Modifier une sortie</h4>
             <form class="needs-validation" novalidate="">
                 <div class="row g-3">
-
 
                     <div class="col-12">
                         <label for="address" class="form-label">Nom</label>
@@ -67,7 +80,6 @@
                         </div>
                     </div>
 
-
                     <div class="col-12">
                         <label for="address" class="form-label">Durée</label>
                         {{ form_widget(excursionForm.duree) }}
@@ -91,20 +103,31 @@
                             Please enter your data.
                         </div>
                     </div>
-
                 </div>
-
-                <hr class="my-4">
-
-
-
-                {#                <button class="w-25 btn btn-primary btn-lg" type="submit">Enregistrer</button>#}
-                {#                <button class="w-25 btn btn-success btn-lg" type="submit">Publier la sortie</button>#}
-                {#                <button class="w-25 btn btn-warning btn-lg" type="submit">Annuler</button>#}
                 {{ form_end(excursionForm) }}
         </div>
-
+        <div class="col-md-7 col-lg-8 ml-5">
+            <hr class="my-4">
+            <a href="{{ path('createLieu') }}" class="btn btn-outline-dark col-2 mb-4 ml-4">Ajouter un lieu</a>
+            <a href="{{ path('createVille') }}" class="btn btn-outline-dark col-2 mb-4 ml-4">Ajouter une ville</a>
+        </div>
     </div>
 
+    {# Javascript pour faire la prévisualisation de l'image lors de l'insert de l'image sans avoir encore validé le formulaire #}
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            const input = document.querySelector('[data-preview="#preview"]');
+            const preview = document.querySelector('#preview');
 
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.addEventListener("load", () => {
+                    preview.src = reader.result;
+                });
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 {% endblock %}

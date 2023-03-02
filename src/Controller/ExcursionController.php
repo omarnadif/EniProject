@@ -10,9 +10,11 @@ use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -60,10 +62,16 @@ class ExcursionController extends AbstractController
     }
 
 
-    #[Route(path: 'updateExcursion', name: 'updateExcursion', methods: ['GET'])]
-    public function updateExcursion(Request $request, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: 'updateExcursion/{id}', name: 'updateExcursion', methods: ['GET', 'POST'])]
+    public function updateExcursion($id, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, Filesystem $filesystem): \Symfony\Component\HttpFoundation\Response
     {
-        $sortie = new Sortie();
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        // Vérification que la sortie existe
+        if (!$sortie) {
+            throw $this->createNotFoundException('La sortie n\'existe pas.');
+        }
+
         //Création du formulaire
         $form = $this->createForm(UpdateSortieFormType::class, $sortie);
         $form->handleRequest($request);
@@ -71,9 +79,45 @@ class ExcursionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $organisateur = $this->getUser();
             $sortie->setParticipantOrganise($organisateur);
-            $entityManager->persist($sortie);
+
+            // Récupération de l'image de profil du formulaire
+            $sortieUserPicture = $form->get('sortieUploadPicture')->getData();
+
+            // Vérification si une image dans sortie a été téléchargée
+            if ($sortieUserPicture) {
+
+                // Génération d'un nom de fichier unique pour éviter les conflits
+                $originalFilename = pathinfo($sortieUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$sortieUserPicture->guessExtension();
+
+                // Déplacement de l'image téléchargée dans le répertoire de stockage défini dans service.yaml (dans sortie_ImageUpload_directory)
+                try {
+                    $sortieUserPicture->move(
+                        $this->getParameter('sortie_ImageUpload_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gestion d'une exception si nécessaire
+                }
+
+                // Suppression de l'ancienne image, s'il en existe une
+                $oldFilename = $sortie->getSortieImageUpload();
+                if ($oldFilename) {
+                    $filesystem->remove($this->getParameter('sortie_ImageUpload_directory').'/'.$oldFilename);
+                }
+
+                // Ajout du nom du fichier d'image dans l'entité Sortie
+                if ($sortie instanceof Sortie) {
+                    $sortie->setSortieImageUpload($newFilename);
+                }
+            }
             $entityManager->flush();
+
+            $this->addFlash('success', 'La sortie a été modifiée avec succès.');
+            return $this->redirectToRoute('indexExcursion', ['id' => $sortie->getId()]);
         }
+
         return $this->render('excursions/updateExcursion.html.twig', [
             'excursionForm' => $form->createView(),
         ]);
