@@ -30,7 +30,6 @@ class LieuController extends AbstractController
         return $this->render('lieu/indexLieu.html.twig', [
             'lieu' => $lieu,
         ]);
-
     }
 
 
@@ -135,14 +134,21 @@ class LieuController extends AbstractController
         if ($lieu === null) {
             // le lieu n'a pas été trouvé
         } else {
+
+            // Suppression de l'image de profil de l'utilisateur, s'il en a une
+            $lieuUserPicture = $lieu->getLieuImageUpload();
+            if ($lieuUserPicture) {
+                $imagePath = $this->getParameter('lieu_ImageUpload_directory') . '/' . $lieuUserPicture;
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            // Supprimer l'entité Lieu
             $em->remove($lieu);
             $em->flush();
-            return $this->redirectToRoute('indexLieu');
         }
 
-        return $this->render('lieu/indexLieu.html.twig', [
-            'lieu' => $lieu,
-
-        ]);
+        return $this->redirectToRoute('indexLieu');
     }
 }

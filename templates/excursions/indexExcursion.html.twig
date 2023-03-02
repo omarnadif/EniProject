@@ -31,8 +31,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for sorties in sortie %}
-             {% for lieux in lieu %}
+        {% for lieux in lieu %}
             <tr>
                 <td>{# Affichage de l'image du lieu ou de l'image par défaut #}
                     {% if lieux.lieuImageUpload %}
@@ -42,22 +41,50 @@
                     {% endif %}
                     <img src="{{ imagePath }}" alt="{{ lieux.nom }}" width="150">
                 </td>
-                <td>{{ sorties.nom }}</td>
-                <td>{{ sorties.dateHeureDebut|date('Y-m-d H:i:s') }}</td>
-                <td>{{ sorties.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
-                <td>{{ sorties.nbInscriptionsMax }}</td>
-                <td>{{ sorties.etat.getLibelle() }}</td>
-                {# {% for participant in sorties.inscriptions %}
-                    <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
-                {% endfor %}
-                <td>{{ sorties.getParticipantOrganise() }}</td>
                 <td>
-                    {#<a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                     <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
-                #}
+                    {% for sorties in sortie %}
+                        {% if sorties.lieu == lieux %}
+                            {{ sorties.nom }}
+                        {% endif %}
+                    {% endfor %}
                 </td>
+                <td>
+                    {% for sorties in sortie %}
+                        {% if sorties.lieu == lieux %}
+                            {{ sorties.dateHeureDebut|date('Y-m-d H:i:s') }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for sorties in sortie %}
+                        {% if sorties.lieu == lieux %}
+                            {{ sorties.dateLimiteInscription|date('Y-m-d H:i:s') }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for sorties in sortie %}
+                        {% if sorties.lieu == lieux %}
+                            {{ sorties.nbInscriptionsMax }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for sorties in sortie %}
+                        {% if sorties.lieu == lieux %}
+                            {{ sorties.etat.getLibelle() }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                {# {% for participant in sortie.inscriptions %}
+            <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
+        {% endfor %}
+        <td>{{ sortie.getParticipantOrganise() }}</td>
+        <td>
+            {#<a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+             <a href="{{ path('', {'id': lieu.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
+                #}
             </tr>
-             {% endfor %}
         {% endfor %}
         </tbody>
     </table>
