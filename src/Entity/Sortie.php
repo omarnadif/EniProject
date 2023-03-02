@@ -57,10 +57,14 @@ class Sortie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sortieImageUpload = null;
 
+    #[ORM\OneToMany(mappedBy: 'sortie', targetEntity: InscriptionEvenements::class, orphanRemoval: true)]
+    private Collection $inscriptions;
+
 
     public function __construct()
     {
         $this->ParticipantInscrit = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,6 +225,36 @@ class Sortie
     public function setSortieImageUpload(?string $sortieImageUpload): self
     {
         $this->sortieImageUpload = $sortieImageUpload;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InscriptionEvenements>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(InscriptionEvenements $inscription): self
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->setSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(InscriptionEvenements $inscription): self
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getSortie() === $this) {
+                $inscription->setSortie(null);
+            }
+        }
 
         return $this;
     }

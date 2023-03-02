@@ -63,4 +63,13 @@ class SortieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function search(string $term)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.nom LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
 }
