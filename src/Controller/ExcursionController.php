@@ -17,7 +17,13 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 #[Route(path: 'excursion/')]
 class ExcursionController extends AbstractController
 {
-    #[Route(path: '', name: 'selectExcursion', methods: ['GET'])]
+    #[Route(path: 'index', name: 'indexExcursion', methods: ['GET'])]
+    public function index(): \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('excursions/indexExcursion.html.twig');
+    }
+
+    #[Route(path: 's', name: 'selectExcursion', methods: ['GET'])]
     public function SelectExcursion(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('excursions/excursion.html.twig');
