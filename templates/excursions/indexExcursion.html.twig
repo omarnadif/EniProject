@@ -47,7 +47,9 @@
                 <td>{{ sorties.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
                 <td>{{ sorties.nbInscriptionsMax }}</td>
                 <td>{{ sorties.etat.getLibelle() }}</td>
-                {#  <td>{{ sorties.participantInscrit.participant.getNom() |upper }} {{ sorties.participantsInscrit.participant.getPrenom() |upper }}</td>
+                {% for participant in sorties.inscriptions %}
+                    <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
+                {% endfor %}
                 <td>{{ sorties.getParticipantOrganise() }}</td>
                 <td>
                     {#<a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>

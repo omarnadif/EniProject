@@ -6,6 +6,10 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
+use App\Repository\LieuRepository;
+use App\Repository\ParticipantRepository;
+use App\Repository\SiteRepository;
+use App\Repository\SortieRepository;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -21,9 +25,32 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ExcursionController extends AbstractController
 {
     #[Route(path: 'index', name: 'indexExcursion', methods: ['GET'])]
-    public function index(): \Symfony\Component\HttpFoundation\Response
+    public function index(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('excursions/indexExcursion.html.twig');
+        $sortie = new Sortie();
+        $searchTerm = $request->request->get('searchTerm');
+        if ($searchTerm) {
+            $participant = $participantRepository->search($searchTerm);
+        } else {
+            $participant = $participantRepository->findAll();
+        }
+
+        if ($searchTerm) {
+            $lieu = $lieuRepository->search($searchTerm);
+        } else {
+            $lieu = $lieuRepository->findAll();
+        }
+        if ($searchTerm) {
+            $sortie = $sortieRepository->search($searchTerm);
+        } else {
+            $sortie = $sortieRepository->findAll();
+        }
+
+        return $this->render('excursions/indexExcursion.html.twig', [
+            'sortie' => $sortie,
+            'lieu' => $lieu,
+            'participant' => $participant,
+        ]);
     }
 
     #[Route(path: 's', name: 'selectExcursion', methods: ['GET'])]
