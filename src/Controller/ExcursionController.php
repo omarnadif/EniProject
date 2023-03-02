@@ -30,9 +30,9 @@ class ExcursionController extends AbstractController
 
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
-            $participant = $participantRepository->search($searchTerm);
+            $participants = $participantRepository->search($searchTerm);
         } else {
-            $participant = $participantRepository->findAll();
+            $participants = $participantRepository->findAll();
         }
 
         if ($searchTerm) {
@@ -54,7 +54,7 @@ class ExcursionController extends AbstractController
         return $this->render('excursions/indexExcursion.html.twig', [
             'sorties' => $sorties,
             'lieu' => $lieu,
-            'participant' => $participant,
+            'participants' => $participants,
             'participantOrganises'=>$participantOrganises]);
     }
 
