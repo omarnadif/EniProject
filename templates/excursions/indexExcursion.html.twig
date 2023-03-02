@@ -47,13 +47,14 @@
                 <td>{{ sorties.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
                 <td>{{ sorties.nbInscriptionsMax }}</td>
                 <td>{{ sorties.etat.getLibelle() }}</td>
-                {% for participant in sorties.inscriptions %}
+                {# {% for participant in sorties.inscriptions %}
                     <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
                 {% endfor %}
                 <td>{{ sorties.getParticipantOrganise() }}</td>
                 <td>
                     {#<a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                     <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a> #}
+                     <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
+                #}
                 </td>
             </tr>
              {% endfor %}

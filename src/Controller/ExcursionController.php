@@ -2,23 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
-use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route(path: 'excursion/')]
@@ -56,7 +51,7 @@ class ExcursionController extends AbstractController
     #[Route(path: 's', name: 'selectExcursion', methods: ['GET'])]
     public function SelectExcursion(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('excursions/excursion.html.twig');
+        return $this->render('excursions/selectExcursion.html.twig');
     }
 
 
@@ -121,9 +116,11 @@ class ExcursionController extends AbstractController
                     $sortie->setSortieImageUpload($newFilename);
                 }
             }
-
             $entityManager->persist($sortie);
             $entityManager->flush();
+
+            // Redirection vers la liste
+            return $this->redirectToRoute('indexExcursion');
         }
 
         return $this->render('excursions/EditeExcursion.html.twig', [
