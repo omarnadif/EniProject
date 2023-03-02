@@ -195,8 +195,13 @@
                         {% else %}
                             <img src="{{ asset('img/user/defaultProfilePicture/pdp_default_Homme.png') }}" alt="defaultImgProfilUser" class="rounded-circle" width="150">
                         {% endif %}
-
-                        {{ app.user.nom|upper }} {{ app.user.prenom }}<b class="caret"></b></a>
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
+                        <span style="color: #e30d0d"> {{ app.user.nom|upper }} {{ app.user.prenom }}</span>
+                        {% endif %}
+                        {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+                            {{ app.user.nom|upper }} {{ app.user.prenom }}
+                        {% endif %}
+                        <b class="caret"></b></a>
                     <div class="dropdown-menu">
                         <a href="{{ path('security_profile') }}" class="dropdown-item"><i class="fa fa-user-o"></i>Mon Profil</a>
                         {% if app.user and is_granted('ROLE_ADMIN') %}
@@ -224,7 +229,7 @@
 {% block main %}
 {% endblock %}
 </body>
-<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+<footer class="d-flex flex-wrap justify-content-between align-items-center  ">
     <div class="col-md-4 d-flex align-items-center">
         <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
             <svg class="bi" width="30" height="24"><img src="{{ asset('img/logo/enilogo.png') }}" width="40" class="mr-2" alt="Logo_Eni"></svg>
