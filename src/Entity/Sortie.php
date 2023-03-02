@@ -55,6 +55,8 @@ class Sortie
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
     private Collection $participants;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $sortieImageUpload = null;
 
     public function __construct()
     {
@@ -213,5 +215,16 @@ class Sortie
         return $this;
     }
 
+    public function getSortieImageUpload(): ?string
+    {
+        return $this->sortieImageUpload;
+    }
+
+    public function setSortieImageUpload(?string $sortieImageUpload): self
+    {
+        $this->sortieImageUpload = $sortieImageUpload;
+
+        return $this;
+    }
 
 }
