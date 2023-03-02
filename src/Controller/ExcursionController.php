@@ -86,7 +86,7 @@ class ExcursionController extends AbstractController
             // Récupération de l'image de profil du formulaire
             $sortieUserPicture = $form->get('sortieUploadPicture')->getData();
 
-            // Vérification si une image dans sortie a été téléchargée
+            // Vérification s'il y a une image dans la sortie a été téléchargée
             if ($sortieUserPicture) {
 
                 // Génération d'un nom de fichier unique pour éviter les conflits

@@ -14,13 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
-#[Route(path: '/admin/lieu/')]
+#[Route(path: 'lieu/')]
 class LieuController extends AbstractController
 {
     #[Route(path: 'indexLieu', name: 'indexLieu', methods:['GET','POST'])]
     public function indexLieu(Request $request, EntityManagerInterface $em, LieuRepository $lieuRepository): Response
     {
-
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
             $lieu = $lieuRepository->search($searchTerm);
@@ -116,7 +115,7 @@ class LieuController extends AbstractController
             return $this->render('lieu/indexLieu.html.twig', [
                 'lieu' => $lieu,]);
         } else {
-            // le lieu a été trouvée
+            // le lieu a été trouvé
         }
 
         return $this->render('lieu/updateLieu.html.twig', [

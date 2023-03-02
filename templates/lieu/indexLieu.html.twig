@@ -21,7 +21,9 @@
             <tr>
                 <th style="width: 22%;">Photo du lieu</th>
                 <th style="width: 22%;">Nom</th>
+                {% if app.user and is_granted('ROLE_ADMIN') %}
                 <th style="width: 22%;">Actions</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -36,10 +38,12 @@
                         <img src="{{ imagePath }}" alt="{{ lieux.nom }}" width="150">
                     </td>
                     <td>{{ lieux.nom }}</td>
+                    {% if app.user and is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path('updateLieu', {'id': lieux.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
                         <a href="{{ path('deleteLieu', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
                     </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
