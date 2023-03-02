@@ -135,7 +135,7 @@ class LieuController extends AbstractController
             // le lieu n'a pas été trouvé
         } else {
 
-            // Suppression de l'image de profil de l'utilisateur, s'il en a une
+            // Suppression de l'image du lieu, s'il en a une
             $lieuUserPicture = $lieu->getLieuImageUpload();
             if ($lieuUserPicture) {
                 $imagePath = $this->getParameter('lieu_ImageUpload_directory') . '/' . $lieuUserPicture;
@@ -143,12 +143,10 @@ class LieuController extends AbstractController
                     unlink($imagePath);
                 }
             }
-
-            // Supprimer l'entité Lieu
-            $em->remove($lieu);
-            $em->flush();
+        // Supprimé dans l'entité Lieu
+        $em->remove($lieu);
+        $em->flush();
         }
-
         return $this->redirectToRoute('indexLieu');
     }
 }

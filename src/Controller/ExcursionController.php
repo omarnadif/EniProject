@@ -2,24 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
-use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route(path: 'excursion/')]
@@ -29,6 +24,8 @@ class ExcursionController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
     {
         $sorties = $sortieRepository->findAll();
+
+        $sortie = new Sortie();
 
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
@@ -42,6 +39,7 @@ class ExcursionController extends AbstractController
         } else {
             $lieu = $lieuRepository->findAll();
         }
+
         if ($searchTerm) {
             $sortie = $sortieRepository->search($searchTerm);
         } else {
@@ -58,7 +56,7 @@ class ExcursionController extends AbstractController
     #[Route(path: 's', name: 'selectExcursion', methods: ['GET'])]
     public function SelectExcursion(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('excursions/excursion.html.twig');
+        return $this->render('excursions/selectExcursion.html.twig');
     }
 
 
@@ -137,6 +135,30 @@ class ExcursionController extends AbstractController
             'excursionForm' => $form->createView(),
         ]);
     }
+
+    #[Route('deleteExcursion/{id}', name: 'deleteExcursion', methods: ['GET'])]
+    public function deleteExcursion($id, EntityManagerInterface $entityManager): Response
+    {
+        $sortie = $entityManager->find(Sortie::class, $id);
+
+        if ($sortie === null) {
+            // la sortie n'a pas été trouvée
+        } else {
+            // Suppression de l'image de la sortie, s'il en a une
+            $lieuUserPicture = $sortie->getSortieImageUpload();
+            if ($lieuUserPicture) {
+                $imagePath = $this->getParameter('sortie_ImageUpload_directory') . '/' . $lieuUserPicture;
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+            // Supprimé dans l'entité Sortie
+            $entityManager->remove($sortie);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('indexExcursion');
+    }
+
     #[Route('inscriptionExcursion/{id}', name: 'inscriptionExcursion', methods: ['GET', 'POST'])]
     public function addParticipantEvent($id, Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository, SluggerInterface $slugger): Response
     {
