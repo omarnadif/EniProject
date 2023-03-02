@@ -26,6 +26,7 @@ class LieuController extends AbstractController
         return $this->render('lieu/indexLieu.html.twig', [
             'lieu' => $lieu,
         ]);
+
     }
 
     #[Route('createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
