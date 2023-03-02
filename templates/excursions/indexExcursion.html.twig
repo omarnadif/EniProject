@@ -4,66 +4,65 @@
 
 {% block main %}
     {# --- Barre de recherche --- #}
-<form class="navbar-form form-control-sm" action="{{ path('indexLieu') }}" method="post">
-    <div class="input-group search-box mb-4">
-        <h6 class="text-justify mt-2 mr-3">Le nom contient: </h6>
-        <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
-        <label for="search"></label><input name="searchTerm" type="text" id="search" class="form-control" placeholder="">
-    </div>
-</form>
-{# --- FIN Barre de recherche --- #}
+    <form class="navbar-form form-control-sm" action="{{ path('indexLieu') }}" method="post">
+        <div class="input-group search-box mb-4">
+            <h6 class="text-justify mt-2 mr-3">Le nom contient: </h6>
+            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+            <label for="search"></label><input name="searchTerm" type="text" id="search" class="form-control" placeholder="">
+        </div>
+    </form>
+    {# --- FIN Barre de recherche --- #}
 
     {# --- Corps de l'index LIEU --- #}
-<div class="table-responsive">
+    <div class="table-responsive">
 
-    <table class=" text-center table table-bordered border-primary">
-        <thead>
-        <tr>
-            <th style="width: 22%;">image de  la sortie</th>
-            <th style="width: 22%;">nom de la sortie</th>
-            <th style="width: 22%;">Date de la sortie</th>
-            <th style="width: 22%;">Cloture</th>
-            <th style="width: 22%;">inscrits/places</th>
-            <th style="width: 22%;">Etat</th>
-            <th style="width: 22%;">Inscrit</th>
-            <th style="width: 22%;">Organisateur</th>}
-            <th style="width: 22%;">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for sortie in sorties %}
-            {% set lieu=sortie.lieu %}
+        <table class=" text-center table table-bordered border-primary">
+            <thead>
             <tr>
-                <td>{# Affichage de l'image du lieu ou de l'image par défaut #}
-                    {% if lieu.lieuImageUpload %}
-                        {% set imagePath = asset('img/lieu/lieuUserUploadPicture/' ~ lieu.lieuImageUpload) %}
-                    {% else %}
-                        {% set imagePath = asset('img/lieu/lieuNoPictureImg/imgLieuDefault.png') %}
-                    {% endif %}
-                    <img src="{{ imagePath }}" alt="{{ lieu.nom }}" width="150">
-                </td>
-                <td>{{ sortie.nom }}</td>
-                <td>{{ sortie.dateHeureDebut|date('Y-m-d H:i:s') }}</td>
-                <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
-                <td>{{ sortie.nbInscriptionsMax }}</td>
-                <td>{{ sortie.etat.getLibelle() }}</td>
-
-                {% for participants in participant %}
-                    <td>{{ participants.nom|upper }} {{ participants.prenom|upper }}</td>
-                {% endfor %}
-                <td>{{ sortie.getParticipantOrganise().getNom() }}</td>
-                <td>
-                    {# //cette href c'est bpour le role User #}
-                    <a href="{{ path('inscriptionExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Inscription</a>
-                    {#//les deux href c'est bpour le role admin
-                    <a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                     <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a> #}
-                </td>
+                <th style="width: 22%;">image de  la sortie</th>
+                <th style="width: 22%;">nom de la sortie</th>
+                <th style="width: 22%;">Date de la sortie</th>
+                <th style="width: 22%;">Cloture</th>
+                <th style="width: 22%;">inscrits/places</th>
+                <th style="width: 22%;">Etat</th>
+                {#  <th style="width: 22%;">Inscrit</th>
+            <th style="width: 22%;">Organisateur</th>#}
+                <th style="width: 22%;">Actions</th>
             </tr>
-
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+                {% set lieu = sortie.lieu %}
+                <tr>
+                    <td>{# Affichage de l'image du sortie ou de l'image par défaut #}
+                        {% if sortie.sortieImageUpload %}
+                            {% set imagePath = asset('img/sortie/sortieUserUploadPicture/' ~ sortie.sortieImageUpload) %}
+                        {% else %}
+                            {% set imagePath = asset('img/sortie/sortieNoPictureImg/imgSortieDefault.png') %}
+                        {% endif %}
+                        <img src="{{ imagePath }}" alt="{{ lieu.nom }}" width="150">
+                    </td>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateHeureDebut|date('Y-m-d H:i:s') }}</td>
+                    <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
+                    <td>{{ sortie.nbInscriptionsMax }}</td>
+                    <td>{{ sortie.etat.getLibelle() }}</td>
+                    {# {% for participant in sorties.inscriptions %}
+                    <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
+                {% endfor %}
+                <td>{{ sorties.getParticipantOrganise() }}</td> #}
+                    <td>
+                        {# //cette href c'est bpour le role User #}
+                        <a href="{{ path('inscriptionExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Inscription</a>
+                        {#//les deux href c'est bpour le role admin
+                        <a href="{{ path('detailsExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Détails</a> #}
+                        <a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                        <a href="{{ path('deleteExcursion', {'id': sortie.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     <a href="{{ path('createExcursion') }}" class="btn btn-info ml-5">Ajouter</a>
 </div>
 {% endblock %}
