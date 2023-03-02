@@ -25,8 +25,8 @@
                 <th style="width: 22%;">Cloture</th>
                 <th style="width: 22%;">inscrits/places</th>
                 <th style="width: 22%;">Etat</th>
-                {#  <th style="width: 22%;">Inscrit</th>
-            <th style="width: 22%;">Organisateur</th>#}
+                  <th style="width: 22%;">Inscrit</th>
+            <th style="width: 22%;">Organisateur</th>}
                 <th style="width: 22%;">Actions</th>
             </tr>
             </thead>
@@ -47,10 +47,10 @@
                     <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
                     <td>{{ sortie.nbInscriptionsMax }}</td>
                     <td>{{ sortie.etat.getLibelle() }}</td>
-                    {# {% for participant in sorties.inscriptions %}
-                    <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
-                {% endfor %}
-                <td>{{ sorties.getParticipantOrganise() }}</td> #}
+                    {% for participants in participant %}
+                        <td>{{ participants.nom|upper }} {{ participants.prenom|upper }}</td>
+                    {% endfor %}
+                    <td>{{ sortie.getParticipantOrganise().getNom() }}</td>
                     <td>
                         {# //cette href c'est bpour le role User #}
                         <a href="{{ path('inscriptionExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Inscription</a>
