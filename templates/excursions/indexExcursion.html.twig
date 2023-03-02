@@ -1,18 +1,63 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Ex{% endblock %}
+{% block title %}{{ parent() }} Creer Sortie {% endblock %}
 
 {% block main %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    {# --- Barre de recherche --- #}
+<form class="navbar-form form-control-sm" action="{{ path('indexLieu') }}" method="post">
+    <div class="input-group search-box mb-4">
+        <h6 class="text-justify mt-2 mr-3">Le nom contient: </h6>
+        <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+        <label for="search"></label><input name="searchTerm" type="text" id="search" class="form-control" placeholder="">
+    </div>
+</form>
+{# --- FIN Barre de recherche --- #}
 
+    {# --- Corps de l'index LIEU --- #}
+<div class="table-responsive">
 
-
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-    </select>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <table class=" text-center table table-bordered border-primary">
+        <thead>
+        <tr>
+            <th style="width: 22%;">image de  la sortie</th>
+            <th style="width: 22%;">nom de la sortie</th>
+            <th style="width: 22%;">Date de la sortie</th>
+            <th style="width: 22%;">Cloture</th>
+            <th style="width: 22%;">inscrits/places</th>
+            <th style="width: 22%;">Etat</th>
+            <th style="width: 22%;">Inscrit</th>
+            <th style="width: 22%;">Organisateur</th>
+            <th style="width: 22%;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sorties in sortie %}
+             {% for lieux in lieu %}
+            <tr>
+                <td>{# Affichage de l'image du lieu ou de l'image par défaut #}
+                    {% if lieux.lieuImageUpload %}
+                        {% set imagePath = asset('img/lieu/lieuUserUploadPicture/' ~ lieux.lieuImageUpload) %}
+                    {% else %}
+                        {% set imagePath = asset('img/lieu/lieuNoPictureImg/imgLieuDefault.png') %}
+                    {% endif %}
+                    <img src="{{ imagePath }}" alt="{{ lieux.nom }}" width="150">
+                </td>
+                <td>{{ sorties.nom }}</td>
+                <td>{{ sorties.dateHeureDebut|date('Y-m-d H:i:s') }}</td>
+                <td>{{ sorties.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
+                <td>{{ sorties.nbInscriptionsMax }}</td>
+                <td>{{ sorties.etat.getLibelle() }}</td>
+                {#  <td>{{ sorties.participantInscrit.participant.getNom() |upper }} {{ sorties.participantsInscrit.participant.getPrenom() |upper }}</td>
+                <td>{{ sorties.getParticipantOrganise() }}</td>
+                <td>
+                    {#<a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                     <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a> #}
+                </td>
+            </tr>
+             {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('editExcursion') }}" class="btn btn-info ml-5">Ajouter</a>
+</div>
 {% endblock %}
-
