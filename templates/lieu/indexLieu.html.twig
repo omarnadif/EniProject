@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block title %}{{ parent() }} Creer Sortie {% endblock %}
+
 {% block main %}
     {# --- Barre de recherche --- #}
     <form class="navbar-form form-control-sm" action="{{ path('indexLieu') }}" method="post">
@@ -13,12 +14,12 @@
     {# --- FIN Barre de recherche --- #}
 
     {# --- Corps de l'index LIEU --- #}
-
     <div class="table-responsive">
 
         <table class=" text-center table table-bordered border-primary">
             <thead>
             <tr>
+                <th style="width: 22%;">Photo du lieu</th>
                 <th style="width: 22%;">Nom</th>
                 <th style="width: 22%;">Actions</th>
             </tr>
@@ -26,10 +27,18 @@
             <tbody>
             {% for lieux in lieu %}
                 <tr>
+                    <td>{# Affichage de l'image du lieu ou de l'image par défaut #}
+                        {% if lieux.lieuImageUpload %}
+                            {% set imagePath = asset('img/lieu/lieuUserUploadPicture/' ~ lieux.lieuImageUpload) %}
+                        {% else %}
+                            {% set imagePath = asset('img/lieu/lieuNoPictureImg/imgLieuDefault.png') %}
+                        {% endif %}
+                        <img src="{{ imagePath }}" alt="{{ lieux.nom }}" width="150">
+                    </td>
                     <td>{{ lieux.nom }}</td>
                     <td>
                         <a href="{{ path('updateLieu', {'id': lieux.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
-                        <a href="{{ path('deleteLieu', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                        <a href="{{ path('deleteLieu', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-
-
 use App\Entity\Ville;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,12 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-#[Route(path: '/admin/ville/')]
 class VilleController extends AbstractController
 {
-    #[Route(path: 'index', name: 'indexville', methods:['GET'])]
-    public function profile(EntityManagerInterface $em): Response
+    #[Route(path: 'ville/index', name: 'indexville', methods:['GET'])]
+    public function indexVille(EntityManagerInterface $em): Response
     {
         $villes = $em->getRepository(Ville::class)->findAll();
 
@@ -26,26 +22,20 @@ class VilleController extends AbstractController
         ]);
     }
 
-    #[Route('create', name: 'createVille', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('ville/create', name: 'createVille', methods: ['GET', 'POST'])]
+    public function createVille(Request $request, EntityManagerInterface $entityManager): Response
     {
-
-        // Création
+        // Création d'une Ville
         $ville = new Ville();
-
 
         //Création du formulaire
         $formVille = $this->createForm(VilleFormType::class, $ville);
         $formVille->handleRequest($request);
 
-
-
-
         //Vérification du formulaire
         if ($formVille->isSubmitted() && $formVille->isValid()) {
 
-
-            //Insertion du Participant en BDD (Base de donnée)
+            //Insertion de la Ville en BDD (Base de donnée)
             $entityManager->persist($ville);
             $entityManager->flush();
 
@@ -53,7 +43,6 @@ class VilleController extends AbstractController
 
             // Redirection vers la liste
             return $this->redirectToRoute('indexville');
-
         }
 
         return $this->render('ville/createVille.html.twig', [
@@ -61,34 +50,26 @@ class VilleController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'update/{id}', name: 'updateVille', methods: ['GET','POST'])]
-    public function update($id, EntityManagerInterface $em,Request $request): Response
+    #[Route(path: '/admin/ville/update/{id}', name: 'updateVille', methods: ['GET','POST'])]
+    public function updateVille($id, EntityManagerInterface $em,Request $request): Response
     {
         $ville = $em->find(Ville::class, $id);
-        // Création
-
-
 
         //Création du formulaire
         $formVille = $this->createForm(VilleFormType::class, $ville);
         $formVille->handleRequest($request);
 
-
-
-
         //Vérification du formulaire
         if ($formVille->isSubmitted() && $formVille->isValid()) {
 
-
-            //Insertion du Participant en BDD (Base de donnée)
+            //Insertion de la Ville en BDD (Base de donnée)
             $em->persist($ville);
             $em->flush();
 
-            $this->addFlash('success', 'La ville a bien été modifier !');
+            $this->addFlash('success', 'La ville a bien été modifiée !');
 
             // Redirection vers la liste
             return $this->redirectToRoute('indexville');
-
         }
 
         if ($ville === null) {
@@ -103,11 +84,10 @@ class VilleController extends AbstractController
             'ville' => $ville,
             'formVille' => $formVille->createView(),
         ]);
-
     }
 
-    #[Route(path: 'delete/{id}', name: 'deleteVille', methods: ['GET'])]
-    public function delete($id, EntityManagerInterface $em): Response
+    #[Route(path: '/admin/ville/delete/{id}', name: 'deleteVille', methods: ['GET'])]
+    public function deleteVille($id, EntityManagerInterface $em): Response
     {
         $ville = $em->find(Ville::class, $id);
 
@@ -123,8 +103,4 @@ class VilleController extends AbstractController
             'ville' => $ville,
         ]);
     }
-
-
-
-
 }
