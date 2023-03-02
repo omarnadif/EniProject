@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -56,14 +54,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageParticipant = null;
-
-    #[ORM\OneToMany(mappedBy: 'participantsInscrit', targetEntity: InscriptionEvenements::class, orphanRemoval: true)]
-    private Collection $inscriptions;
-
-    public function __construct()
-    {
-        $this->inscriptions = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -122,11 +112,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         return $this->roles;
-       /* $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        /* $roles = $this->roles;
+         // guarantee every user at least has ROLE_USER
+         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);*/
+         return array_unique($roles);*/
     }
 
     public function setRoles(array $roles): self
@@ -260,36 +250,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImageParticipant(?string $imageParticipant): self
     {
         $this->imageParticipant = $imageParticipant;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, InscriptionEvenements>
-     */
-    public function getInscriptions(): Collection
-    {
-        return $this->inscriptions;
-    }
-
-    public function addInscription(InscriptionEvenements $inscription): self
-    {
-        if (!$this->inscriptions->contains($inscription)) {
-            $this->inscriptions->add($inscription);
-            $inscription->setParticipantsInscrit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInscription(InscriptionEvenements $inscription): self
-    {
-        if ($this->inscriptions->removeElement($inscription)) {
-            // set the owning side to null (unless already changed)
-            if ($inscription->getParticipantsInscrit() === $this) {
-                $inscription->setParticipantsInscrit(null);
-            }
-        }
 
         return $this;
     }
