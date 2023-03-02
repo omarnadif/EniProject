@@ -196,11 +196,13 @@
                             <a href="{{ path('indexLieu') }}" class="dropdown-item">Gestion des lieux</a>
                             <a href="{{ path('indexville') }}" class="dropdown-item">Gestion de les villes</a>
                             <a href="{{ path('indexSite') }}" class="dropdown-item">Gestion de sites</a>
+                            <a href="{{ path('indexExcursion') }}" class="dropdown-item">Gestion des évènements</a>
                         {% endif %}
 
                         {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
                             <a href="{{ path('createLieu') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des lieux</a>
                             <a href="{{ path('createVille') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des villes</a>
+                            <a href="{{ path('createExcursion') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des évènementx</a>
                         {% endif %}
                     </div>
                 </div>

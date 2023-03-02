@@ -2,26 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
-use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route(path: 'excursion/')]
 class ExcursionController extends AbstractController
 {
-    #[Route(path: 'index', name: 'indexExcursion', methods: ['GET'])]
-    public function index(): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: 'indexExcursion', name: 'indexExcursion', methods: ['GET'])]
+    public function indexExcursion(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('excursions/indexExcursion.html.twig');
     }
@@ -52,8 +49,8 @@ class ExcursionController extends AbstractController
         ]);
     }
 
-    #[Route('editExcursion', name: 'editExcursion', methods: ['GET', 'POST'])]
-    public function excursionForm(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('createExcursion', name: 'createExcursion', methods: ['GET', 'POST'])]
+    public function createExcursion(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $sortie = new Sortie();
 
@@ -65,13 +62,15 @@ class ExcursionController extends AbstractController
             $organisateur = $this->getUser();
             $sortie->setParticipantOrganise($organisateur);
 
+            $sortie = new Sortie();
+
             // Récupération des données du formulaire
             $sortie = $form->getData();
 
             // Récupération de l'image de la sortie du formulaire
             $sortieUserPicture = $form->get('sortieUploadPicture')->getData();
 
-            // Vérification si une image de profil a été téléchargée
+            // Vérification si une image de la Sortie a été téléchargée
             if ($sortieUserPicture) {
 
                 // Génération d'un nom de fichier unique pour éviter les conflits
@@ -79,7 +78,7 @@ class ExcursionController extends AbstractController
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$sortieUserPicture->guessExtension();
 
-                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
+                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans sortie_ImageUpload_directory)
                 try {
                     $sortieUserPicture->move(
                         $this->getParameter('sortie_ImageUpload_directory'),
@@ -97,6 +96,9 @@ class ExcursionController extends AbstractController
 
             $entityManager->persist($sortie);
             $entityManager->flush();
+
+            // Redirection vers la liste
+            return $this->redirectToRoute('indexExcursion');
         }
 
         return $this->render('excursions/EditeExcursion.html.twig', [

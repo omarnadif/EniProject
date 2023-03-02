@@ -86,8 +86,6 @@ class CreerSortieFormType extends AbstractType
             'attr' => ['class' => 'form-control']
         ]);
 
-
-
         $builder->add('sites', EntityType::class, [
             'trim' => true,
             'required' => true,
@@ -107,7 +105,6 @@ class CreerSortieFormType extends AbstractType
 
         ]);
 
-
         $builder->add('etat', EntityType::class, [
             'trim' => true,
             'label' => 'Etat: ',
@@ -117,15 +114,6 @@ class CreerSortieFormType extends AbstractType
             'choice_value' => 'libelle',
             'attr' => ['class' => 'form-control'],
         ]);
-
-
-
-//            ->add('sites')
-//            ->add('etatRelation')
-//            ->add('ParticipantOrganise')
-//            ->add('ParticipantInscrit')
-
-
 
         $builder->add('Enregistrer', SubmitType::class, [
             'attr' => ['class' => 'w-25 btn btn-primary btn-lg']
