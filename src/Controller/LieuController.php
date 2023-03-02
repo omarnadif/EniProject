@@ -6,6 +6,7 @@ use App\Entity\Lieu;
 use App\Form\LieuFormType;
 use App\Repository\LieuRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,7 +90,7 @@ class LieuController extends AbstractController
     }
 
     #[Route(path: 'updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
-    public function updateLieu($id, EntityManagerInterface $em,Request $request): Response
+    public function updateLieu($id, Request $request, EntityManagerInterface $em, SluggerInterface $slugger, Filesystem $filesystem): \Symfony\Component\HttpFoundation\Response
     {
         $lieu = $em->find(Lieu::class, $id);
 
@@ -100,8 +101,38 @@ class LieuController extends AbstractController
         //Vérification du formulaire
         if ($formLieu->isSubmitted() && $formLieu->isValid()) {
 
-            //Insertion du Lieu en BDD (Base de donnée)
-            $em->persist($lieu);
+            // Récupération de l'image de profil du formulaire
+            $lieuUserPicture = $formLieu->get('lieuUploadPicture')->getData();
+
+            // Vérification s'il y a une image dans la sortie a été téléchargée
+            if ($lieuUserPicture) {
+
+                // Génération d'un nom de fichier unique pour éviter les conflits
+                $originalFilename = pathinfo($lieuUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$lieuUserPicture->guessExtension();
+
+                // Déplacement de l'image téléchargée dans le répertoire de stockage défini dans service.yaml (dans sortie_ImageUpload_directory)
+                try {
+                    $lieuUserPicture->move(
+                        $this->getParameter('lieu_ImageUpload_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gestion d'une exception si nécessaire
+                }
+
+                // Suppression de l'ancienne image, s'il en existe une
+                $oldFilename = $lieu->getLieuImageUpload();
+                if ($oldFilename) {
+                    $filesystem->remove($this->getParameter('lieu_ImageUpload_directory').'/'.$oldFilename);
+                }
+
+                // Ajout du nom du fichier d'image dans l'entité Sortie
+                if ($lieu instanceof Lieu) {
+                    $lieu->setLieuImageUpload($newFilename);
+                }
+            }
             $em->flush();
 
             $this->addFlash('success', 'Le lieu a bien été modifié !');
