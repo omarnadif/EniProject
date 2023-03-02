@@ -28,7 +28,8 @@ class ExcursionController extends AbstractController
     #[Route(path: 'index', name: 'indexExcursion', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
     {
-        $sortie = new Sortie();
+        $sorties = $sortieRepository->findAll();
+
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
             $participant = $participantRepository->search($searchTerm);
@@ -48,7 +49,7 @@ class ExcursionController extends AbstractController
         }
 
         return $this->render('excursions/indexExcursion.html.twig', [
-            'sortie' => $sortie,
+            'sorties' => $sorties,
             'lieu' => $lieu,
             'participant' => $participant,
         ]);

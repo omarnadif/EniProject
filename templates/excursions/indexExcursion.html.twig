@@ -1,3 +1,4 @@
+{% extends "base.html.twig" %}
 
 {% block title %}{{ parent() }} Creer Sortie {% endblock %}
 
@@ -31,7 +32,7 @@
             </thead>
             <tbody>
             {% for sortie in sorties %}
-                {% set lieu=sortie.lieu %}
+                {% set lieu = sortie.lieu %}
                 <tr>
                     <td>{# Affichage de l'image du lieu ou de l'image par défaut #}
                         {% if lieu.lieuImageUpload %}
@@ -58,7 +59,6 @@
                      <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a> #}
                     </td>
                 </tr>
-
             {% endfor %}
             </tbody>
         </table>
