@@ -8,12 +8,14 @@ use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route(path: 'excursion/')]
 class ExcursionController extends AbstractController
@@ -51,9 +53,10 @@ class ExcursionController extends AbstractController
     }
 
     #[Route('editExcursion', name: 'editExcursion', methods: ['GET', 'POST'])]
-    public function excursionForm(Request $request, EntityManagerInterface $entityManager): Response
+    public function excursionForm(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $sortie = new Sortie();
+
         //Création du formulaire
         $form = $this->createForm(CreerSortieFormType::class, $sortie);
         $form->handleRequest($request);
@@ -61,6 +64,37 @@ class ExcursionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $organisateur = $this->getUser();
             $sortie->setParticipantOrganise($organisateur);
+
+            // Récupération des données du formulaire
+            $sortie = $form->getData();
+
+            // Récupération de l'image de la sortie du formulaire
+            $sortieUserPicture = $form->get('sortieUploadPicture')->getData();
+
+            // Vérification si une image de profil a été téléchargée
+            if ($sortieUserPicture) {
+
+                // Génération d'un nom de fichier unique pour éviter les conflits
+                $originalFilename = pathinfo($sortieUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$sortieUserPicture->guessExtension();
+
+                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
+                try {
+                    $sortieUserPicture->move(
+                        $this->getParameter('sortie_ImageUpload_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gestion d'une exception si nécessaire
+                }
+
+                // Ajout du nom du fichier d'image dans l'entité Sortie
+                if ($sortie instanceof Sortie) {
+                    $sortie->setSortieImageUpload($newFilename);
+                }
+            }
+
             $entityManager->persist($sortie);
             $entityManager->flush();
         }

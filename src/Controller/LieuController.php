@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
-use App\Entity\Ville;
 use App\Form\LieuFormType;
-use App\Form\VilleFormType;
 use App\Repository\LieuRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;

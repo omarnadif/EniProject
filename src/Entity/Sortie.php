@@ -54,6 +54,9 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private ?Etat $etat = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $sortieImageUpload = null;
+
 
     public function __construct()
     {
@@ -206,6 +209,18 @@ class Sortie
     public function setEtat(?Etat $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getSortieImageUpload(): ?string
+    {
+        return $this->sortieImageUpload;
+    }
+
+    public function setSortieImageUpload(?string $sortieImageUpload): self
+    {
+        $this->sortieImageUpload = $sortieImageUpload;
 
         return $this;
     }
