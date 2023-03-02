@@ -14,7 +14,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -23,10 +22,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ExcursionController extends AbstractController
 {
     #[Route(path: 'index', name: 'indexExcursion', methods: ['GET'])]
-    public function index(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
+    public function index(Request $request, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
     {
         $sorties = $sortieRepository->findAll();
-
         $sortie = new Sortie();
 
         $searchTerm = $request->request->get('searchTerm');
