@@ -10,11 +10,11 @@
 {% endblock %}
 
 {% block main %}
-    <div class="p-5  text-center bg-light">
-        <img class="d-block mx-auto mb-3" src="{{ asset('img/logo/enilogo.png') }}" alt="" width="150">
-        <h1 class="display-5 fw-bold" style="font-family: 'Arial Black';"> Bienvenue sur le site Sortireni</h1>
+    <div class="p-5  text-center bg-light" id="home">
+        <img class="d-block mx-auto mb-3 mt-5" src="{{ asset('img/logo/enilogo.png') }}" alt="" width="230">
+        <h1 class="display-5 fw-bold " style="font-family: 'Arial Black'; color: #fff"> Bienvenue sur le site Sortireni</h1>
         <div class="col-lg-6 mx-auto">
-            <p  class="fs-5" style="font-family: 'DejaVu Sans';">  Nous sommes ravis de vous accueillir ici et de vous offrir la possibilité de découvrir de nouveaux événements, de rencontrer de nouvelles personnes et de créer des souvenirs inoubliables. Merci d'avoir choisi notre site et nous sommes sûrs que vous trouverez ce que vous cherchez. Bonne navigation et bonne excursion !</p>
+            <p  class="fs-5 " style="font-family: 'DejaVu Sans'; color: #fff">  Nous sommes ravis de vous accueillir ici et de vous offrir la possibilité de découvrir de nouveaux événements, de rencontrer de nouvelles personnes et de créer des souvenirs inoubliables. Merci d'avoir choisi notre site et nous sommes sûrs que vous trouverez ce que vous cherchez. Bonne navigation et bonne excursion !</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                 {% if  not app.user %}
                     <a type="button" class="btn btn-primary btn-lg px-4" href="{{ path('security_login') }}">Login</a>
