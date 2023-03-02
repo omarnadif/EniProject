@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Security\UserAuthenticator;
@@ -23,36 +24,25 @@ class ExcursionController extends AbstractController
     }
 
 
-    #[Route(path: 'update', name: 'updateExcursion', methods: ['GET'])]
+    #[Route(path: 'updateExcursion', name: 'updateExcursion', methods: ['GET'])]
     public function updateExcursion(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('excursions/updateExcursion.html.twig');
     }
 
-    #[Route('edite', name: 'editeExcursion', methods: ['GET', 'POST'])]
+    #[Route('editExcursion', name: 'editExcursion', methods: ['GET', 'POST'])]
     public function excursionForm(Request $request, EntityManagerInterface $entityManager): Response
     {
-
-        // Création
         $sortie = new Sortie();
-
-
         //Création du formulaire
         $form = $this->createForm(CreerSortieFormType::class, $sortie);
         $form->handleRequest($request);
 
-
-        //Vérification du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
-
-
-            //Insertion du Participant en BDD (Base de donnée)
+            $organisateur = $this->getUser();
+            $sortie->setParticipantOrganise($organisateur);
             $entityManager->persist($sortie);
             $entityManager->flush();
-
-            //Connexion automatique du Participant
-//            return $userAuthenticator->authenticateUser($user, $authenticator, $request);
-
         }
 
         return $this->render('excursions/EditeExcursion.html.twig', [

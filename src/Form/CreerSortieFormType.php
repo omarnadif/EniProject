@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Author;
 use App\Entity\Etat;
 use App\Entity\Lieu;
+use App\Entity\Site;
 use App\Entity\Sortie;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -64,24 +65,33 @@ class CreerSortieFormType extends AbstractType
 
 
 
-        $builder->add('lieu', EntityType::class, [
+        $builder->add('sites', EntityType::class, [
             'trim' => true,
             'required' => true,
-            'class' => Lieu::class,
+            'class' => Site::class,
             'choice_label'=>'nom',
             'attr' => ['class' => 'form-control']
 
         ]);
 
+        $builder->add('lieu', EntityType::class, [
+            'trim' => true,
+            'required' => true,
+            'class' => Lieu::class,
+            'choice_label'=>'nom',
+            'choice_value' => 'id',
+            'attr' => ['class' => 'form-control']
 
+        ]);
 
 
         $builder->add('etat', EntityType::class, [
             'trim' => true,
-            'label' => 'Nom: ',
+            'label' => 'Etat: ',
             'required' => true,
             'class' => Etat::class,
             'choice_label'=>'libelle',
+            'choice_value' => 'libelle',
             'attr' => ['class' => 'form-control'],
         ]);
 
@@ -99,8 +109,7 @@ class CreerSortieFormType extends AbstractType
         ]);
 
     }
-
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Sortie::class,

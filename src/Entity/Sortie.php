@@ -34,8 +34,6 @@ class Sortie
     #[ORM\Column(length: 100)]
     private ?string $infosSortie = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $etat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
@@ -47,14 +45,15 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Etat $etatRelation = null;
-
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Participant $ParticipantOrganise = null;
 
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sortiesRelations')]
     private Collection $ParticipantInscrit;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etat $etat = null;
+
 
     public function __construct()
     {
@@ -138,18 +137,6 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(string $etat): self
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
-
     public function getLieu(): ?Lieu
     {
         return $this->lieu;
@@ -174,17 +161,6 @@ class Sortie
         return $this;
     }
 
-    public function getEtatRelation(): ?etat
-    {
-        return $this->etatRelation;
-    }
-
-    public function setEtatRelation(?etat $etatRelation): self
-    {
-        $this->etatRelation = $etatRelation;
-
-        return $this;
-    }
 
     public function getParticipantOrganise(): ?Participant
     {
@@ -221,4 +197,18 @@ class Sortie
 
         return $this;
     }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): self
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+
 }
