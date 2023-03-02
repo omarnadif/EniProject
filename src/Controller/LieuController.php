@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
-use App\Entity\Ville;
 use App\Form\LieuFormType;
-use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -14,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 
 class LieuController extends AbstractController
 {
@@ -70,7 +67,6 @@ class LieuController extends AbstractController
                     $lieu->setLieuImageUpload($newFilename);
                 }
             }
-
             //Insertion du Lieu en BDD (Base de donnée)
             $entityManager->persist($lieu);
             $entityManager->flush();
@@ -78,7 +74,6 @@ class LieuController extends AbstractController
             // Redirection vers la liste
             return $this->redirectToRoute('indexLieu');
         }
-
         return $this->render('lieu/createLieu.html.twig', [
             'lieu' => $lieu,
             'lieuForm' => $formLieu->createView(),
@@ -86,16 +81,55 @@ class LieuController extends AbstractController
     }
 
     #[Route(path: 'admin/lieu/updateLieu/{id}', name: 'updateLieu', methods: ['GET','POST'])]
-    public function updateLieu($id, EntityManagerInterface $em,Request $request): Response
+    public function updateLieu($id, EntityManagerInterface $em, Request $request, SluggerInterface $slugger, Filesystem $filesystem): Response
     {
+        // Récupération des données de LIEU
         $lieu = $em->find(Lieu::class, $id);
 
         //Création du formulaire
         $formLieu = $this->createForm(LieuFormType::class, $lieu);
+
+        // Validation du formulaire si soumis
         $formLieu->handleRequest($request);
 
         //Vérification du formulaire
         if ($formLieu->isSubmitted() && $formLieu->isValid()) {
+
+            // Récupération des données du formulaire
+            $lieu = $formLieu->getData();
+
+            // Récupération de l'image de profil du formulaire
+            $lieuUserPicture = $formLieu->get('lieuUploadPicture')->getData();
+
+            // Vérification si une image de profil a été téléchargée
+            if ($lieuUserPicture) {
+
+                // Génération d'un nom de fichier unique pour éviter les conflits
+                $originalFilename = pathinfo($lieuUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$lieuUserPicture->guessExtension();
+
+                // Déplacement de l'image téléchargée dans le répertoire de stockage défini dans service.yaml (dans participant_image_directory)
+                try {
+                    $lieuUserPicture->move(
+                        $this->getParameter('lieu_ImageUpload_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gestion d'une exception si nécessaire
+                }
+
+                // Suppression de l'ancienne image s'il en existe une
+                $oldFilename = $lieu->getLieuImageUpload();
+                if ($oldFilename) {
+                    $filesystem->remove($this->getParameter('lieu_ImageUpload_directory').'/'.$oldFilename);
+                }
+
+                // Ajout du nom du nouveau fichier d'image dans l'entité Lieu
+                if ($lieu instanceof Lieu) {
+                    $lieu->setLieuImageUpload($newFilename);
+                }
+            }
 
             //Insertion du Lieu en BDD (Base de donnée)
             $em->persist($lieu);
@@ -108,11 +142,10 @@ class LieuController extends AbstractController
         }
 
         if ($lieu === null) {
-            // le lieu n'a pas été trouvée
+            // le lieu n'a pas été trouvé
             return $this->render('lieu/indexLieu.html.twig', [
-                'lieu' => $lieu,]);
-        } else {
-            // le lieu a été trouvée
+                'lieu' => $lieu,
+            ]);
         }
 
         return $this->render('lieu/updateLieu.html.twig', [

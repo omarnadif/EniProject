@@ -7,10 +7,10 @@ use App\Form\ParticipantProfileFormType;
 use App\Form\ResetPassWordFormType;
 use App\Form\ResetPassWordRequestFormType;
 use App\Repository\ParticipantRepository;
-use App\Security\UserAuthenticator;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class SecurityController extends AbstractController
@@ -37,10 +36,12 @@ class SecurityController extends AbstractController
 
     #[Route(path: '/logout', name: 'security_logout', methods:['GET'])]
     public function logout(): void
-    {}
+    {
 
-    #[Route(path: '/profile', name: 'security_profile', methods:['GET'])]
-    public function profile(): Response
+    }
+
+    #[Route(path: '/affichageProfil', name: 'security_profil', methods:['GET'])]
+    public function affichageProfil(): Response
     {
         $user = $this->getUser();
 
@@ -50,7 +51,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/updateProfile', name: 'security_updateProfile', methods: ['GET', 'POST'])]
-    public function updateProfile(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function updateProfile(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SluggerInterface $slugger, Filesystem $filesystem): Response
     {
         // Récupération de l'utilisateur courant
         $user = $this->getUser();
@@ -86,6 +87,12 @@ class SecurityController extends AbstractController
                     // Gestion d'une exception si nécessaire
                 }
 
+                // Suppression de l'ancienne image s'il en existe une
+                $oldFilename = $user->getImageParticipant();
+                if ($oldFilename) {
+                    $filesystem->remove($this->getParameter('participant_image_directory').'/'.$oldFilename);
+                }
+
                 // Ajout du nom du fichier d'image dans l'entité Participant
                 if ($user instanceof Participant) {
                     $user->setImageParticipant($newFilename);
@@ -106,7 +113,7 @@ class SecurityController extends AbstractController
             $this->addFlash('succes', 'Le profil a bien été modifié !');
 
             // Redirection vers la page de profil de l'utilisateur
-            return $this->redirectToRoute('security_profile');
+            return $this->redirectToRoute('security_profil');
         }
 
         // Affichage de la page de modification de profil avec le formulaire
@@ -144,12 +151,7 @@ class SecurityController extends AbstractController
         return $this->render('home/home.html.twig');
     }
     #[Route(path: '/forgetPassword', name: 'security_forgettenPassword', methods:['GET','POST'])]
-    public function forgetPassword(Request $request,
-                                   ParticipantRepository $participantRepository,
-                                   TokenGeneratorInterface $tokenGenerator,
-                                   EntityManagerInterface $entityManager,
-                                   SendMailService $mail
-    ): Response
+    public function forgetPassword(Request $request, ParticipantRepository $participantRepository, TokenGeneratorInterface $tokenGenerator, EntityManagerInterface $entityManager, SendMailService $mail): Response
     {
         $form = $this->createForm(ResetPassWordRequestFormType::class);
 
@@ -159,8 +161,8 @@ class SecurityController extends AbstractController
 
             $criteria = ['email' => $form->get('email')->getData()];
             $user = $participantRepository->findOneBy($criteria);
-// on verifie si on a un utilisateur
 
+            // on verifie si on a un utilisateur
             if ($user){
                 //on génére un token de reinitialisation
                 $token = $tokenGenerator->generateToken();
@@ -175,19 +177,14 @@ class SecurityController extends AbstractController
                 //on crée les données du mail
                 $context=compact('url','user');
 
-
                 //Envoi du mail
                 $mail->send('453f7e6784-9562de@inbox.mailtrap.io',
-                $user->getEmail(),
-                'Réinitialisation du mot de passe',
-                'password_reset',
-                $context);
+                $user->getEmail(), 'Réinitialisation du mot de passe', 'password_reset', $context);
                 $this->addFlash('success','E-mail envoyé');
+
                 dd($url);
+
                 return $this->redirectToRoute('security_login');
-
-
-
             }
             $this->addFlash('danger', 'un problème est survenu');
             return $this->redirectToRoute('security_login');
@@ -199,11 +196,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/forgetPassword/{token}', name: 'reset_pass', methods:['GET','POST'])]
-    public function resetPass(string $token,
-    Request $request,
-    ParticipantRepository $participantRepository,
-    EntityManagerInterface $entityManager,UserPasswordHasherInterface $userPasswordHasher)
-    :Response
+    public function resetPass(string $token, Request $request, EntityManagerInterface $entityManager,UserPasswordHasherInterface $userPasswordHasher):Response
     {
         //on vérifie si on a le token enregistré
         $user = $entityManager->getRepository(Participant::class)->findOneBy(['resetToken' => $token]);
@@ -233,6 +226,5 @@ class SecurityController extends AbstractController
         }
         $this->addFlash('danger','jeton invalide');
         return $this->redirectToRoute('security_login');
-
     }
 }

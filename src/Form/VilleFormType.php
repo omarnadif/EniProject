@@ -15,29 +15,26 @@ class VilleFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
-        $builder
-            ->add('nom', null, [
+        $builder->add('nom', null, [
                 'constraints' => [
                     new NotBlank(),
                     new Length(['max' => 255]),
-                    //seulement des lettres et des espaces
-                    new Regex('/^[a-zA-Z\s]+$/')
+                    //seulement les lettres, les espaces et les tirets cours (-)
+                    new Regex('/^[a-zA-Z\s\-]+$/')
                 ]
-            ])
-            ->add('codePostal', null, [
+            ]);
+
+        $builder->add('codePostal', null, [
                 'constraints' => [
                     new NotBlank(),
                     //maximum 5 numéros
                     new Regex('/^\d{5}$/')
                 ]
-            ])
-        ;
+            ]);
 
         $builder->add('Ajouter', SubmitType::class, [
             'attr' => ['class' => 'w-25 btn btn-dark btn-lg']
         ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
