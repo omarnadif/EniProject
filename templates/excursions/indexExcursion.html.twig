@@ -52,12 +52,19 @@
                 {% endfor %}
                 <td>{{ sorties.getParticipantOrganise() }}</td> #}
                     <td>
-                        {# //cette href c'est bpour le role User #}
+                        {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('inscriptionExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Inscription</a>
+                            {#//les deux href c'est bpour le role admin
+                        <a href="{{ path('detailsExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Détails</a> #}
+                        {% endif %}
+
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('inscriptionExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Inscription</a>
                         {#//les deux href c'est bpour le role admin
                         <a href="{{ path('detailsExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Détails</a> #}
                         <a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
                         <a href="{{ path('deleteExcursion', {'id': sortie.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

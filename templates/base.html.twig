@@ -227,7 +227,8 @@
                         {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
                             <a href="{{ path('createLieu') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des lieux</a>
                             <a href="{{ path('createVille') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des villes</a>
-                            <a href="{{ path('createExcursion') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des évènementx</a>
+                            <a href="{{ path('createExcursion') }}" class="dropdown-item"><i class="fa fa-sliders"></i> Ajouter des évènements</a>
+                            <a href="{{ path('indexExcursion') }}" class="dropdown-item"><i class="fa fa-calendar"></i>Liste des évènements</a>
                         {% endif %}
                     </div>
                 </div>
