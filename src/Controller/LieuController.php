@@ -32,7 +32,6 @@ class LieuController extends AbstractController
         ]);
     }
 
-
     #[Route('createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
     public function createLieu(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
