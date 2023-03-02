@@ -1,46 +1,128 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }}: Se Connecter{% endblock %}
+{% block title %}{{ parent() }}Se Connecter{% endblock %}
 
 {% block main %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .login-container {
+            width: 400px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .welcome-text {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            text-align: left;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+            padding: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 0 auto;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #555;
+        }
+
+
+    </style>
+
+
+    <div class="space">
+    <div class="login-container ">
+        <div class="logo-container">
+            <img src="{{ asset('img/logo/enilogo.png') }}" alt="Logo">
         </div>
-    {% endfor %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('security_logout') }}">Déconnexion</a>
-        </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Entrez vos identifiants</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    {# Encoche se souvenir de moi #}
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Se souvenir de moi
-            </label>
-            <div class="mdpoublier">
-            <a href="{{ path('security_forgettenPassword') }}">mot de passe oublié</a>
+        <h1 class="welcome-text">Login</h1>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
             </div>
-        </div>
+        {% endfor %}
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('security_logout') }}">Déconnexion</a>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="{{ last_username }}" name="email" placeholder="Inserisci la tua email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
-    {# boutton se connecter #}
-    <button class="btn btn-lg btn-primary" type="submit">Se connecter</button>
-</form>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+            </div>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                </label>
+                <div class="mdpoublier">
+                    <a href="{{ path('security_forgettenPassword') }}">Mot de passe oublié</a>
+                </div>
+            </div>
+
+            <button class="submit-btn" type="submit">Login</button>
+        </form>
+    </div>
+
+    </div>
 
 {% endblock %}

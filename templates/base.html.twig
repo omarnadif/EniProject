@@ -13,6 +13,29 @@
 
     {# --- CSS --- #}
     <style>
+        *{
+            margin: 0;
+            padding: 0;
+
+        }
+        .transparent-nav {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        #home{
+
+            min-height: 90vh;
+            width: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),url('{{ asset('img/bkhome2.jpg') }}');
+            background-position: center;
+            background-size: cover;
+        }
+        .space{
+            min-height: 80vh;
+
+        }
+
         body {
             background: #eeeeee;
         }
@@ -23,9 +46,7 @@
             padding: 0 !important;
         }
         .navbar {
-            background: #fff;
-            padding-left: 16px;
-            padding-right: 16px;
+
             border-bottom: 1px solid #d6d6d6;
             box-shadow: 0 0 4px rgba(0,0,0,.1);
 
@@ -142,6 +163,10 @@
             }
         }
 
+
+        /*DARK MODE / LIGHT MODE*\
+
+         */
         /* Light mode styles */
         body.light {
             background: #eeeeee;
@@ -157,8 +182,8 @@
 
         /* Dark mode styles */
         body.dark {
-            background: #333;
-            color: #fff;
+            background: #000000;
+            color: #cbc7c7;
         }
 
         .navbar-dark .navbar-nav .nav-link {
@@ -173,7 +198,7 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-xl navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light  transparent-nav">
     <a href="{{ path('home_home') }}" class="navbar-brand"><img src="{{ asset('img/logo/enilogo.png') }}" width="60" class="mr-2" alt="Logo_Eni">Sortir<b>Eni</b></a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
@@ -207,7 +232,7 @@
                     </div>
                 </div>
             {% endif %}
-            <button id="toggleTheme" class="btn btn-sm btn-outline-secondary light-theme">Dark mode</button>
+            <button id="toggleTheme" class="btn btn-sm btn-outline-secondary light-theme ml-2">Dark mode</button>
         </div>
 
         {#        <form class="navbar-form form-inline">#}
@@ -234,7 +259,7 @@
                             <img src="{{ asset('img/user/defaultProfilePicture/pdp_default_Homme.png') }}" alt="defaultImgProfilUser" class="rounded-circle" width="150">
                         {% endif %}
                         {% if app.user and is_granted('ROLE_ADMIN') %}
-                        <span style="color: #e30d0d"> {{ app.user.nom|upper }} {{ app.user.prenom }}</span>
+                            <span style="color: #e30d0d"> {{ app.user.nom|upper }} {{ app.user.prenom }}</span>
                         {% endif %}
                         {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
                             {{ app.user.nom|upper }} {{ app.user.prenom }}
