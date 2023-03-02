@@ -25,38 +25,41 @@
             <th style="width: 22%;">Cloture</th>
             <th style="width: 22%;">inscrits/places</th>
             <th style="width: 22%;">Etat</th>
-            <th style="width: 22%;">Inscrit</th>
-            <th style="width: 22%;">Organisateur</th>
+           {#  <th style="width: 22%;">Inscrit</th>
+            <th style="width: 22%;">Organisateur</th>#}
             <th style="width: 22%;">Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for sorties in sortie %}
-             {% for lieux in lieu %}
+        {% for sortie in sorties %}
+{% set lieu=sortie.lieu %}
             <tr>
                 <td>{# Affichage de l'image du lieu ou de l'image par défaut #}
-                    {% if lieux.lieuImageUpload %}
-                        {% set imagePath = asset('img/lieu/lieuUserUploadPicture/' ~ lieux.lieuImageUpload) %}
+                    {% if lieu.lieuImageUpload %}
+                        {% set imagePath = asset('img/lieu/lieuUserUploadPicture/' ~ lieu.lieuImageUpload) %}
                     {% else %}
                         {% set imagePath = asset('img/lieu/lieuNoPictureImg/imgLieuDefault.png') %}
                     {% endif %}
-                    <img src="{{ imagePath }}" alt="{{ lieux.nom }}" width="150">
+                    <img src="{{ imagePath }}" alt="{{ lieu.nom }}" width="150">
                 </td>
-                <td>{{ sorties.nom }}</td>
-                <td>{{ sorties.dateHeureDebut|date('Y-m-d H:i:s') }}</td>
-                <td>{{ sorties.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
-                <td>{{ sorties.nbInscriptionsMax }}</td>
-                <td>{{ sorties.etat.getLibelle() }}</td>
-                {% for participant in sorties.inscriptions %}
+                <td>{{ sortie.nom }}</td>
+                <td>{{ sortie.dateHeureDebut|date('Y-m-d H:i:s') }}</td>
+                <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
+                <td>{{ sortie.nbInscriptionsMax }}</td>
+                <td>{{ sortie.etat.getLibelle() }}</td>
+                {# {% for participant in sorties.inscriptions %}
                     <td>{{ participant.participantsInscrit.nom|upper }} {{ participant.participantsInscrit.prenom|upper }}</td>
                 {% endfor %}
-                <td>{{ sorties.getParticipantOrganise() }}</td>
+                <td>{{ sorties.getParticipantOrganise() }}</td> #}
                 <td>
-                    {#<a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
+                    {# //cette href c'est bpour le role User #}
+                    <a href="{{ path('inscriptionExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Inscription</a>
+                    {#//les deux href c'est bpour le role admin
+                    <a href="{{ path('updateExcursion', {'id': sortie.id}) }}" class="btn btn-outline-success btn-sm">Modifier</a>
                      <a href="{{ path('', {'id': lieux.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')" >Supprimer</a> #}
                 </td>
             </tr>
-             {% endfor %}
+
         {% endfor %}
         </tbody>
     </table>

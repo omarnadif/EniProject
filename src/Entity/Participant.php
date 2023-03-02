@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -48,16 +50,62 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = null;
 
-    #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: "participants")]
+    #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: "Participants")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $site;
 
+    #[ORM\OneToMany(mappedBy: 'ParticipantOrganise', targetEntity: Sortie::class)]
+    private Collection $sortiesOrganise;
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageParticipant = null;
+
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'participants')]
+    private Collection $sorties;
+
+    public function __construct()
+    {
+        $this->sorties = new ArrayCollection();
+        $this->sortiesOrganise = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return Collection|null
+     */
+    public function getSortiesOrganise(): ?Collection
+    {
+        return $this->sortiesOrganise;
+    }
+
+    /**
+     * @param Collection|null $sortiesOrganise
+     */
+    public function setSortiesOrganise(?Collection $sortiesOrganise): void
+    {
+        $this->sortiesOrganise = $sortiesOrganise;
+    }
+
+    public function addSortieOrganise(Sortie $sortie): self
+    {
+        if (!$this->sortiesOrganise->contains($sortie)) {
+            $this->sortiesOrganise->add($sortie);
+            $sortie->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSortieOrganise(Sortie $sortie): self
+    {
+        if ($this->sortiesOrganise->removeElement($sortie)) {
+            $sortie->removeParticipant($this);
+        }
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -87,6 +135,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->pseudo = $pseudo;
     }
+
 
     /**
      * A visual identifier that represents this user.
@@ -253,4 +302,32 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSortie(Sortie $sortie): self
+    {
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties->add($sortie);
+            $sortie->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSortie(Sortie $sortie): self
+    {
+        if ($this->sorties->removeElement($sortie)) {
+            $sortie->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
 }

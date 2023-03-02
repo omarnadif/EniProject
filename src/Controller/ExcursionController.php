@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\CreerSortieFormType;
 use App\Form\UpdateSortieFormType;
@@ -36,19 +37,19 @@ class ExcursionController extends AbstractController
         }
 
         if ($searchTerm) {
-            $lieu = $lieuRepository->search($searchTerm);
+            $lieux = $lieuRepository->search($searchTerm);
         } else {
-            $lieu = $lieuRepository->findAll();
+            $lieux = $lieuRepository->findAll();
         }
         if ($searchTerm) {
-            $sortie = $sortieRepository->search($searchTerm);
+            $sorties = $sortieRepository->search($searchTerm);
         } else {
-            $sortie = $sortieRepository->findAll();
+            $sorties = $sortieRepository->findAll();
         }
 
         return $this->render('excursions/indexExcursion.html.twig', [
-            'sortie' => $sortie,
-            'lieu' => $lieu,
+            'sorties' => $sorties,
+            'lieux' => $lieux,
             'participant' => $participant,
         ]);
     }
@@ -104,7 +105,7 @@ class ExcursionController extends AbstractController
                 // Génération d'un nom de fichier unique pour éviter les conflits
                 $originalFilename = pathinfo($sortieUserPicture->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$sortieUserPicture->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $sortieUserPicture->guessExtension();
 
                 // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
                 try {
@@ -128,6 +129,47 @@ class ExcursionController extends AbstractController
 
         return $this->render('excursions/EditeExcursion.html.twig', [
             'excursionForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('inscriptionExcursion/{id}', name: 'inscriptionExcursion', methods: ['GET', 'POST'])]
+    public function addParticipantEvent($id, Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository, SluggerInterface $slugger): Response
+    {
+        // Obtenez l'objet Sortie en fonction de l'ID de la sortie à partir de la base de données.
+        $sortie = $sortieRepository->find($id);
+
+        // Obtenez l'objet Participant en fonction de l'ID du participant à partir de la base de données.
+        // Récupérez l'objet User à partir de la session.
+        /* @var Participant $participant*/
+        $participant = $this->getUser();
+
+        // Ajoutez le participant à la sortie.
+        $sortie->addParticipant($participant);
+        $participant->addSortie($sortie);
+        $em->flush();
+
+        $searchTerm = $request->request->get('searchTerm');
+        if ($searchTerm) {
+            $participants = $participantRepository->search($searchTerm);
+        } else {
+            $participants = $participantRepository->findAll();
+        }
+
+        if ($searchTerm) {
+            $lieux = $lieuRepository->search($searchTerm);
+        } else {
+            $lieux = $lieuRepository->findAll();
+        }
+        if ($searchTerm) {
+            $sorties = $sortieRepository->search($searchTerm);
+        } else {
+            $sorties = $sortieRepository->findAll();
+        }
+
+        return $this->render('excursions/indexExcursion.html.twig', [
+            'sorties' => $sorties,
+            'lieux' => $lieux,
+            'participants' => $participants,
         ]);
     }
 }
