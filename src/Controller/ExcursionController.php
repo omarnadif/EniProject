@@ -45,12 +45,16 @@ class ExcursionController extends AbstractController
         } else {
             $sortie = $sortieRepository->findAll();
         }
+        $participantOrganises = [];
+        foreach ($sorties as $sortie) {
+            $participantOrganises[] = $sortie->getParticipantOrganise();
+        }
 
         return $this->render('excursions/indexExcursion.html.twig', [
             'sorties' => $sorties,
             'lieu' => $lieu,
             'participant' => $participant,
-        ]);
+            'participantOrganises'=>$participantOrganises]);
     }
 
     #[Route(path: 's', name: 'selectExcursion', methods: ['GET'])]

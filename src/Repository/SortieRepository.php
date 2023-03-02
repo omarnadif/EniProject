@@ -72,4 +72,5 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
 }
