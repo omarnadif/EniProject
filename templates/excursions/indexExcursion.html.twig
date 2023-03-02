@@ -47,8 +47,8 @@
                     <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i:s') }}</td>
                     <td>{{ sortie.nbInscriptionsMax }}</td>
                     <td>{{ sortie.etat.getLibelle() }}</td>
-                    {% for participants in participant %}
-                        <td>{{ participants.nom|upper }} {{ participants.prenom|upper }}</td>
+                    {% for participant in participants %}
+                        <td>{{ participant.nom|upper }} {{ participant.prenom|upper }}</td>
                     {% endfor %}
                     <td>{{ sortie.getParticipantOrganise().getNom() }}</td>
                     <td>
