@@ -10,7 +10,9 @@
     {% form_theme lieuForm 'bootstrap_5_layout.html.twig' %}
 
     {{ form_start(lieuForm) }}
-
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(lieuForm) }}
+    </div>
     <div class="row g-6 mr-6 mt-4">
         <div class="col-md-5 col-lg-3 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -24,31 +26,49 @@
             <div class="row g-3">
                 <div class="col-12">
                     <label for="nom" class="form-label">Nom</label>
+                    <div class="form-error">
+                        {{ form_errors(lieuForm.nom) }}
+                    </div>
                     {{ form_widget(lieuForm.nom) }}
                 </div>
 
                 <div class="col-12">
                     <label for="rue" class="form-label">Rue</label>
+                    <div class="form-error">
+                        {{ form_errors(lieuForm.rue) }}
+                    </div>
                     {{ form_widget(lieuForm.rue)}}
                 </div>
 
                 <div class="col-12">
                     <label for="longitude" class="form-label">Longitude</label>
+                    <div class="form-error">
+                        {{ form_errors(lieuForm.longitude) }}
+                    </div>
                     {{ form_widget(lieuForm.longitude)}}
                 </div>
 
                 <div class="col-12">
                     <label for="latitude" class="form-label">Latitude</label>
+                    <div class="form-error">
+                        {{ form_errors(lieuForm.latitude) }}
+                    </div>
                     {{ form_widget(lieuForm.latitude)}}
                 </div>
 
                 <div class="col-12">
                     <label for="ville" class="form-label">Ville</label>
+                    <div class="form-error">
+                        {{ form_errors(lieuForm.ville) }}
+                    </div>
                     {{ form_widget(lieuForm.ville)}}
                 </div>
 
                 <div class="col-12">
                     <label for="lieuUploadPicture" class="form-label">Image</label>
+                    <div class="form-error">
+                        {{ form_errors(lieuForm.lieuUploadPicture) }}
+                    </div>
                     {{ form_widget(lieuForm.lieuUploadPicture, {attr: {class: 'form-control'}}) }}
                 </div>
             </div>
