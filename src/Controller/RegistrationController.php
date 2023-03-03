@@ -51,6 +51,7 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('indexGestionUser');
+
         //Connexion automatique du Participant
         /*return $userAuthenticator->authenticateUser($user, $authenticator, $request);*/
         }

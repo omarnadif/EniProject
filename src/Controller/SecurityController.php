@@ -26,25 +26,27 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'security_login', methods:['GET','POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Si problème lors du login renvoie sur l'exception
+        // Récupération de l'éventuelle erreur d'authentification
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+
+        // Récupération du dernier nom d'utilisateur entré par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        // Rendu de la vue de login avec les variables récupérées
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     #[Route(path: '/logout', name: 'security_logout', methods:['GET'])]
     public function logout(): void
-    {
-
-    }
+    {}
 
     #[Route(path: '/affichageProfil', name: 'security_profil', methods:['GET'])]
     public function affichageProfil(): Response
     {
+        // Récupération de l'utilisateur connecté
         $user = $this->getUser();
 
+        // Renvoie de la vue du profil avec les données de l'utilisateur
         return $this->render('user/profile.html.twig', [
             'user' => $user,
         ]);
@@ -125,12 +127,19 @@ class SecurityController extends AbstractController
     #[Route(path: '/profile/delete', name: 'security_deleteProfile', methods:['GET'])]
     public function deleteUser(EntityManagerInterface $entityManager): Response
     {
+        // Récupération de l'utilisateur actuel
         $user = $this->getUser();
+
+        // Si l'utilisateur n'est pas connecté, redirection vers la page de login
         if (!$user)
         {
             return $this->redirectToRoute('security_login');
         }
+
+        // Suppression du token de l'utilisateur actuel
         $this->container->get('security.token_storage')->setToken(null);
+
+        // Déconnexion de l'utilisateur actuel
         $this->logout();
 
         // Suppression de l'image de profil de l'utilisateur, s'il en a une
@@ -142,39 +151,47 @@ class SecurityController extends AbstractController
             }
         }
 
+        // Suppression de l'utilisateur en BDD (Base de données)
         $entityManager->remove($user);
         $entityManager->flush();
         // $this->get('session')->remove('user');
         /* pour tout supprimer */
         // $this->get('session')->clear();
 
+        // Redirection vers la page d'accueil
         return $this->render('home/home.html.twig');
     }
+
     #[Route(path: '/forgetPassword', name: 'security_forgettenPassword', methods:['GET','POST'])]
     public function forgetPassword(Request $request, ParticipantRepository $participantRepository, TokenGeneratorInterface $tokenGenerator, EntityManagerInterface $entityManager, SendMailService $mail): Response
     {
+        // Création du formulaire de demande de réinitialisation de mot de passe
         $form = $this->createForm(ResetPassWordRequestFormType::class);
 
+        // Traitement du formulaire
         $form->handleRequest($request);
 
+        // Si le formulaire est soumis et valide
         if($form->isSubmitted() && $form->isValid()){
 
+            // Récupération de l'utilisateur en utilisant l'adresse e-mail fournie dans le formulaire
             $criteria = ['email' => $form->get('email')->getData()];
             $user = $participantRepository->findOneBy($criteria);
 
-            // on verifie si on a un utilisateur
+            // Vérification de l'existence de l'utilisateur
             if ($user){
-                //on génére un token de reinitialisation
+
+                // Génération d'un jeton de réinitialisation de mot de passe
                 $token = $tokenGenerator->generateToken();
                 $user->setResetToken($token);
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                //on génére un lien de reinitialisation du mot de passe
+                // Génération d'un lien de réinitialisation de mot de passe contenant le jeton
                 $url = $this->generateUrl('reset_pass',['token' => $token],
                 UrlGeneratorInterface::ABSOLUTE_URL);
 
-                //on crée les données du mail
+                // Création des données du mail
                 $context=compact('url','user');
 
                 //Envoi du mail
@@ -184,12 +201,18 @@ class SecurityController extends AbstractController
 
                 dd($url);
 
+                // Redirection vers la page de connexion
                 return $this->redirectToRoute('security_login');
             }
+
+            // Message flash d'erreur
             $this->addFlash('danger', 'un problème est survenu');
+
+            // Redirection vers la page de connexion
             return $this->redirectToRoute('security_login');
         }
 
+        // Affichage du formulaire de demande de réinitialisation de mot de passe
         return $this->render('security/reset_password_request.html.twig',[
             'requestPassForm' => $form->createView()
         ]);
@@ -202,18 +225,25 @@ class SecurityController extends AbstractController
         $user = $entityManager->getRepository(Participant::class)->findOneBy(['resetToken' => $token]);
 
         if($user){
+
+            // Création du formulaire de modification du mot de passe
             $form = $this->createForm(ResetPassWordFormType::class);
 
             $form->handleRequest($request);
+
             if($form->isSubmitted() && $form->isValid()){
-                //on efface le token
+                // On efface le token de réinitialisation
                 $user->setResetToken('');
+
+                // On met à jour le mot de passe de l'utilisateur
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
                         $form->get('password')->getData()
                     )
                 );
+
+                // On enregistre les modifications dans la base de données
                 $entityManager->persist($user);
                 $entityManager->flush();
                 $this->addFlash('success','mot de passe modifier');
@@ -224,6 +254,8 @@ class SecurityController extends AbstractController
                 'PassForm' => $form->createView()
             ]);
         }
+
+        // Si le token est invalide ou inexistant, on affiche un message d'erreur
         $this->addFlash('danger','jeton invalide');
         return $this->redirectToRoute('security_login');
     }

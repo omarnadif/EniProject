@@ -20,8 +20,6 @@ class AdminController extends AbstractDashboardController
     #[Route('/admin/gestion', name: 'admin')]
     public function index(): Response
     {
-
-
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
 
         // Option 1. Make your dashboard redirect to the same page for all users

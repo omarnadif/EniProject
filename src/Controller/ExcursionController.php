@@ -24,10 +24,14 @@ class ExcursionController extends AbstractController
     #[Route(path: 'indexExcursion', name: 'indexExcursion', methods: ['GET'])]
     public function indexExcursion(Request $request, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository): \Symfony\Component\HttpFoundation\Response
     {
+        // Récupère toutes les sorties avec "findAll()" à partir de la base de données.
         $sorties = $sortieRepository->findAll();
 
+        // Initialise un nouvel objet Sortie.
         $sortie = new Sortie();
 
+        // Si "searchTerm" est présent, effectue une recherche pour les participants.
+        // Sinon, récupère tous les participants.
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
             $participants = $participantRepository->search($searchTerm);
@@ -35,22 +39,31 @@ class ExcursionController extends AbstractController
             $participants = $participantRepository->findAll();
         }
 
+        // Si "searchTerm" est présent, effectue une recherche pour les lieux.
+        // Sinon, récupère tous les lieux.
         if ($searchTerm) {
             $lieu = $lieuRepository->search($searchTerm);
         } else {
             $lieu = $lieuRepository->findAll();
         }
 
+        // Si "searchTerm" est présent, effectue une recherche pour les sorties.
+        // Sinon, récupère toutes les sorties.
         if ($searchTerm) {
             $sortie = $sortieRepository->search($searchTerm);
         } else {
             $sortie = $sortieRepository->findAll();
         }
+
+        // Initialise un tableau vide pour les participants organisant chaque sortie.
         $participantOrganises = [];
+
+        // Pour chaque sortie, ajoute le participant organisant à $participantOrganises.
         foreach ($sorties as $sortie) {
             $participantOrganises[] = $sortie->getParticipantOrganise();
         }
 
+        // Rend la vue "indexExcursion.html.twig" avec les données récupérées.
         return $this->render('excursions/indexExcursion.html.twig', [
             'sorties' => $sorties,
             'lieu' => $lieu,
@@ -68,6 +81,7 @@ class ExcursionController extends AbstractController
     #[Route(path: 'updateExcursion/{id}', name: 'updateExcursion', methods: ['GET', 'POST'])]
     public function updateExcursion($id, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, Filesystem $filesystem): \Symfony\Component\HttpFoundation\Response
     {
+        // Récupération de l'excursion correspondant à l'identifiant fourni
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
 
         // Vérification que la sortie existe
@@ -75,10 +89,11 @@ class ExcursionController extends AbstractController
             throw $this->createNotFoundException('La sortie n\'existe pas.');
         }
 
-        //Création du formulaire
+        //Création du formulaire pour la mise à jour de l'excursion
         $form = $this->createForm(UpdateSortieFormType::class, $sortie);
         $form->handleRequest($request);
 
+        // Vérification que le formulaire a été soumis et que les données sont valides
         if ($form->isSubmitted() && $form->isValid()) {
             $organisateur = $this->getUser();
             $sortie->setParticipantOrganise($organisateur);
@@ -115,12 +130,15 @@ class ExcursionController extends AbstractController
                     $sortie->setSortieImageUpload($newFilename);
                 }
             }
+            // Enregistrement des modifications dans la base de données
             $entityManager->flush();
 
+            // Ajout d'un message flash pour indiquer que la sortie a été modifiée avec succès
             $this->addFlash('success', 'La sortie a été modifiée avec succès.');
             return $this->redirectToRoute('indexExcursion', ['id' => $sortie->getId()]);
         }
 
+        // Rendu de la vue pour la mise à jour de l'excursion avec le formulaire créé précédemment
         return $this->render('excursions/updateExcursion.html.twig', [
             'excursionForm' => $form->createView(),
         ]);
@@ -209,19 +227,20 @@ class ExcursionController extends AbstractController
     #[Route('inscriptionExcursion/{id}', name: 'inscriptionExcursion', methods: ['GET', 'POST'])]
     public function addParticipantEvent($id, Request $request, EntityManagerInterface $em, SortieRepository $sortieRepository, LieuRepository $lieuRepository, ParticipantRepository $participantRepository, SluggerInterface $slugger): Response
     {
-        // Obtenez l'objet Sortie en fonction de l'ID de la sortie à partir de la base de données.
+        // Récupération de l'objet Sortie correspondant à l'ID de la sortie depuis la base de données
         $sortie = $sortieRepository->find($id);
 
-        // Obtenez l'objet Participant en fonction de l'ID du participant à partir de la base de données.
-        // Récupérez l'objet User à partir de la session.
+        // Récupération de l'objet Participant correspondant à l'ID du participant depuis la base de données
+        // Récupération de l'objet User depuis la session
         /* @var Participant $participant*/
         $participant = $this->getUser();
 
-        // Ajoutez le participant à la sortie.
+        // Ajout du participant à la sortie
         $sortie->addParticipant($participant);
         $participant->addSortie($sortie);
         $em->flush();
 
+        // Recherche d'un terme de recherche dans la base de données et récupération des résultats pour les afficher
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
             $participants = $participantRepository->search($searchTerm);
@@ -240,6 +259,7 @@ class ExcursionController extends AbstractController
             $sorties = $sortieRepository->findAll();
         }
 
+        // Renvoie des données nécessaires à l'affichage de la page d'accueil des excursions
         return $this->render('excursions/indexExcursion.html.twig', [
             'sorties' => $sorties,
             'lieux' => $lieux,

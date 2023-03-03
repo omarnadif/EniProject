@@ -14,19 +14,23 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-
 #[Route(path: 'lieu/')]
 class LieuController extends AbstractController
 {
     #[Route(path: 'indexLieu', name: 'indexLieu', methods:['GET','POST'])]
     public function indexLieu(Request $request, EntityManagerInterface $em, LieuRepository $lieuRepository): Response
     {
+        // Récupère le terme de recherche depuis la requête
         $searchTerm = $request->request->get('searchTerm');
         if ($searchTerm) {
+            // Effectue une recherche dans la base de données en utilisant le terme de recherche
             $lieu = $lieuRepository->search($searchTerm);
         } else {
+            // Récupère tous les lieux depuis la base de données
             $lieu = $lieuRepository->findAll();
         }
+
+        // Retourne la réponse HTTP avec le résultat de la recherche ou tous les lieux
         return $this->render('lieu/indexLieu.html.twig', [
             'lieu' => $lieu,
         ]);
@@ -35,7 +39,7 @@ class LieuController extends AbstractController
     #[Route('createLieu', name: 'createLieu', methods: ['GET', 'POST'])]
     public function createLieu(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-        // Création
+        // Création d'une instance de Lieu
         $lieu = new Lieu();
 
         //Création du formulaire
@@ -59,7 +63,7 @@ class LieuController extends AbstractController
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$lieuUserPicture->guessExtension();
 
-                // Déplacement de l'image téléchargée dans le répertoire de stockage définis dans service.yaml (dans participant_image_directory)
+                // Déplacement de l'image téléchargée dans le répertoire de stockage défini dans service.yaml (dans participant_image_directory)
                 try {
                     $lieuUserPicture->move(
                         $this->getParameter('lieu_ImageUpload_directory'),
@@ -83,6 +87,7 @@ class LieuController extends AbstractController
             return $this->redirectToRoute('indexLieu');
         }
 
+        // Affichage de la vue pour créer un Lieu
         return $this->render('lieu/createLieu.html.twig', [
             'lieu' => $lieu,
             'lieuForm' => $formLieu->createView(),

@@ -49,19 +49,12 @@ class GestionUserController extends AbstractController
     {
         $participant = $em->find(Participant::class, $id);
 
-
-
         //Création du formulaire
         $formParticipant = $this->createForm(GestionUserFormType::class, $participant);
         $formParticipant->handleRequest($request);
 
-
-
-
-
         //Vérification du formulaire
         if ($formParticipant->isSubmitted() && $formParticipant->isValid()) {
-
 
             //Insertion du Participant en BDD (Base de donnée)
             $em->persist($participant);
@@ -70,11 +63,10 @@ class GestionUserController extends AbstractController
             $this->addFlash('success', 'DONE !');
             // Redirection vers la liste
             return $this->redirectToRoute('indexGestionUser');
-
         }
 
         if ($participant === null) {
-            //  pas  trouvée
+            //  pas trouvée
             return $this->render('admin/gestionUser.html.twig', [
                 'participant' => $participant,]);
         } else {
@@ -85,6 +77,5 @@ class GestionUserController extends AbstractController
             'participant' => $participant,
             'formParticipant' => $formParticipant->createView(),
         ]);
-
     }
 }

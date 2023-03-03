@@ -23,49 +23,49 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'security_login';
+    public const LOGIN_ROUTE = 'security_login'; // Route de connexion
 
     public function __construct(private UrlGeneratorInterface $urlGenerator, private EntityManagerInterface $entityManager)
     {}
 
     public function authenticate(Request $request, ): Passport
     {
-        $email = $request->request->get('email', '');
+        $email = $request->request->get('email', ''); // Récupère l'email saisi dans le formulaire de connexion
 
         $user = $this->entityManager->getRepository(Participant::class)->findOneBy(['email' => $email]);
 
-        if (!$user) {
-            throw new CustomUserMessageAuthenticationException('Email introuvable.');
+        if (!$user) { // Si l'utilisateur n'a pas été trouvé
+            throw new CustomUserMessageAuthenticationException('Email introuvable.'); // Lève une exception pour indiquer que l'email est introuvable
         }
 
-        if (!$user->isActif()) {
-            throw new CustomUserMessageAuthenticationException('Votre compte est désactivé.');
+        if (!$user->isActif()) { // Si le compte de l'utilisateur est désactivé
+            throw new CustomUserMessageAuthenticationException('Votre compte est désactivé.'); // Lève une exception pour indiquer que le compte est désactivé
         }
 
-        $request->getSession()->set(Security::LAST_USERNAME, $email);
+        $request->getSession()->set(Security::LAST_USERNAME, $email); // Stocke l'email de l'utilisateur dans la session
 
         return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->request->get('password', '')),
+            new UserBadge($email), // Identifiant de l'utilisateur pour l'authentification
+            new PasswordCredentials($request->request->get('password', '')), // Mot de passe de l'utilisateur
             [
-                new RememberMeBadge(),
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+                new RememberMeBadge(), // Badge pour activer la fonction "Se souvenir de moi"
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')), // Badge pour vérifier le jeton CSRF
             ]
         );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) { // Si l'utilisateur a été redirigé vers la page de connexion avant l'authentification
+            return new RedirectResponse($targetPath); // Redirige l'utilisateur vers la page de destination initiale
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('home_home'));
+        return new RedirectResponse($this->urlGenerator->generate('home_home')); // Redirige l'utilisateur vers la page d'accueil
     }
 
     protected function getLoginUrl(Request $request): string
     {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+        return $this->urlGenerator->generate(self::LOGIN_ROUTE); // Renvoie l'URL de la page de connexion
     }
 }
 

@@ -74,9 +74,7 @@
             background-color: #555;
         }
 
-
     </style>
-
 
     <div class="space">
     <div class="login-container ">
@@ -100,15 +98,13 @@
             {% endif %}
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" value="{{ last_username }}" name="email" placeholder="Inserisci la tua email">
+                <input type="email" id="email" value="{{ last_username }}" name="email" placeholder="Insère ton email">
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password">Mot de passe:</label>
                 <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
-                <input type="hidden" name="_csrf_token"
-                       value="{{ csrf_token('authenticate') }}"
-                >
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             </div>
             <div class="checkbox mb-3">
                 <label>
